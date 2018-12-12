@@ -348,7 +348,7 @@ function loadEventFrame(){
             var WebId = $(this).val();
             var name = $(this).attr("data-name");
              chkArray.push(WebId); 
-            var url = baseServiceUrl+'streams/' + WebId + '/interpolated?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d'; 
+            var url = baseServiceUrl+'streams/' + WebId + '/recorded?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d'; 
             var attributesData =  processJsonContent(url, 'GET', null);
             $.when(attributesData).fail(function () {
                 console.log("Cannot Find the Attributes.");
@@ -443,7 +443,7 @@ function getMap(){
         var WebId = $(this).val();
         var name = $(this).attr("data-name");
         chkArray.push(WebId); 
-        var url = baseServiceUrl+'streams/' + WebId + '/interpolated?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d';
+        var url = baseServiceUrl+'streams/' + WebId + '/recorded?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d';
         var attributesData =  processJsonContent(url, 'GET', null);
             $.when(attributesData).fail(function () {
                 console.log("Cannot Find the Attributes.");
