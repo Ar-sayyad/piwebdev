@@ -6,7 +6,7 @@ app.controller('assetdesignController', function($scope) {
     var elementsChildListItems = '';
     var previousList = [];
     /***GLOBAL VARIABLES END***/
-    
+
  /***Asset Database START***/
     var url = baseServiceUrl + 'assetdatabases?path=\\\\' + afServerName + '\\' + afDatabaseName;
     var ajaxEF = processJsonContent(url, 'GET', null);
@@ -16,7 +16,7 @@ app.controller('assetdesignController', function($scope) {
     });
     $.when(ajaxEF).done(function() {
         var WebId = (ajaxEF.responseJSON.WebId);
-        
+
          /***Elements Templates BY Category START***/
             var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elementtemplates?field=Categories&query='+filterCategoryName+'&searchFullHierarchy=true';
             var elementTemplatedata = processJsonContent(url, 'GET', null);
@@ -32,15 +32,15 @@ app.controller('assetdesignController', function($scope) {
                     sr++
                 })
             });
-        /***Elements Templates BY Category END***/ 
-        
+        /***Elements Templates BY Category END***/
+
         $("#elementTemplatesLeft").change(function() {
             $("#elementListLeft").empty();
             $("#elementTemplatesRight").empty();
             $("#elementListRight").empty();
             var leftTemplate = $("#elementTemplatesLeft").val();
-            
-             /***ElementsListByTemplate START***/  
+
+             /***ElementsListByTemplate START***/
                 var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elements?templateName=' + leftTemplate+'&searchFullHierarchy=true';
                     var rightelementdata = processJsonContent(url, 'GET', null);
                     $.when(rightelementdata).fail(function() {
@@ -57,8 +57,8 @@ app.controller('assetdesignController', function($scope) {
                         })
                     });
               /***ElementsListByTemplate END***/
-              
-              /***ElementsListByCategory START***/ 
+
+              /***ElementsListByCategory START***/
                     var catName = catNameGenrate + leftTemplate.toLowerCase();
                     console.log(catName); //Just for Print Category Generated
                     var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elements?categoryName=' + catName+'&searchFullHierarchy=true';
@@ -80,10 +80,10 @@ app.controller('assetdesignController', function($scope) {
                         });
                         lastSrl = csr
                     });
-             /***ElementsListByCategory END***/  
+             /***ElementsListByCategory END***/
         });
     });
-    
+
     /***shiftRight START***/
         $("#shiftRight").click(function() {
             if (!$("input[name='selectorLeft']:checked").val()) {
@@ -107,9 +107,9 @@ app.controller('assetdesignController', function($scope) {
                     return !1
                 }
             }
-        });    
+        });
     /***shiftRight END***/
-    
+
     /***shiftLeft START***/
         $("#shiftLeft").click(function() {
             if (!$("input[name='selectorRight']:checked").val()) {
@@ -124,8 +124,8 @@ app.controller('assetdesignController', function($scope) {
             }
         });
      /***shiftLeft END***/
-     
-    /***Right Drop Down OnChange START***/   
+
+    /***Right Drop Down OnChange START***/
     $("#elementTemplatesRight").change(function() {
         while (previousList.length > 0) {
             previousList.pop()
@@ -146,8 +146,8 @@ app.controller('assetdesignController', function($scope) {
                 srn++
             });
             $("#elementListRight").append('<li class="elemRightList elemRightListMain' + sr + '"><input type="radio" id="elemRightList' + sr + '" data-id="' + sr + '" data-name="' + name + '"  value="' + WebId + '" checked="" name="selectorMainRight"><label class="labelList rightLabel btn btn-success_light" for="elemRightListMain' + sr + '">' + name + ' </label></li>');
-        
-        /***ElementsListByRightOnchange START***/  
+
+        /***ElementsListByRightOnchange START***/
             var url = baseServiceUrl + 'elements/' + WebId + '/elements';
             var rightelementList = processJsonContent(url, 'GET', null);
             $.when(rightelementList).fail(function() {
@@ -170,10 +170,10 @@ app.controller('assetdesignController', function($scope) {
                     srt++
                 });
             });
-        /***ElementsListByRightOnchange END***/ 
+        /***ElementsListByRightOnchange END***/
     });
-    /***Right Drop Down OnChange END***/   
-    
+    /***Right Drop Down OnChange END***/
+
     /*****buildElementReference SAVE BUTTON START*****/
     function isDoubleClicked(element) {
     //if already clicked return TRUE to indicate this click is not allowed
@@ -203,7 +203,7 @@ app.controller('assetdesignController', function($scope) {
         removedList = previousList.filter(function(n) {
             return currentList.indexOf(n) > -1 ? false : n
         });
-        
+
         /*****IF NEW ELEMENT ADDED START*****/
         $.each($(addedList), function(key) {
             if (ParentWebId !== '') {
@@ -236,7 +236,7 @@ app.controller('assetdesignController', function($scope) {
             }
         });
         /*****IF NEW ELEMENT ADDED END*****/
-        
+
         /*****IF ELEMENT REMOVED START*****/
         var remval=0;
         var remlen = removedList.length;
@@ -248,7 +248,7 @@ app.controller('assetdesignController', function($scope) {
                     $.when(postAjaxEF).fail(function() {
                          if(++remval === remlen) {
                             warningmsg((remval)+" Element Cannot Removed..!<br> Not a Weak Reference");
-                           }   
+                           }
                     });
                     $.when(postAjaxEF).done(function() {
                         var response = (JSON.stringify(postAjaxEF.responseText));
@@ -256,7 +256,7 @@ app.controller('assetdesignController', function($scope) {
                             previousList.pop(removedList[key]);
                             if(++remval === remlen) {
                                 successmsg((remval)+" Element Removed Successfully..!");
-                               } 
+                               }
                         } else {
                             var failure = postAjaxEF.responseJSON.Items;
                             $.each(failure, function(key) {
@@ -275,10 +275,10 @@ app.controller('assetdesignController', function($scope) {
             }
         });
         /*****IF ELEMENT REMOVED END*****/
-        
+
         if (addedList.length > 0) {
             successmsg((addedList.length) + " Element Created Successfully..!")
-        }        
+        }
     });
      /*****buildElementReference SAVE BUTTON END*****/
 });

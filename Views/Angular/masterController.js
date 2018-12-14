@@ -272,8 +272,8 @@ function loadEventFrame(){
                             }); 
         var chart = Highcharts.chart('eventFrame', {
                                 chart: {
-                                  type: 'xrange'
-                                  // zoomType: 'xy'
+                                  type: 'xrange',
+                                  zoomType: 'xy'
                                 },
                                 title: {
                                   text: ''
@@ -461,6 +461,7 @@ function getMap(){
                             unit = attributesDataItems[key].UnitsAbbreviation;
                         }
                   });  
+                  console.log(data);
                    $.each(eventsColorsData,function(key) {
                        if(name===eventsColorsData[key].name){
                              data.push({
@@ -483,7 +484,7 @@ function getMap(){
                    });                            
                 Highcharts.chart('container', {
                         chart: {
-                           // zoomType: 'xy'
+                            zoomType: 'xy'
                         },
                         title: {
                             text: ''

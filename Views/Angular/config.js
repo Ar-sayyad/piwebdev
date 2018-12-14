@@ -16,7 +16,7 @@ var allocationAttributeName = "PLANT";/****The Plant Attributes Name for save th
 var iframeConfigUrl = "http://www.google.com"; //IFRAME URL 
 var eventsColorsData = [
     {
-        "name":"BALANCE","color":"#058DC7","min":0,"max":150 
+        "name":"BALANCE","color":"#058DC7","min":0,"max":1000 
     },
     {
         "name":"U","color":"#50B432","min":0,"max":130 
