@@ -343,39 +343,26 @@ function loadEventFrame(){
         var xAxis=[];
         var sr=0;
         var chkArray=[];
-        var vdate='';
-        var vtime='';
-        startDate = startDate.split('-');
-        endDate = endDate.split('-');
-        startTime = startTime.split(':');
-        endTime = endTime.split(':');   
         $.each($("input[name='selectorChild"+maincell+"']:checked"), function(){ 
             var data1=[];
             var WebId = $(this).val();
             var name = $(this).attr("data-name");
              chkArray.push(WebId); 
-            var url = baseServiceUrl+'streams/' + WebId + '/interpolated?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d&searchFullHierarchy=true'; 
+            var url = baseServiceUrl+'streams/' + WebId + '/recorded?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d'; 
             var attributesData =  processJsonContent(url, 'GET', null);
             $.when(attributesData).fail(function () {
                 console.log("Cannot Find the Attributes.");
             });
-            $.when(attributesData).done(function () {
+            $.when(attributesData).done(function () {                 
                  var attributesDataItems = (attributesData.responseJSON.Items);
                  var unit = '';
-                $.each(attributesDataItems,function(key) {                    
-                 var Timestamp = attributesDataItems[key].Timestamp;
+                $.each(attributesDataItems,function(key) {
                         var val = (Math.round((attributesDataItems[key].Value) * 100) / 100);                         
                         if(isNaN(val)){
                            // console.log(val);//Skipping NaN Values
                         }else{
-                             vdate = (Timestamp).substring(0,10);//start date
-                            vtime = (Timestamp).substring(11,19);//start time                                   
-                                    vdate = vdate.split('-');//start date split array
-                                    vtime = vtime.split(':');//start time split array
-                            var val = Math.round((attributesDataItems[key].Value) * 100) / 100;
-                            var dt = Date.UTC(vdate[0],(vdate[1]-1),vdate[2],vtime[0],vtime[1],vtime[2]);
-                            data1.push([dt,val]);
-                            //xAxis.push(Timestamp); 
+                            data1.push((Math.round((attributesDataItems[key].Value) * 100) / 100));
+                            xAxis.push(attributesDataItems[key].Timestamp);
                             unit = attributesDataItems[key].UnitsAbbreviation;
                         }                        
                   });   
@@ -399,12 +386,10 @@ function loadEventFrame(){
                                 }
                             }); 
                        }
-                   });    
-                     
-             var Childchart =    Highcharts.chart('cellgraphChart'+maincell, {
+                   });         
+                Highcharts.chart('cellgraphChart'+maincell, {
                         chart: {
                             //zoomType: 'xy'
-                             type: 'spline'
                         },
                         title: {
                             text: ''
@@ -412,22 +397,13 @@ function loadEventFrame(){
                         subtitle: {
                             text: ''
                         },
-                         xAxis: {
-                                  type: 'datetime'
-                                },
+                         xAxis: [{
+                                categories: xAxis,
+                                crosshair: true
+                            }],
                         yAxis: yAxisData, //Y AXIS RANGE DATA
                         tooltip: {
                             shared: true
-                        },
-                         plotOptions: {
-                            spline: {
-                                lineWidth: 2,
-                                states: {
-                                    hover: {
-                                        lineWidth: 3
-                                    }
-                                },
-                            }
                         },
                         legend: {
                             layout: 'vetical',
@@ -438,9 +414,8 @@ function loadEventFrame(){
                             floating: true
                         },
                     series: data //PI ATTRIBUTES RECORDED DATA
-                });    
-                 Childchart.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2],startTime[0],startTime[1],startTime[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2],endTime[0],endTime[1],endTime[2]));//EXTREME POINTSET
-                 sr++;
+                });           
+                sr++;
             });            
         });  
             if(chkArray.length === 0){
@@ -451,7 +426,7 @@ function loadEventFrame(){
 /****LOAD CHILD ATTRIBUTES CHARTS****/
 
 /*********MAIN CHARTS SECTION START**********/  
-function getMap(){  
+function getMap(){   
     var data=[];
     var yAxisData=[];
     var xAxis=[];
@@ -462,20 +437,13 @@ function getMap(){
     var startDateTime = (startDate + 'T' + startTime+'Z');
     var endDate = $('#endDate').val();
     var endTime = $("#endTime").val();
-    var endDateTime = (endDate + 'T' + endTime+'Z');   
-    var vdate='';
-    var vtime='';
-        startDate = startDate.split('-');
-        endDate = endDate.split('-');
-        startTime = startTime.split(':');
-        endTime = endTime.split(':');   
+    var endDateTime = (endDate + 'T' + endTime+'Z');      
     $.each($("input[name='selectorLeft']:checked"), function(){ 
         var data1=[];
         var WebId = $(this).val();
         var name = $(this).attr("data-name");
         chkArray.push(WebId); 
-        var url = baseServiceUrl+'streams/' + WebId + '/interpolated?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d&searchFullHierarchy=true';
-        //console.log(url);
+        var url = baseServiceUrl+'streams/' + WebId + '/recorded?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d';
         var attributesData =  processJsonContent(url, 'GET', null);
             $.when(attributesData).fail(function () {
                 console.log("Cannot Find the Attributes.");
@@ -483,25 +451,17 @@ function getMap(){
             $.when(attributesData).done(function () {                 
                  var attributesDataItems = (attributesData.responseJSON.Items);
                  var unit = '';
-                 //console.log("count: "+(attributesDataItems.length));
                 $.each(attributesDataItems,function(key) {
-                        var Timestamp = attributesDataItems[key].Timestamp;
                         var val = (Math.round((attributesDataItems[key].Value) * 100) / 100);                         
                         if(isNaN(val)){
                            // console.log(val);////Skipping NaN Values
                         }else{
-                            vdate = (Timestamp).substring(0,10);//start date
-                            vtime = (Timestamp).substring(11,19);//start time                                   
-                                    vdate = vdate.split('-');//start date split array
-                                    vtime = vtime.split(':');//start time split array
-                            var val = Math.round((attributesDataItems[key].Value) * 100) / 100;
-                            var dt = Date.UTC(vdate[0],(vdate[1]-1),vdate[2],vtime[0],vtime[1],vtime[2]);
-                            data1.push([dt,val]);
-                            //xAxis.push(Timestamp); 
+                            data1.push((Math.round((attributesDataItems[key].Value) * 100) / 100));
+                            xAxis.push(attributesDataItems[key].Timestamp);
                             unit = attributesDataItems[key].UnitsAbbreviation;
                         }
                   });  
-                  //console.log(data1);
+                  console.log(data);
                    $.each(eventsColorsData,function(key) {
                        if(name===eventsColorsData[key].name){
                              data.push({
@@ -511,8 +471,7 @@ function getMap(){
                                 color:eventsColorsData[key].color,
                                 data: data1,
                                 tooltip: { valueSuffix: unit}
-                            });
-                            //data = data1;
+                            });  
                             yAxisData.push({
                                 min:eventsColorsData[key].min,
                                 max:eventsColorsData[key].max,
@@ -522,36 +481,24 @@ function getMap(){
                                 }
                             }); 
                        }
-                   });    
-                   //console.log(JSON.stringify(data));
-                               
-              var mainchart =   Highcharts.chart('container', {
+                   });                            
+                Highcharts.chart('container', {
                         chart: {
-                            //zoomType: 'xy'
-                              type: 'spline'
-                              },
+                            zoomType: 'xy'
+                        },
                         title: {
                             text: ''
                         },
                         subtitle: {
                             text: ''
                         },
-                         xAxis: {
-                                  type: 'datetime'
-                                },
+                         xAxis: [{
+                                categories: xAxis,
+                                crosshair: true
+                            }],
                         yAxis: yAxisData, //Y AXIS RANGE DATA
                         tooltip: {
-                                shared: true
-                        },
-                        plotOptions: {
-                            spline: {
-                                lineWidth: 2,
-                                states: {
-                                    hover: {
-                                        lineWidth: 3
-                                    }
-                                },
-                            }
+                            shared: true
                         },
                         legend: {
                             layout: 'vetical',
@@ -561,11 +508,8 @@ function getMap(){
                             y: 40,
                             floating: true
                         },
-                       
-                    series:data  //PI ATTRIBUTES RECORDED DATA
-                    
-                });
-               mainchart.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2],startTime[0],startTime[1],startTime[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2],endTime[0],endTime[1],endTime[2]));//EXTREME POINTSET
+                    series: data //PI ATTRIBUTES RECORDED DATA
+                });           
                 sr++;
             });            
     }); 
