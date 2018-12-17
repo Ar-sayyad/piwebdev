@@ -272,8 +272,8 @@ function loadEventFrame(){
                             }); 
         var chart = Highcharts.chart('eventFrame', {
                                 chart: {
-                                  type: 'xrange',
-                                  zoomType: 'xy'
+                                  type: 'xrange'
+                                 // zoomType: 'xy'
                                 },
                                 title: {
                                   text: ''
@@ -403,7 +403,7 @@ function loadEventFrame(){
                      
              var Childchart =    Highcharts.chart('cellgraphChart'+maincell, {
                         chart: {
-                            //zoomType: 'xy'
+                            zoomType: 'xy',
                              type: 'spline'
                         },
                         title: {
@@ -421,10 +421,10 @@ function loadEventFrame(){
                         },
                          plotOptions: {
                             spline: {
-                                lineWidth: 2,
+                                lineWidth: 1,
                                 states: {
                                     hover: {
-                                        lineWidth: 3
+                                        lineWidth: 2
                                     }
                                 },
                             }
@@ -435,7 +435,8 @@ function loadEventFrame(){
                             x: 0,
                             verticalAlign: 'top',
                             y: 40,
-                            floating: true
+                            floating: true,
+                            enabled: false
                         },
                     series: data //PI ATTRIBUTES RECORDED DATA
                 });    
@@ -527,7 +528,7 @@ function getMap(){
                                
               var mainchart =   Highcharts.chart('container', {
                         chart: {
-                            //zoomType: 'xy'
+                            zoomType: 'xy',
                               type: 'spline'
                               },
                         title: {
@@ -545,10 +546,10 @@ function getMap(){
                         },
                         plotOptions: {
                             spline: {
-                                lineWidth: 2,
+                                lineWidth: 1,
                                 states: {
                                     hover: {
-                                        lineWidth: 3
+                                        lineWidth: 2
                                     }
                                 },
                             }
@@ -559,7 +560,8 @@ function getMap(){
                             x: 0,
                             verticalAlign: 'top',
                             y: 40,
-                            floating: true
+                            floating: true,
+                            enabled: false
                         },
                        
                     series:data  //PI ATTRIBUTES RECORDED DATA

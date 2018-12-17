@@ -19,7 +19,7 @@ var eventsColorsData = [
         "name":"BALANCE","color":"#058DC7","min":0,"max":300 
     },
     {
-        "name":"U","color":"#50B432","min":0,"max":250 
+        "name":"U","color":"#50B432","min":0,"max":35
     },
     { 
         "name":"KU","color":"#ED561B","min":0,"max":170 
