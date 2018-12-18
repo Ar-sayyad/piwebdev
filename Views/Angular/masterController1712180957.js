@@ -57,7 +57,7 @@ app.controller('masterController', function($scope) {
     $("#elementList").change(function (){
         var elementName = $("#elementList option:selected").attr("data-name");//BLOCK ELEMENT NAME FOR IFRAME GRAPH GENERATION
         var iframeUrl= iframeConfigUrl+'?name='+elementName; //IFRAME URL 
-        $('.iframeMapp').attr('src', iframeUrl);  
+        $('.iframeMap').attr('src', iframeUrl);  
         //console.log(iframeUrl);
         $("#container").empty();
         $("#attributesListLeft").empty();
@@ -97,13 +97,10 @@ app.controller('masterController', function($scope) {
                      var category = attributesItems[key].CategoryNames;                    
                      $.each(category,function(key1) {
                          if(trendCat===category[key1]){
-                         $("#attributesListLeft").append('<li class="paramterListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getMap('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
+                         $("#attributesListLeft").append('<li class="paramterListChild paramterList'+cat+'">\n\
+                            <input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getMap('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
                             <label class="labelListChild leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+'</label>\n\
-                            <div class="ScaleDiv">\n\
-                                <input type="text" value="" class="scales" placeholder="Min" name="min" onchange="getMap('+cat+');" id="min'+cat+'">\n\
-                                <input type="text" value="" class="scales" placeholder="Max" name="max" onchange="getMap('+cat+');" id="max'+cat+'">\n\
-                            </div>\n\
-                             </li>');  
+                            </li>');  
                         }
                         
                         else if(timestampCat===category[key1] || valueCat===category[key1]){
@@ -141,14 +138,14 @@ app.controller('masterController', function($scope) {
             return false;
         }
         else{  
-            $("#cellGraphList").append('<div class="col-12 col-lg-6 col-xl-1 ChildAttrs childListDiv'+maincell+'">\n\
+            $("#cellGraphList").append('<div class="col-12 col-lg-6 col-xl-1 childListDiv'+maincell+'">\n\
                                 <div class="card">\n\
                                     <div class="card-body childGraph style-1">\n\
                                         <ul id="cellgraph'+maincell+'"></ul>\n\
                                     </div>\n\
                                 </div>\n\
                             </div>\n\
-                            <div class="col-12 col-lg-6 col-xl-5 ChildAttrsChart childListDiv'+maincell+'">\n\
+                            <div class="col-12 col-lg-6 col-xl-5 childListDiv'+maincell+'">\n\
                                 <button  type="button" onclick="removeDiv('+maincell+');" class="btn btn-sm btn-danger childChartClose"><i class="fa fa-close"></i></button>\n\
                                 <div class="card">\n\
                                     <div class="card-body childGraph" id="cellgraphChart'+maincell+'">\n\
@@ -174,9 +171,9 @@ app.controller('masterController', function($scope) {
                      var category = childAttributesItems[key].CategoryNames;                    
                      $.each(category,function(key1) {
                          if(trendCat===category[key1]){
-                        $("#cellgraph"+inc).append('<li class="paramterListCellChild paramterList'+cat+'">\n\
+                        $("#cellgraph"+inc).append('<li class="paramterListChild paramterList'+cat+'">\n\
                             <input type="checkbox" id="elemList'+inc+cat+'" data-id="'+cat+'"  data-name="'+childAttributesItems[key].Name+'" onchange="getChildMap('+inc+');" class="paraList getChildChart" value="'+childAttributesItems[key].WebId+'" name="selectorChild'+inc+'">\n\
-                            <label class="labelListCellChild leftLabel" for="elemList'+inc+cat+'">'+childAttributesItems[key].Name+'</label>\n\
+                            <label class="labelListChild leftLabel" for="elemList'+inc+cat+'">'+childAttributesItems[key].Name+'</label>\n\
                             </li>');  
                         }
                     });                    
@@ -477,9 +474,6 @@ function getMap(){
         var data1=[];
         var WebId = $(this).val();
         var name = $(this).attr("data-name");
-        var cat = $(this).attr("data-id");
-        var min = $("#min"+cat).val();
-        var max = $("#max"+cat).val();       
         chkArray.push(WebId); 
         var url = baseServiceUrl+'streams/' + WebId + '/interpolated?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d&searchFullHierarchy=true';
         //console.log(url);
@@ -520,12 +514,9 @@ function getMap(){
                                 tooltip: { valueSuffix: unit}
                             });
                             //data = data1;
-                            if(min===''){ min = eventsColorsData[key].min;}
-                            if(max===''||max===0){ max = eventsColorsData[key].max;}
-                            // console.log(cat+" min: "+min+" | "+" max: "+max);
                             yAxisData.push({
-                                min:min,//eventsColorsData[key].min,
-                                max:max,//eventsColorsData[key].max,
+                                min:eventsColorsData[key].min,
+                                max:eventsColorsData[key].max,
                                 title: {text: ''},
                                 labels: {format: '{value}'+unit,
                                     style: {color: eventsColorsData[key].color}

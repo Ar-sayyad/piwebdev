@@ -217,7 +217,7 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
 .iframeMap{
     border:1px solid #ccc;
     width:100%;
-    height: 97%;
+    height: 100%;
 }
 .AtName{
     
@@ -273,14 +273,29 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
     padding-left: 0px;
 }
 .labelListChild{
-        width: 100%;
-        height: 41px !important;
+        width: 50%;
+        height: 33px !important;
         font-size: 10px;
         text-align: left;
+        border: 1px solid #ccc;
         padding: 4px 0px 0px 0px !important;
         text-transform: none;
         margin-bottom: 5px !important;
+        box-shadow: 1px 1px 1px 0px var(--dark);
 }
+
+.labelListCellChild{
+        width: 100%;
+        height: 33px !important;
+        font-size: 10px;
+        text-align: left;
+        border: 1px solid #ccc;
+        padding: 4px 0px 0px 0px !important;
+        text-transform: none;
+        margin-bottom: 5px !important;
+        box-shadow: 1px 1px 1px 0px var(--dark);
+}
+
 .childGraph [type=checkbox]+label {
     font-weight: 400;
     position: relative;
@@ -312,6 +327,13 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
     margin: 0px 0px 6px 0px;
     background-color: #dee2e6;
 }
+.paramterListCellChild {
+    padding: 0px;
+    width: 100%;
+    height: 35px;
+    margin: 0px 0px 6px 0px;
+    background-color: #dee2e6;
+}
 .childGraph [type=checkbox]:checked+label:before {
     top: 1px;
     left: -4px;
@@ -336,7 +358,7 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
 }
 .childChartClose{
         float: right !important;
-        margin-left: 94%;
+        margin-left: 96%;
         margin-top: 10px;
         position: absolute;
         z-index: 9999999;
@@ -360,4 +382,32 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
     border: 2px solid #75808a;
     height: 80px;
     padding: 2%;
+ }
+ .ScaleDiv{
+    float: right;
+    height: 30px;
+    width: 50%;
+ }
+ .scales{
+     width: 40%;
+     padding: 5px;
+     border: 1px solid #ccc;
+     height: 33px;
+     margin: 0px 0px 2px 5px;
+     box-shadow: 1px 1px 1px 0px var(--dark);
+ }
+ .ChildAttrs{
+     padding-right: 0px;
+     padding-left: 5px;
+ }
+ .ChildAttrsChart{
+     padding-left: 5px;
+     padding-right: 5px;
+ }
+ .mainChart{
+     padding-left: 5px;
+ }
+ #maapp{
+    height: 200px;
+    padding: 10px; 
  }
