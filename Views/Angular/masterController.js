@@ -175,8 +175,8 @@ app.controller('masterController', function($scope) {
                      $.each(category,function(key1) {
                          if(trendCat===category[key1]){
                         $("#cellgraph"+inc).append('<li class="paramterListCellChild paramterList'+cat+'">\n\
-                            <input type="checkbox" id="elemList'+inc+cat+'" data-id="'+cat+'"  data-name="'+childAttributesItems[key].Name+'" onchange="getChildMap('+inc+');" class="paraList getChildChart" value="'+childAttributesItems[key].WebId+'" name="selectorChild'+inc+'">\n\
-                            <label class="labelListCellChild leftLabel" for="elemList'+inc+cat+'">'+childAttributesItems[key].Name+'</label>\n\
+                            <input type="checkbox" id="elemChildList'+inc+cat+'" data-id="'+cat+'"  data-name="'+childAttributesItems[key].Name+'" onchange="getChildMap('+inc+');" class="paraList getChildChart" value="'+childAttributesItems[key].WebId+'" name="selectorChild'+inc+'">\n\
+                            <label class="labelListCellChild leftLabel" for="elemChildList'+inc+cat+'">'+childAttributesItems[key].Name+'</label>\n\
                             </li>');  
                         }
                     });                    

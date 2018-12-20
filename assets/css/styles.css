@@ -237,7 +237,7 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
 }
 .attributeData, .attributeData1{
     float:left;
-    width: 12%;
+    width: 20%;
     padding: 0px;
     height: auto;
     text-align: center;
