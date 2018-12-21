@@ -130,24 +130,31 @@ app.controller('masterController', function($scope) {
                                     console.log("Cannot Find the Attributes Values.");
                                 });
                                  $.when(attributesValue).done(function () {
-                                       var currName = attributesItems[key].Name;
-                                       var Value = (Math.round(attributesValue.responseJSON.Value * 100) / 100).toFixed(2);
-                                       var bgcolor='';
-                                       $.each(tableAttrColors,function(key) {
-                                            if(currName===tableAttrColors[key].name){
-                                                  if(Value < tableAttrColors[key].LT){
-                                                        bgcolor="#FF0000";
-                                                  }else if(Value > tableAttrColors[key].LT && Value < tableAttrColors[key].HT){
-                                                        bgcolor="#FFFF00";
-                                                  }else if(Value > tableAttrColors[key].HT){
-                                                        bgcolor="#1ce74a";
-                                                  }else{
-                                                        bgcolor="#D3D3D3";//NaN
-                                                  }
-                                            }
-                                       }); 
-                                       var Units = (attributesValue.responseJSON.UnitsAbbreviation);
-                                       var Timestamp = (attributesValue.responseJSON.Timestamp).substring(0,10);
+                                     var currName = attributesItems[key].Name;
+                                      var Value = (Math.round(attributesValue.responseJSON.Value * 100) / 100).toFixed(2);
+                                      var bgcolor='';
+                                     $.each(tableAttrColors,function(key) {
+                                          if(currName===tableAttrColors[key].name){
+                                                //console.log(tableAttrColors[key].name);
+                                             if(Value < tableAttrColors[key].LT){
+                                                 bgcolor="#FF0000";
+                                                 //console.log(currName+": " +Value+" is Lesser than LT: "+parseFloat(tableAttrColors[key].LT));
+                                             }else if(Value > tableAttrColors[key].LT && Value < tableAttrColors[key].HT){
+                                                 bgcolor="#FFFF00";
+                                                 //console.log(currName+": " +Value+" is Between LT: "+parseFloat(tableAttrColors[key].LT) +" & HT: "+parseFloat(tableAttrColors[key].HT));
+                                             }else if(Value > tableAttrColors[key].HT){
+                                                 bgcolor="#1ce74a";
+                                                 //console.log(currName+": " +Value+" is Greater than HT: "+parseFloat(tableAttrColors[key].HT));
+                                             }
+                                             else{
+                                                 bgcolor="#D3D3D3";
+                                                 //console.log(currName+": " +Value+" having Bad Value.")
+                                             }
+                                          }
+                                    });                                  
+                                   
+                                    var Units = (attributesValue.responseJSON.UnitsAbbreviation);
+                                    var Timestamp = (attributesValue.responseJSON.Timestamp).substring(0,10);
                                  $(".tableAttributes").append('<div class="attributeData" style="background-color:'+bgcolor+'"><div class="attrHead">'+attributesItems[key].Name+'<br>'+Value+' <b>'+Units+'</b><br><span>('+Timestamp+')</span></div></div>');
                                  }); 
                                  WebIdVal=attributesItems[key].WebId;
