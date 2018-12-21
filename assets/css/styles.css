@@ -135,6 +135,7 @@ body::-webkit-scrollbar-thumb{
 }
 #style-3  {
     height: 200px;
+    padding: 10px;
 }
 #style-3::-webkit-scrollbar-thumb  {
     background-color: #008cffc2;
@@ -237,7 +238,7 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
 }
 .attributeData, .attributeData1{
     float:left;
-    width: 20%;
+    width: 19%;
     padding: 0px;
     height: auto;
     text-align: center;
@@ -255,7 +256,7 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
         font-size: 12px;
 }
 .attrHead{
-    font-weight: 600;
+    font-weight: 500;
 }
 .map{
     /* margin-top: -3px; */

@@ -62,4 +62,32 @@ var EFData = [
     }
 ]; ///EVENT FRAME DATA JSON ARRAY 
 var defaultColor="#ccc";
+
+var tableAttrColors = [
+    {
+        "name":"U","LT":20,"HT":50 
+    },
+    {
+        "name":"KU","LT":50,"HT":120
+    },
+    { 
+        "name":"PH","LT":1.8,"HT":2.1 
+    },   
+    { 
+        "name":"PR","LT":50, "HT":130
+    },
+    {
+        "name":"VR","LT":10,"HT":130 
+    },
+    { 
+        "name":"BALANCE","LT":10,"HT":200
+    },
+    { 
+        "name":"CONNECTION_TO_PLANT","LT":10,"HT":180
+    },
+    { 
+        "name":"STATUS","LT":5,"HT":180
+    }
+]; ///TABLE ELEMENT ATTRIBUTES 
+
 /***CONFIGURATION SETTING***/

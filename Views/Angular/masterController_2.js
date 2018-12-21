@@ -96,20 +96,7 @@ app.controller('masterController', function($scope) {
                  var WebIdVal='';
                  $.each(attributesItems,function(key) {  
                      var category = attributesItems[key].CategoryNames;   
-                     
-//                      $.each(tableAttrColors,function(key) {                                        
-//                                        if(tableAttrColors[key].name===attributesItems[key].Name){
-//                                            console.log(tableAttrColors[key].name);
-////                                             if(Value < tableAttrColors[key].LT){
-////                                                 console.log(Value+" is Lesser than LT: "+tableAttrColors[key].LT);
-////                                             }else if(Value > tableAttrColors[key].LT && Value < tableAttrColors[key].HT){
-////                                                 console.log(Value+" is Between LT: "+tableAttrColors[key].LT +" & HT: "+tableAttrColors[key].HT);
-////                                             }else if(Value < tableAttrColors[key].HT){
-////                                                 console.log(Value+" is Greater than HT: "+tableAttrColors[key].HT);
-////                                             }
-//                                        }
-//                                   });
-                                   
+                     //console.log(category);
                      $.each(category,function(key1) {
                          if(trendCat===category[key1]){
                          $("#attributesListLeft").append('<li class="paramterListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getMap('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
@@ -124,38 +111,16 @@ app.controller('masterController', function($scope) {
                         else if(timestampCat===category[key1] || valueCat===category[key1]){
                             if(WebIdVal==='' || WebIdVal!==attributesItems[key].WebId){
                             var url = baseServiceUrl + 'streams/' + attributesItems[key].WebId + '/value';
-                            //console.log(url);
                             var attributesValue =  processJsonContent(url, 'GET', null);
                                 $.when(attributesValue).fail(function () {
                                     console.log("Cannot Find the Attributes Values.");
                                 });
-                                 $.when(attributesValue).done(function () {
-                                     var currName = attributesItems[key].Name;
-                                      var Value = parseFloat(Math.round(attributesValue.responseJSON.Value * 100) / 100).toFixed(2);
-                                      var bgcolor='';
-                                     $.each(tableAttrColors,function(key) {
-                                          if(currName===tableAttrColors[key].name){
-                                                //console.log(tableAttrColors[key].name);
-                                             if(Value < parseFloat(tableAttrColors[key].LT)){
-                                                 bgcolor="#FF0000";
-                                                 console.log(currName+": " +Value+" is Lesser than LT: "+parseFloat(tableAttrColors[key].LT));
-                                             }else if(Value > parseFloat(tableAttrColors[key].LT) && Value < parseFloat(tableAttrColors[key].HT)){
-                                                 bgcolor="#FFFF00";
-                                                 console.log(currName+": " +Value+" is Between LT: "+parseFloat(tableAttrColors[key].LT) +" & HT: "+parseFloat(tableAttrColors[key].HT));
-                                             }else if(Value > parseFloat(tableAttrColors[key].HT)){
-                                                 bgcolor="#1ce74a";
-                                                 console.log(currName+": " +Value+" is Greater than HT: "+parseFloat(tableAttrColors[key].HT));
-                                             }
-                                             else{
-                                                 bgcolor="#D3D3D3";
-                                                 console.log(currName+": " +Value+" having Bad Value.")
-                                             }
-                                          }
-                                    });                                  
-                                   
+                                $.when(attributesValue).done(function () {
+                                   // console.log(attributesItems[key].Name);
+                                    var Value = (Math.round(attributesValue.responseJSON.Value * 100) / 100);
                                     var Units = (attributesValue.responseJSON.UnitsAbbreviation);
                                     var Timestamp = (attributesValue.responseJSON.Timestamp).substring(0,10);
-                                 $(".tableAttributes").append('<div class="attributeData" style="background-color:'+bgcolor+'"><div class="attrHead">'+attributesItems[key].Name+'<br>'+Value+' <b>'+Units+'</b><br><span>('+Timestamp+')</span></div></div>');
+                                 $(".tableAttributes").append('<div class="attributeData"><div class="attrHead">'+attributesItems[key].Name+'<br>'+Value+' <b>'+Units+'</b><br><span>('+Timestamp+')</span></div></div>');
                                  }); 
                                  WebIdVal=attributesItems[key].WebId;
                              }
