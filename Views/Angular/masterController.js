@@ -69,6 +69,7 @@ app.controller('masterController', function($scope) {
         
         /***GET CHILD ELEMENTS OF SELECTED BLOCK ELEMENT START***/  
             var url = baseServiceUrl+'elements/' + WebId + '/elements?templateName=CELL'; 
+            console.log(url);
             var childElementList =  processJsonContent(url, 'GET', null);
                 $.when(childElementList).fail(function () {
                     //warningmsg("Cannot Find the Child Element On Change.");
