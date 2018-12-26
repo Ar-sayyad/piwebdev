@@ -234,6 +234,7 @@ function loadEventFrame(){
       /**************///
         var data=[];
         var yAxisData=[];
+        var xAxis=[];
         var chkArray = [];
         var sr=0;
         var startDate = $('#startDate').val();
@@ -252,10 +253,10 @@ function loadEventFrame(){
         var now = new Date();
         var WebId = $("#elementList").val();
         var eventFrameList=[];
-        var edata=[];
+        var data=[];
         var sdate ='',stime ='',edate ='',etime ='',y=0;
       $(document).ready(function() {    
-    /*****Main Charts****/
+    
     $.each($("input[name='selectorLeft']:checked"), function(){ 
         var data1=[];
         var WebId = $(this).val();
@@ -330,21 +331,31 @@ function loadEventFrame(){
                         subtitle: {
                             text: ''
                         },
-                         xAxis:{
-                            type: 'datetime',
-                            events:{               
-                                 afterSetExtremes:function(){                                
-                                      if (!this.chart.options.chart.isZoomed)
-                                       {                                         
-                                       var xMin = this.chart.xAxis[0].min;
-                                       var xMax = this.chart.xAxis[0].max;
-                                       chart1.xAxis[0].isDirty = true;
-                                       chart2.xAxis[0].setExtremes(xMin, xMax, true);                                
-                                       chart2.options.chart.isZoomed = false;
-                                       }
-                                   } 
-                                 }
-                            },
+                         xAxis: {
+                                  type: 'datetime',
+                                   events:{               
+                                    afterSetExtremes:function(){
+                                
+                                 if (!this.chart.options.chart.isZoomed)
+                                 {                                         
+                                    var xMin = this.chart.xAxis[0].min;
+                                    var xMax = this.chart.xAxis[0].max;
+                                     
+                                    //var zmRange = computeTickInterval(xMin, xMax);
+                                    //chart1.xAxis[0].options.tickInterval =zmRange;
+                                    chart1.xAxis[0].isDirty = true;
+                                    //chart2.xAxis[0].options.tickInterval = zmRange;
+                                    //chart2.xAxis[0].isDirty = true;
+                                     
+                                   //chart2.options.chart.isZoomed = true;
+                                   chart2.xAxis[0].setExtremes(xMin, xMax, true);                                
+                                   chart2.options.chart.isZoomed = false;
+                                }
+                            }
+                            
+                            
+                        }
+                                },
                         yAxis: yAxisData, //Y AXIS RANGE DATA
                         tooltip: {
                                 shared: true
@@ -367,8 +378,10 @@ function loadEventFrame(){
                             y: 40,
                             floating: true,
                             enabled: false
-                        },                       
-                    series:data  //PI ATTRIBUTES RECORDED DATA                    
+                        },
+                       
+                    series:data  //PI ATTRIBUTES RECORDED DATA
+                    
                 });
                chart1.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2],startTime[0],startTime[1],startTime[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2],endTime[0],endTime[1],endTime[2]));//EXTREME POINTSET
                 sr++;
@@ -379,129 +392,138 @@ function loadEventFrame(){
     }else{
      //console.log(chkArray);
     }
-    
-    /****Event Frames*****/    
-         var url = baseServiceUrl + 'elements/' + WebId + '/eventframes?startTime='+startDateTime+'&endTime='+endDateTime+'&searchFullHierarchy=true'; 
-         var eventFrameData =  processJsonContent(url, 'GET', null);
-             $.when(eventFrameData).fail(function () {
-                 console.log("Cannot Find the Event Frames.");
-             });
-              $.when(eventFrameData).done(function () {
-                   var eventFrames = (eventFrameData.responseJSON.Items);
-                     $.each(eventFrames,function(key) {  
-                         var eventFrameName = eventFrames[key].TemplateName;
-                         eventFrameList.push(eventFrameName);                               
-                         var eventFrameStartTime = eventFrames[key].StartTime;
-                         var eventFrameEndTime = eventFrames[key].EndTime;
-                             sdate = eventFrameStartTime.substring(0,10);//start date
-                             stime = eventFrameStartTime.substring(11,19);//start time
-                             edate = eventFrameEndTime.substring(0,10);//end date
-                             etime = eventFrameEndTime.substring(11,19);//end time                                     
-                             sdate = sdate.split('-');//start date split array
-                             stime = stime.split(':');//start time split array
-                             edate = edate.split('-');//end date split array
-                             etime = etime.split(':');//end time split array
-                         if(edate[0]==='9999'){ var edyr=now.getFullYear(), edmnth = now.getMonth(), eddt=now.getDate(), h = now.getHours(), m = now.getMinutes(), s = now.getSeconds(); eventFrameEndTime="Running";}
-                         else{ var edyr=edate[0], edmnth = (edate[1]-1), eddt=edate[2], h = etime[0], m = etime[1], s =etime[2]; } //if Event Frame is Runnig Stage                              
-                         var color ='';
-                         $.each(EFData,function(key) {
-                             if(eventFrameName===EFData[key].efName){
-                                  color = EFData[key].color;
-                             }
-                             if(color!==''){
-                                 edata.push({
-                                      nm:eventFrameName,
-                                      sd:eventFrameStartTime,
-                                      ed:eventFrameEndTime,
-                                      color:color,
-                                      x: Date.UTC(sdate[0], (sdate[1]-1), sdate[2],stime[0],stime[1],stime[2]),
-                                      x2: Date.UTC(edyr, edmnth, eddt,h,m,s),
-                                      y: y
-                                  }); 
-                              }else{
-                                   edata.push({
-                                      nm:eventFrameName,
-                                      sd:eventFrameStartTime,
-                                      ed:eventFrameEndTime,
-                                      color:defaultColor,
-                                      x: Date.UTC(sdate[0], (sdate[1]-1), sdate[2],stime[0],stime[1],stime[2]),
-                                      x2: Date.UTC(edyr, edmnth, eddt,h,m,s),
-                                      y: y
-                                  }); 
-                              }                                     
-                         });                             
-                       y++; //AXIS INCREAMENT
-                     }); 
-
-  chart2 = Highcharts.chart('eventFrame', {
-                         chart: {
-                           //zoomType: 'xy',
-                           type: 'xrange'
-                         },
-                         title: {
-                           text: ''
-                         },
-                         xAxis: {
-                           type: 'datetime',
-                            events:{               
-                                 afterSetExtremes:function(){                                
-                                         if (!this.chart.options.chart.isZoomed)
-                                         {                                         
-                                            var xMin = this.chart.xAxis[0].min;
-                                            var xMax = this.chart.xAxis[0].max;
-                                            chart2.xAxis[0].isDirty = true;
-                                            chart1.xAxis[0].setExtremes(xMin, xMax, true);                                
-                                            chart1.options.chart.isZoomed = false;
-                                        }
+    //getMap();
+               
+                var url = baseServiceUrl + 'elements/' + WebId + '/eventframes?startTime='+startDateTime+'&endTime='+endDateTime+'&searchFullHierarchy=true'; 
+                var eventFrameData =  processJsonContent(url, 'GET', null);
+                    $.when(eventFrameData).fail(function () {
+                        console.log("Cannot Find the Event Frames.");
+                    });
+                     $.when(eventFrameData).done(function () {
+                          var eventFrames = (eventFrameData.responseJSON.Items);
+                            $.each(eventFrames,function(key) {  
+                                var eventFrameName = eventFrames[key].TemplateName;
+                                eventFrameList.push(eventFrameName);                               
+                                var eventFrameStartTime = eventFrames[key].StartTime;
+                                var eventFrameEndTime = eventFrames[key].EndTime;
+                                    sdate = eventFrameStartTime.substring(0,10);//start date
+                                    stime = eventFrameStartTime.substring(11,19);//start time
+                                    edate = eventFrameEndTime.substring(0,10);//end date
+                                    etime = eventFrameEndTime.substring(11,19);//end time                                     
+                                    sdate = sdate.split('-');//start date split array
+                                    stime = stime.split(':');//start time split array
+                                    edate = edate.split('-');//end date split array
+                                    etime = etime.split(':');//end time split array
+                                if(edate[0]==='9999'){ var edyr=now.getFullYear(), edmnth = now.getMonth(), eddt=now.getDate(), h = now.getHours(), m = now.getMinutes(), s = now.getSeconds(); eventFrameEndTime="Running";}
+                                else{ var edyr=edate[0], edmnth = (edate[1]-1), eddt=edate[2], h = etime[0], m = etime[1], s =etime[2]; } //if Event Frame is Runnig Stage                              
+                                var color ='';
+                                $.each(EFData,function(key) {
+                                    if(eventFrameName===EFData[key].efName){
+                                         color = EFData[key].color;
                                     }
+                                    if(color!==''){
+                                        data.push({
+                                             nm:eventFrameName,
+                                             sd:eventFrameStartTime,
+                                             ed:eventFrameEndTime,
+                                             color:color,
+                                             x: Date.UTC(sdate[0], (sdate[1]-1), sdate[2],stime[0],stime[1],stime[2]),
+                                             x2: Date.UTC(edyr, edmnth, eddt,h,m,s),
+                                             y: y
+                                         }); 
+                                     }else{
+                                          data.push({
+                                             nm:eventFrameName,
+                                             sd:eventFrameStartTime,
+                                             ed:eventFrameEndTime,
+                                             color:defaultColor,
+                                             x: Date.UTC(sdate[0], (sdate[1]-1), sdate[2],stime[0],stime[1],stime[2]),
+                                             x2: Date.UTC(edyr, edmnth, eddt,h,m,s),
+                                             y: y
+                                         }); 
+                                     }                                     
+                                });                             
+                              y++; //AXIS INCREAMENT
+                            }); 
+                            
+         chart2 = Highcharts.chart('eventFrame', {
+                                chart: {
+                                  //zoomType: 'xy',
+                                  type: 'xrange'
+                                },
+                                title: {
+                                  text: ''
+                                },
+                                xAxis: {
+                                  type: 'datetime',
+                                   events:{               
+                                    afterSetExtremes:function(){
+                                
+                                 if (!this.chart.options.chart.isZoomed)
+                                 {                                         
+                                    var xMin = this.chart.xAxis[0].min;
+                                    var xMax = this.chart.xAxis[0].max;
+                                     
+                                    //var zmRange = computeTickInterval(xMin, xMax);
+                                    //chart1.xAxis[0].options.tickInterval =zmRange;
+                                   // chart1.xAxis[0].isDirty = true;
+                                    //chart2.xAxis[0].options.tickInterval = zmRange;
+                                    chart2.xAxis[0].isDirty = true;
+                                     
+                                  // chart1.options.chart.isZoomed = true;
+                                   chart1.xAxis[0].setExtremes(xMin, xMax, true);                                
+                                   chart1.options.chart.isZoomed = false;
                                 }
-                         },
-                        tooltip: {
-                             shared: true,
-                             useHTML: true,
-                             headerFormat:'<table>',
-                             pointFormat: '<tr><th colspan="2" style="text-align: center;font-size:10px;"><b>{point.nm} </b></th></tr>' +
-                                 '<tr><td style="font-size:10px;">Start: {point.sd} - End: {point.ed}</td></tr>',
-                             footerFormat: '</table>',
-                             valueDecimals: 2
-                         },
-                         yAxis: {
-                             gridLineColor: '#FFFFFF',
-                             minorGridLineWidth: 0,
-                             lineColor: '#FFFFFF',
-                             gridLineWidth: 0,
-                           title: {
-                             text: ''
-                           },
-                           categories: eventFrameList,
-                           reversed: true,
-                           labels: {
-                                 enabled: false
-                             }
-                         },
-                         series: [{
-                             showInLegend: false, 
-                             name: 'Event Frames',
-                             pointPadding: 0,
-                             groupPadding: 0,
-                             borderColor: '#ffffff',
-                             pointWidth: 10,
-                             borderRadius:0,
-                             data: edata,
-                           dataLabels: {
-                               format:'{point.nm}',
-                               enabled: false,
-                             style: {
-                                 fontSize: '9',
-                                 fontWeight:''
-                             }
-                           }
-                         }]
-                     });                                                 
-                 chart2.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2]));//EXTREME POINTSET
-             });                    
-         });            
-     }
+                            }
+                        }
+                                },
+                               tooltip: {
+                                    shared: true,
+                                    useHTML: true,
+                                    headerFormat:'<table>',
+                                    pointFormat: '<tr><th colspan="2" style="text-align: center;font-size:10px;"><b>{point.nm} </b></th></tr>' +
+                                        '<tr><td style="font-size:10px;">Start: {point.sd} - End: {point.ed}</td></tr>',
+                                    footerFormat: '</table>',
+                                    valueDecimals: 2
+                                },
+                                yAxis: {
+                                    gridLineColor: '#FFFFFF',
+                                    minorGridLineWidth: 0,
+                                    lineColor: '#FFFFFF',
+                                    gridLineWidth: 0,
+                                  title: {
+                                    text: ''
+                                  },
+                                  categories: eventFrameList,
+                                  reversed: true,
+                                  labels: {
+                                        enabled: false
+                                    }
+                                },
+                                series: [{
+                                    showInLegend: false, 
+                                    name: 'Event Frames',
+                                    pointPadding: 0,
+                                    groupPadding: 0,
+                                    borderColor: '#ffffff',
+                                    pointWidth: 10,
+                                    borderRadius:0,
+                                    data: data,
+                                  dataLabels: {
+                                      format:'{point.nm}',
+                                      enabled: false,
+                                    style: {
+                                        fontSize: '9',
+                                        fontWeight:''
+                                    }
+                                  }
+                                }]
+                            }); 
+                                                
+                        chart2.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2]));//EXTREME POINTSET
+                    });                    
+                });            
+            }
     /*****LOAD EVENT FRAME DATA END****/
              
 /****LOAD CHILD ATTRIBUTES CHARTS****/
@@ -514,6 +536,7 @@ function loadEventFrame(){
         var endDateTime = (endDate + 'T' + endTime+'Z'); 
         var data=[];
         var yAxisData=[];
+        var xAxis=[];
         var sr=0;
         var chkArray=[];
         var vdate='';
@@ -623,6 +646,279 @@ function loadEventFrame(){
             }
     }
 /****LOAD CHILD ATTRIBUTES CHARTS****/
+
+/*********MAIN CHARTS SECTION START**********/  
+//function getMap(){
+//      $(document).ready(function() {
+//    var chart1;
+//    var chart2;
+//    var controllingChart;
+//    
+//    var defaultTickInterval = 5;
+//    var currentTickInterval = defaultTickInterval;
+//        function unzoom() {
+//             chart1.options.chart.isZoomed = false;
+//             chart2.options.chart.isZoomed = false;
+//            
+//            chart1.xAxis[0].setExtremes(null, null);
+//            chart2.xAxis[0].setExtremes(null, null);
+//        }
+//    function computeTickInterval(xMin, xMax) {
+//        var zoomRange = xMax - xMin;
+//        
+//        if (zoomRange <= 2)
+//            currentTickInterval = 0.5;
+//        if (zoomRange < 20)
+//            currentTickInterval = 1;
+//        else if (zoomRange < 100)
+//            currentTickInterval = 5;
+//    }
+//
+//    //explicitly set the tickInterval for the 3 charts - based on
+//    //selected range
+//    function setTickInterval(event) {
+//        var xMin = event.xAxis[0].min;
+//        var xMax = event.xAxis[0].max;
+//        computeTickInterval(xMin, xMax);
+//
+//        chart1.xAxis[0].options.tickInterval = currentTickInterval;
+//        chart1.xAxis[0].isDirty = true;
+//        chart2.xAxis[0].options.tickInterval = currentTickInterval;
+//        chart2.xAxis[0].isDirty = true;
+//    }
+//
+//    //reset the extremes and the tickInterval to default values
+//    function unzoom() {
+//        chart1.xAxis[0].options.tickInterval = defaultTickInterval;
+//        chart1.xAxis[0].isDirty = true;
+//        chart2.xAxis[0].options.tickInterval = defaultTickInterval;
+//        chart2.xAxis[0].isDirty = true;
+//    
+//        chart1.xAxis[0].setExtremes(null, null);
+//        chart2.xAxis[0].setExtremes(null, null);
+//    }
+//    //getMap();
+//            
+//                    /**************///
+//                     var data=[];
+//    var yAxisData=[];
+//    var xAxis=[];
+//    var chkArray = [];
+//    var sr=0;
+//    var startDate = $('#startDate').val();
+//    var startTime = $("#startTime").val();
+//    var startDateTime = (startDate + 'T' + startTime+'Z');
+//    var endDate = $('#endDate').val();
+//    var endTime = $("#endTime").val();
+//    var endDateTime = (endDate + 'T' + endTime+'Z');   
+//    var vdate='';
+//    var vtime='';
+//    
+//        startDate = startDate.split('-');
+//        endDate = endDate.split('-');
+//        startTime = startTime.split(':');
+//        endTime = endTime.split(':');   
+//    $.each($("input[name='selectorLeft']:checked"), function(){ 
+//        var data1=[];
+//        var WebId = $(this).val();
+//        var name = $(this).attr("data-name");
+//        var cat = $(this).attr("data-id");
+//        var min = $("#min"+cat).val();
+//        var max = $("#max"+cat).val();       
+//        chkArray.push(WebId); 
+//        var url = baseServiceUrl+'streams/' + WebId + '/interpolated?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d&searchFullHierarchy=true';
+//        //console.log(url);
+//        var attributesData =  processJsonContent(url, 'GET', null);
+//            $.when(attributesData).fail(function () {
+//                console.log("Cannot Find the Attributes.");
+//            });
+//            $.when(attributesData).done(function () {                 
+//                 var attributesDataItems = (attributesData.responseJSON.Items);
+//                 var unit = '';
+//                 //console.log("count: "+(attributesDataItems.length));
+//                $.each(attributesDataItems,function(key) {
+//                        var Timestamp = attributesDataItems[key].Timestamp;
+//                        var val = (Math.round((attributesDataItems[key].Value) * 100) / 100);                         
+//                        if(isNaN(val)){
+//                           // console.log(val);////Skipping NaN Values
+//                        }else{
+//                            vdate = (Timestamp).substring(0,10);//start date
+//                            vtime = (Timestamp).substring(11,19);//start time                                   
+//                                    vdate = vdate.split('-');//start date split array
+//                                    vtime = vtime.split(':');//start time split array
+//                            var val = Math.round((attributesDataItems[key].Value) * 100) / 100;
+//                            var dt = Date.UTC(vdate[0],(vdate[1]-1),vdate[2],vtime[0],vtime[1],vtime[2]);
+//                            data1.push([dt,val]);
+//                            //xAxis.push(Timestamp); 
+//                            unit = attributesDataItems[key].UnitsAbbreviation;
+//                        }
+//                  });  
+//                  //console.log(data1);
+//                   $.each(eventsColorsData,function(key) {
+//                       if(name===eventsColorsData[key].name){
+//                             data.push({
+//                                name: name,
+//                                type: 'spline',
+//                                yAxis: sr,
+//                                color:eventsColorsData[key].color,
+//                                data: data1,
+//                                tooltip: { valueSuffix: unit}
+//                            });
+//                            //data = data1;
+//                            if(min===''){ min = eventsColorsData[key].min;}
+//                            if(max===''||max===0){ max = eventsColorsData[key].max;}
+//                            // console.log(cat+" min: "+min+" | "+" max: "+max);
+//                            yAxisData.push({
+//                                min:min,//eventsColorsData[key].min,
+//                                max:max,//eventsColorsData[key].max,
+//                                title: {text: ''},
+//                                labels: {format: '{value}'+unit,
+//                                    style: {color: eventsColorsData[key].color}
+//                                }
+//                            }); 
+//                       }
+//                   });    
+//                   //console.log(JSON.stringify(data));
+//                                 
+//               chart2 =   Highcharts.chart('container', {
+//                        chart: {
+//                            zoomType: 'xy',
+//                              type: 'spline'
+//                              },
+//                        title: {
+//                            text: ''
+//                        },
+//                        subtitle: {
+//                            text: ''
+//                        },
+//                         xAxis: {
+//                                  type: 'datetime',
+//                                   events:{               
+//                                    afterSetExtremes:function(){
+//                                
+//                                 if (!this.chart.options.chart.isZoomed)
+//                                 {                                         
+//                                    var xMin = this.chart.xAxis[0].min;
+//                                    var xMax = this.chart.xAxis[0].max;
+//                                     
+//                                    var zmRange = computeTickInterval(xMin, xMax);
+//                                    chart1.xAxis[0].options.tickInterval =zmRange;
+//                                    chart1.xAxis[0].isDirty = true;
+//                                    chart2.xAxis[0].options.tickInterval = zmRange;
+//                                    chart2.xAxis[0].isDirty = true;
+//                                     
+//                                   chart2.options.chart.isZoomed = true;
+//                                   chart2.xAxis[0].setExtremes(xMin, xMax, true);
+//                                
+//                                   chart2.options.chart.isZoomed = false;
+//                                }
+//                            }
+//                            
+//                            
+//                        }
+//                                },
+//                        yAxis: yAxisData, //Y AXIS RANGE DATA
+//                        tooltip: {
+//                                shared: true
+//                        },
+//                        plotOptions: {
+//                            spline: {
+//                                lineWidth: 1,
+//                                states: {
+//                                    hover: {
+//                                        lineWidth: 2
+//                                    }
+//                                },
+//                            }
+//                        },
+//                        legend: {
+//                            layout: 'vetical',
+//                            align: 'right',
+//                            x: 0,
+//                            verticalAlign: 'top',
+//                            y: 40,
+//                            floating: true,
+//                            enabled: false
+//                        },
+//                       
+//                    series:data  //PI ATTRIBUTES RECORDED DATA
+//                    
+//                });
+//               chart2.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2],startTime[0],startTime[1],startTime[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2],endTime[0],endTime[1],endTime[2]));//EXTREME POINTSET
+//                sr++;
+//            });            
+//    }); 
+//     if(chkArray.length === 0){
+//        $("#container").empty(); //Empty chart Div  
+//    }else{
+//     //console.log(chkArray);
+//    }
+//    
+//    
+//    
+//    
+//    /******/
+//    
+//       
+//                    
+//                });            
+//}
+//function getMap(){
+//    var chart1;
+//    var chart2;
+//    var controllingChart;
+//    
+//    var defaultTickInterval = 5;
+//    var currentTickInterval = defaultTickInterval;
+//    
+//    $(document).ready(function() {
+//        function unzoom() {
+//             chart1.options.chart.isZoomed = false;
+//             chart2.options.chart.isZoomed = false;
+//            
+//            chart1.xAxis[0].setExtremes(null, null);
+//            chart2.xAxis[0].setExtremes(null, null);
+//        }
+//    function computeTickInterval(xMin, xMax) {
+//        var zoomRange = xMax - xMin;
+//        
+//        if (zoomRange <= 2)
+//            currentTickInterval = 0.5;
+//        if (zoomRange < 20)
+//            currentTickInterval = 1;
+//        else if (zoomRange < 100)
+//            currentTickInterval = 5;
+//    }
+//
+//    //explicitly set the tickInterval for the 3 charts - based on
+//    //selected range
+//    function setTickInterval(event) {
+//        var xMin = event.xAxis[0].min;
+//        var xMax = event.xAxis[0].max;
+//        computeTickInterval(xMin, xMax);
+//
+//        chart1.xAxis[0].options.tickInterval = currentTickInterval;
+//        chart1.xAxis[0].isDirty = true;
+//        chart2.xAxis[0].options.tickInterval = currentTickInterval;
+//        chart2.xAxis[0].isDirty = true;
+//    }
+//
+//    //reset the extremes and the tickInterval to default values
+//    function unzoom() {
+//        chart1.xAxis[0].options.tickInterval = defaultTickInterval;
+//        chart1.xAxis[0].isDirty = true;
+//        chart2.xAxis[0].options.tickInterval = defaultTickInterval;
+//        chart2.xAxis[0].isDirty = true;
+//    
+//        chart1.xAxis[0].setExtremes(null, null);
+//        chart2.xAxis[0].setExtremes(null, null);
+//    }
+//
+//   
+// });
+//}
+
+
 
   /*********MAIN CHARTS SECTION END**********/  
   
