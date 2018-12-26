@@ -6,7 +6,7 @@ app.config(function($routeProvider){
     .when("/Master",{controller:"masterController",templateUrl:"Views/master_dashboard.html"})
     .when("/Allocation",{controller:"allocationController",templateUrl:"Views/allocation.html"})
     .when("/AssetDesign",{controller:"assetdesignController",templateUrl:"Views/assetDesign.html"})
-     .when("/Upload",{controller:"uploadController",templateUrl:"Views/upload.html"})
+    .when("/MasterNew",{controller:"newController",templateUrl:"Views/master_newdashboard.html"})
     .otherwise({redirectTo:'/Home'})});
 
 var processJsonContent=function(url,type,data){

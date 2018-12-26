@@ -62,10 +62,12 @@ var EFData = [
     }
 ]; ///EVENT FRAME DATA JSON ARRAY 
 var defaultColor="#ccc";
-
+var minLTclr="#FF0000";
+var btwnLTHTclr="#FFFF00";
+var maxHTclr="#1ce74a";
 var tableAttrColors = [
     {
-        "name":"U","LT":20,"HT":50 
+        "name":"U","LT":20,"HT":50
     },
     {
         "name":"KU","LT":50,"HT":120

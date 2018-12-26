@@ -135,14 +135,14 @@ app.controller('masterController', function($scope) {
                                        var bgcolor='';
                                        $.each(tableAttrColors,function(key) {
                                             if(currName===tableAttrColors[key].name){
-                                                  if(Value < tableAttrColors[key].LT){
-                                                        bgcolor="#FF0000";
+                                                   if(Value < tableAttrColors[key].LT){
+                                                        bgcolor=minLTclr;
                                                   }else if(Value > tableAttrColors[key].LT && Value < tableAttrColors[key].HT){
-                                                        bgcolor="#FFFF00";
+                                                        bgcolor=btwnLTHTclr;
                                                   }else if(Value > tableAttrColors[key].HT){
-                                                        bgcolor="#1ce74a";
+                                                        bgcolor=maxHTclr;
                                                   }else{
-                                                        bgcolor="#D3D3D3";//NaN
+                                                        bgcolor=defaultColor;//NaN
                                                   }
                                             }
                                        }); 
@@ -306,8 +306,8 @@ function loadEventFrame(){
                             }); 
         var chart = Highcharts.chart('eventFrame', {
                                 chart: {
-                                  type: 'xrange'
-                                 // zoomType: 'xy'
+                                  type: 'xrange',
+                                  zoomType: 'xy'
                                 },
                                 title: {
                                   text: ''
