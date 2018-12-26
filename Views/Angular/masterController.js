@@ -115,8 +115,8 @@ app.controller('masterController', function($scope) {
                          $("#attributesListLeft").append('<li class="paramterListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getMap('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
                             <label class="labelListChild leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+'</label>\n\
                             <div class="ScaleDiv">\n\
-                                <input type="text" value="" class="scales" placeholder="Min" name="min" onchange="getMap('+cat+');" id="min'+cat+'">\n\
-                                <input type="text" value="" class="scales" placeholder="Max" name="max" onchange="getMap('+cat+');" id="max'+cat+'">\n\
+                                <input type="text" class="scales min" placeholder="Min" name="min" onchange="getMap('+cat+');" id="min'+cat+'">\n\
+                                <input type="text" class="scales max" placeholder="Max" name="max" onchange="getMap('+cat+');" id="max'+cat+'">\n\
                             </div>\n\
                              </li>');  
                         }
