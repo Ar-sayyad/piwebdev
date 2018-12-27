@@ -212,6 +212,9 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
     text-align: center;
     text-transform: capitalize;
 }
+.topheader h4{
+    color:#343a40;
+}
 .wd100{
     width:100%;
 }
@@ -417,4 +420,7 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
  }
  .max{
     background-color: #fdd2d2;
+ }
+ .blockname{
+     color:#343a40;
  }

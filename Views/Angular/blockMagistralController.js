@@ -24,7 +24,7 @@ app.controller('blockMagistralController', function($scope) {
                                             <div class="card cardpadding">\n\
                                                 <div class="card-body" style="text-align: center;margin-top: 15px;">\n\
                                                     <input type="hidden" id="elements' + sr + '" data-id="' + elementsItems[key].Name + '" value="' + elementsItems[key].WebId + '" class="elements form-control">\n\
-                                                    <h4>' + elementsItems[key].Name + '</h4>\n\
+                                                    <h4 class="blockname">' + elementsItems[key].Name + '</h4>\n\
                                                 </div>\n\
                                             </div>\n\
                                         </div>\n\
