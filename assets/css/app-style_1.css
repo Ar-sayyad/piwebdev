@@ -14,10 +14,10 @@ html {
 }
 body {
 	background:#f7f7ff;
-	font-family: 'Roboto', sans-serif;
-	font-size: 15px;
-	color: #636363;
-	letter-spacing: 1px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    color: #636363;
+    letter-spacing: 1px;
 }
 [tabindex="-1"]:focus {
 	outline: 0!important
@@ -38,8 +38,9 @@ body {
 }
 
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
-	font-weight: 600;
-	color: #212529;
+	color: #292929;
+	/* font-weight: 600; */
+	color: #223035;
 }
 .h1, h1 {
 	font-size: 48px;
@@ -204,7 +205,7 @@ hr {
 }
 
 #sidebar-wrapper {
-  background: #212529;
+  background: #e2e2e2;
   position: fixed;
   top: 0px;
   left: 0px;
@@ -383,7 +384,7 @@ hr {
 }
 
 .logo-text{
-	color: #fbfbfb;
+	color: #223035;
 	font-size: 20px;
 	display: inline-block;
 	position: relative;

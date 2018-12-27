@@ -1,4 +1,4 @@
-app.controller('masterController', function($scope) {
+app.controller('masterController', function($scope) {   
     $scope.pagename = "Master Dashboard";
     $(".tabDiv").hide();
     var now = new Date();

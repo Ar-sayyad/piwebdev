@@ -249,7 +249,7 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
     box-shadow: 1px 1px 1px 0px #6c757d, 0 0px 6px 0 #f8f9fa;
 }
 .attributeData1 div,.attributeData div{
-    border: 1px solid #495057;
+    border: 1px solid #ccc;
     height: 80px;
 }
 .attributeData span{
