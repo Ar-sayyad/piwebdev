@@ -10,7 +10,7 @@ app.controller('blockMagistralController', function($scope) {
         var WebId = (ajaxEF.responseJSON.WebId);
         
         /****Get Element List by Template Name START***/
-            var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elements?templateName=' + templateName + '&searchFullHierarchy=true';
+            var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elements?templateName=' + newtemplateName + '&searchFullHierarchy=true';
             var elementdata = processJsonContent(url, 'GET', null);
             $.when(elementdata).fail(function() {
                 warningmsg("Cannot Find the Element.");
