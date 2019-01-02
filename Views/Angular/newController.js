@@ -568,7 +568,8 @@ function loadEventFrame(){
                                 max:eventsColorsData[key].max,
                                 title: {text: ''},
                                 labels: {format: '{value}'+unit,
-                                    style: {color: eventsColorsData[key].color}
+                                    style: {color: eventsColorsData[key].color},
+                                    enabled: false
                                 }
                             }); 
                        }
