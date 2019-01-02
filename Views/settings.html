@@ -1,0 +1,56 @@
+<header class="topbar-nav">
+    <nav class="navbar navbar-expand bg-white">
+        <h4>{{pagename}}</h4>    
+    </nav>
+</header>
+<div class="content-wrapper">
+    <div class="container-fluid">
+      <!--Start Dashboard Content-->      
+      <div class="row">
+          <div class="col-12 col-lg-6 col-xl-6">
+          <div class="card">
+            <div class="card-body">
+                <div class="form-group">
+                     <span class="slect">
+                           <label>Select Color :</label>
+                      </span>
+                      <span class="slectBox">
+                          <input type="color" class="form-control" name="color" id="bgcolor">
+                    </span>                        
+                </div>                
+            </div>
+          </div>
+        </div>
+       
+          <div class="col-12 col-lg-6 col-xl-6">
+          <div class="card">
+            <div class="card-body">
+                <div class="form-group">
+                    <span class="slect">
+                           <label>Select Elements :</label>
+                      </span>
+                      <span class="slectBox">
+                          <select ng-change="check()" id="elementTemplatesRight" style="width: 90%;" class="form-control" ng-model="cardSelected">
+                        <option value="">---Select Elements---</option>
+                     </select> 
+                     </span>                
+                </div>
+                
+            </div>
+          </div>
+        </div>
+      
+      </div>
+      
+      <!--End Row-->		  
+      
+       <!--End Dashboard Content-->
+       
+    </div>
+    <!-- End container-fluid-->
+    <div class="container-fluid" style="margin-top: 0px;">
+  
+    </div>
+    </div>
+
+  

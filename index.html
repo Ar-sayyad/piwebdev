@@ -66,6 +66,11 @@
                   <i class="ti-layout-grid2"></i> <span>New Dashboard</span>
               </a>
           </li>
+           <li ng-class="{active : isSelected('Settings')}">
+              <a href="#!Settings" ng-click="setMaster('Settings')" class="waves-effect">
+                  <i class="ti-settings"></i> <span>Settings</span>
+              </a>
+          </li>
         </ul>	 
    </div>    
    <!--End sidebar-wrapper-->
@@ -111,5 +116,6 @@
   <script src="Views/Angular/uploadController.js" type="text/javascript"></script>
   <script src="Views/Angular/blockMagistralController.js" type="text/javascript"></script>
   <script src="Views/Angular/newController.js" type="text/javascript"></script>
+  <script src="Views/Angular/settingController.js" type="text/javascript"></script>
 </body>
 </html>
