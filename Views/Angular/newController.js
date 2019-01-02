@@ -185,7 +185,7 @@ app.controller('newController', function($scope) {
             });
             $.when(childParaData).done(function () {
                 $(".childGraph").append('<input type="hidden" id="childId'+inc+'" value="'+ChildWebId+'"><input type="hidden" id="childName'+inc+'" value="'+childName+'">');
-                $("#cellgraph"+inc).append('<h6 sty>'+childName+'</h6>');
+                $("#cellgraph"+inc).append('<h6 style="color:black;">'+childName+'</h6>');
                  var childAttributesItems = (childParaData.responseJSON.Items);
                  var cat=1;
                  $.each(childAttributesItems,function(key) {  
