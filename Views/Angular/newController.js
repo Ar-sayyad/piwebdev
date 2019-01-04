@@ -1,16 +1,24 @@
 app.controller('newController', function($scope) {  
-    $scope.pagename = "New Dashboard";
+    $scope.pagename = "Master Dashboard";
     $(".tabDiv").hide();
     var now = new Date();
     $(function() {   
-       var month = (now.getMonth() + 1);  
-       var emonth = (now.getMonth());
+       var emonth = '';
+       var yr='';
+       var month = (now.getMonth()+1); 
+            if(month===1){
+                 emonth = 12;
+                 yr = (now.getFullYear()-1);
+             }else{
+                emonth = now.getMonth();
+                yr = now.getFullYear();
+             }
        var day = now.getDate();
        if (month < 10) 
            month = "0" + month;
        if (day < 10) 
            day = "0" + day;
-       var start = now.getFullYear()+'-'+emonth + '-' + day;
+       var start = yr +'-'+emonth + '-' + day;       
        var end = now.getFullYear()+'-'+month + '-' + day;
         $("#startDate").val(start);
         $("#startDate").datepicker({dateFormat: 'yy-mm-dd',maxDate : '0'});

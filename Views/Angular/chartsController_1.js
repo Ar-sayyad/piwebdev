@@ -241,6 +241,7 @@ function loadEventFrame(){
     var chart2;
       /**************///
         var data=[];
+        var bardata=[];
         var yAxisData=[];
         var chkArray = [];
         var sr=0;
@@ -266,6 +267,7 @@ function loadEventFrame(){
     /*****Main Charts****/
     $.each($("input[name='selectorLeft']:checked"), function(){ 
         var data1=[];
+        var bardata1=[];
         var WebId = $(this).val();
         var name = $(this).attr("data-name");
         var cat = $(this).attr("data-id");
@@ -295,11 +297,36 @@ function loadEventFrame(){
                             var val = Math.round((attributesDataItems[key].Value) * 100) / 100;
                             var dt = Date.UTC(vdate[0],(vdate[1]-1),vdate[2],vtime[0],vtime[1],vtime[2]);
                             data1.push([dt,val]);
+                            bardata1.push(val);
                             //xAxis.push(Timestamp); 
                             unit = attributesDataItems[key].UnitsAbbreviation;
                         }
                   });  
-                  //console.log(data1);
+                  //console.log("data: "+bardata1.length);
+           var bar = Highcharts.chart('barChartLoad', {
+                            title: {
+                                text: ''
+                            },
+
+                            subtitle: {
+                                text: 'Plain'
+                            },
+    xAxis: {
+        type: 'datetime',
+        //categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    },
+
+    series: [{
+                    type: 'column',
+                    data: bardata1,
+                    colorByPoint: true,
+                    showInLegend: false
+                }]
+});
+ bar.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2],startTime[0],startTime[1],startTime[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2],endTime[0],endTime[1],endTime[2]));//EXTREME POINTSET
+
+
+
                    $.each(eventsColorsData,function(key) {
                        if(name===eventsColorsData[key].name){
                              data.push({
@@ -310,6 +337,7 @@ function loadEventFrame(){
                                 data: data1,
                                 tooltip: { valueSuffix: unit}
                             });
+                                 
                             //data = data1;
                             if(min===''){ min = eventsColorsData[key].min;}
                             if(max===''||max===0){ max = eventsColorsData[key].max;}
@@ -325,12 +353,12 @@ function loadEventFrame(){
                             }); 
                        }
                    });    
-                   //console.log(JSON.stringify(data));
+                //   console.log(JSON.stringify(bardata));
                                  
                chart1 =   Highcharts.chart('container', {
                         chart: {
                             zoomType: 'xy',
-                              type: 'spline'
+                              type: 'area'
                               },
                         title: {
                             text: ''
@@ -380,6 +408,8 @@ function loadEventFrame(){
                 });
                chart1.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2],startTime[0],startTime[1],startTime[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2],endTime[0],endTime[1],endTime[2]));//EXTREME POINTSET
                 sr++;
+                       
+
             });            
     }); 
      if(chkArray.length === 0){
@@ -512,7 +542,44 @@ function loadEventFrame(){
          
          
          /*****Load Bar Chart*****/
-         
+
+$('#plain').click(function () {
+    bar.update({
+        chart: {
+            inverted: false,
+            polar: false
+        },
+        subtitle: {
+            text: 'Plain'
+        }
+    });
+});
+
+$('#inverted').click(function () {
+    bar.update({
+        chart: {
+            inverted: true,
+            polar: false
+        },
+        subtitle: {
+            text: 'Inverted'
+        }
+    });
+});
+
+$('#polar').click(function () {
+    bar.update({
+        chart: {
+            inverted: false,
+            polar: true
+        },
+        subtitle: {
+            text: 'Polar'
+        }
+    });
+});
+
+
          /****end bar chart*****/
      }
     /*****LOAD EVENT FRAME DATA END****/
