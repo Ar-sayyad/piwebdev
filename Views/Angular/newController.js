@@ -107,13 +107,17 @@ app.controller('newController', function($scope) {
                                    
                      $.each(category,function(key1) {
                          if(trendCat===category[key1]){
-                         $("#attributesListLeft").append('<li class="paramterListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getCharts('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
+                             $.each(eventsColorsData,function(key1) {
+                                if(attributesItems[key].Name===eventsColorsData[key1].name){
                             <label class="labelListChild leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+'</label>\n\
                             <div class="ScaleDiv">\n\
-                                <input type="text" class="scales min" placeholder="Min" name="min" onchange="getCharts('+cat+');" id="min'+cat+'">\n\
-                                <input type="text" class="scales max" placeholder="Max" name="max" onchange="getCharts('+cat+');" id="max'+cat+'">\n\
+                                <input type="text" class="scales min" placeholder="Min" value="'+eventsColorsData[key1].min+'" name="min" onchange="getCharts('+cat+');" id="min'+cat+'">\n\
+                                <input type="text" class="scales max" placeholder="Max" value="'+eventsColorsData[key1].max+'" name="max" onchange="getCharts('+cat+');" id="max'+cat+'">\n\
                             </div>\n\
                              </li>');  
+                            }
+                            });
+                         
                         }
                         
                         else if(timestampCat===category[key1] || valueCat===category[key1]){
