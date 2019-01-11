@@ -109,6 +109,7 @@ app.controller('newController', function($scope) {
                          if(trendCat===category[key1]){
                              $.each(eventsColorsData,function(key1) {
                                 if(attributesItems[key].Name===eventsColorsData[key1].name){
+                                    $("#attributesListLeft").append('<li class="paramterListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getCharts('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
                             <label class="labelListChild leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+'</label>\n\
                             <div class="ScaleDiv">\n\
                                 <input type="text" class="scales min" placeholder="Min" value="'+eventsColorsData[key1].min+'" name="min" onchange="getCharts('+cat+');" id="min'+cat+'">\n\
