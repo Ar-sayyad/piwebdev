@@ -97,16 +97,17 @@
                   </div>
                 </div>
             
-                <div class="card col-12 col-lg-6 col-xl-12" style="display: none;">
+                <div class="card col-12 col-lg-6 col-xl-12" id="chartViewData" style="display: none;">
                     <div class="card-body newchartDiv">
                         <div id="container" class="chonicleContainer"></div>
                         <!--<div id="eventFrame" class="eventFrameContainer scrollbar"></div>-->
                     </div>
                 </div>
-                  <div class="card col-12 col-lg-6 col-xl-12">
+                  <div class="card col-12 col-lg-6 col-xl-12" id="tableViewData" >
                     <div class="card-body newchartDiv">
+                        <button id="generate-excel" style="float: right;" class="btn btn-primary"><i class="ti-download"></i> Excel</button>
                         <div id="containerTable" class="chonicleContainer">
-                            <table class="table table-bordered table-striped">
+                            <table id="test_table" class="table table-bordered table-striped">
                                 <thead>
                                 <tr>
                                     <th>Sr.No.</th>

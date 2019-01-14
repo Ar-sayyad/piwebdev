@@ -35,7 +35,21 @@ app.controller('chroniclesController', function($scope) {
       $('input[type="time"][name="starttime"]').attr({'value':'00:00:00' });
       $('input[type="time"][name="endtime"]').attr({'value': h + ':' + m + ':' + s });
     });
-    
+    $("#chartView").click(function(){
+        $("#tableViewData").hide();
+        $("#chartViewData").show();
+    });
+    $("#tableView").click(function(){
+        $("#tableViewData").show();
+        $("#chartViewData").hide();
+    });
+    var excel = new ExcelGen({
+        "src_id": "test_table",
+        "show_header": true
+    });
+    $("#generate-excel").click(function () {
+        excel.generate();
+    });
     var url = baseServiceUrl+'assetdatabases?path=\\\\' + afServerName + '\\' + afDatabaseName; 
        var ajaxEF =  processJsonContent(url, 'GET', null);
            $.when(ajaxEF).fail(function () {
