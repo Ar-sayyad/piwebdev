@@ -59,17 +59,16 @@ app.controller('chroniclesController', function($scope) {
                var WebId = (ajaxEF.responseJSON.WebId); 
                
                 /****TEMPLATE ELEMENT SEARCH BY TEMPLATE NAME START****/
-                var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elementtemplates?field=Categories&query='+filterCategoryName+'&searchFullHierarchy=true';
-                //var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elements?templateName=' + templateName+'&searchFullHierarchy=true';
-                    var parentTemplateList =  processJsonContent(url, 'GET', null);                    
-                    $.when(parentTemplateList).fail(function () {
+                var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elements?templateName=' + templateName+'&searchFullHierarchy=true';
+                    var elementList =  processJsonContent(url, 'GET', null);                    
+                    $.when(elementList).fail(function () {
                         warningmsg("Cannot Find the Element Templates.");
                     });
-                    $.when(parentTemplateList).done(function () {
-                     var parentTemplateListItems = (parentTemplateList.responseJSON.Items);
+                    $.when(elementList).done(function () {
+                     var elementListItems = (elementList.responseJSON.Items);
                      var sr= 1;
-                        $.each(parentTemplateListItems,function(key) {
-                            $("#parentTemplateList").append("<option  data-id="+WebId+" value="+parentTemplateListItems[key].Name+">"+parentTemplateListItems[key].Name+"</option>"); 
+                        $.each(elementListItems,function(key) {
+                            $("#elementList").append("<option  data-name="+elementListItems[key].Name+" value="+elementListItems[key].WebId+">"+elementListItems[key].Name+"</option>"); 
                             sr++;
                         }); 
                     });  
@@ -77,38 +76,21 @@ app.controller('chroniclesController', function($scope) {
                });
     
     /*****BLOCK ELEMENT ONCHNAGE START****/
-    $("#parentTemplateList").change(function (){
-        var parentTemplateID = $("#parentTemplateList option:selected").attr("data-id");//BLOCK ELEMENT NAME FOR IFRAME GRAPH GENERATION
-            $("#container").empty();
-            $("#parentList").empty();
-           $("#parentList").append("<option value='' selected disabled>---Select Parent---</option>");
-        var parentTemplateName = $("#parentTemplateList").val();
+    $("#elementList").change(function (){
+        var elementName = $("#elementList option:selected").attr("data-name");//BLOCK ELEMENT NAME FOR IFRAME GRAPH GENERATION
+        var iframeUrl= iframeConfigUrl+'?name='+elementName; //IFRAME URL 
+        $('.iframeMapp').attr('src', iframeUrl);  
+        //console.log(iframeUrl);
+        $("#container").empty();
+        $("#attributesListLeft").empty();
+       // $(".tableAttributes").empty();
+        //$("#elementChildList").empty();
+        $("#cellGraphList").empty(); 
+        $(".tabDiv").show();
+        var WebId = $("#elementList").val();
          
-          var url = baseServiceUrl + 'assetdatabases/' + parentTemplateID + '/elements?templateName=' + parentTemplateName+'&searchFullHierarchy=true';
-                    var parentList =  processJsonContent(url, 'GET', null);                    
-                    $.when(parentList).fail(function () {
-                        warningmsg("Cannot Find the Element Templates.");
-                    });
-                    $.when(parentList).done(function () {
-                     var parentListItems = (parentList.responseJSON.Items);
-                     var sr= 1;
-                        $.each(parentListItems,function(key) {
-                            $("#parentList").append("<option  data-name="+parentListItems[key].Name+" value="+parentListItems[key].WebId+">"+parentListItems[key].Name+"</option>"); 
-                            sr++;
-                        }); 
-                    });  
-           });          
-                    
     /*****GET CHART DATA AND VALUE AND TIMESTAMP ATTRIBUTES START****/
-    $("#parentList").change(function (){
-           var parentname = $("#parentList option:selected").attr("data-name");//BLOCK ELEMENT NAME FOR IFRAME GRAPH GENERATION
-            //$("#container").empty();
-           // $("#elementList").empty();
-              $("#attributesListLeft").empty();
-           //$("#elementList").append("<option value='' selected disabled>---Select Parent---</option>");
-        var parentWebId = $("#parentList").val();
-        var url = baseServiceUrl + 'elements/' + parentWebId + '/attributes';
-        console.log(url);
+        var url = baseServiceUrl + 'elements/' + WebId + '/attributes';
         var attributesList =  processJsonContent(url, 'GET', null);
             $.when(attributesList).fail(function () {
                 warningmsg("Cannot Find the Attributes.");
@@ -122,16 +104,22 @@ app.controller('chroniclesController', function($scope) {
                                    
                      $.each(category,function(key1) {
                          if(trendCat===category[key1]){
-                         $("#attributesListLeft").append('<li class="elListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getCharts('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
-                            <label class="labelListAttr leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+' ('+attributesItems[key].DefaultUnitsNameAbbreviation+')</label></li>');  
-                             $("#eldata").append('<th>'+attributesItems[key].Name+'</th>');
+                         $("#attributesListLeft").append('<li class="paramterListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getCharts('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
+                            <label class="labelListChild leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+'</label>\n\
+                            <div class="ScaleDiv">\n\
+                                <input type="text" class="scales min" placeholder="Min" name="min" onchange="getCharts('+cat+');" id="min'+cat+'">\n\
+                                <input type="text" class="scales max" placeholder="Max" name="max" onchange="getCharts('+cat+');" id="max'+cat+'">\n\
+                            </div>\n\
+                             </li>');  
                         }
+                        
+                       
                      });
                     cat++;
                  });                                            
             });  
-//            /*****GET CHART DATA AND VALUE AND TIMESTAMP ATTRIBUTES END****/
-//             loadEventFrame();//Loading Event Frames
+            /*****GET CHART DATA AND VALUE AND TIMESTAMP ATTRIBUTES END****/
+             loadEventFrame();//Loading Event Frames
         });
 /*****BLOCK ELEMENT ONCHNAGE END****/   
 });

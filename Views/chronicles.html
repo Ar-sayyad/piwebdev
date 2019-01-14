@@ -14,7 +14,7 @@
                           <span class="">
                                <label>Select Templates :</label>
                               <select id="parentTemplateList" style="width:95%;" class="form-control">
-                                <option value="">---Select Template---</option>
+                                  <option value="" selected="" disabled="">---Select Template---</option>
                              </select>                         
                          </span>                        
                     </div>                
@@ -26,24 +26,24 @@
                           <span class="">
                                <label>Select Parents :</label>
                               <select id="parentList" style="width:95%;" class="form-control">
-                                <option value="">---Select Parent---</option>
+                                <option value="">--Select Parent--</option>
                              </select>                         
                          </span>                        
                     </div>                
                 </div>
               </div>
-                <div class="card">
+<!--                <div class="card">
                 <div class="card-body">
                     <div class="form-group">                         
                           <span class="">
                                <label>Select Elements :</label>
-                              <select id="elementList" style="width:95%;" multiple class="form-control">
-                                <!--<option value="">---Select Elements---</option>-->
+                              <select id="elementList" style="width:95%;" multiple class="form-control" onchange="getCharts();" >
+                                <option value="">---Select Elements---</option>
                              </select>                         
                          </span>                        
                     </div>                
                 </div>
-              </div>
+              </div>-->
                  <div class="card">
                     <div class="card-body newchartDiv scrollbar" id="style-1">
                         <ul id="attributesListLeft"></ul> 
@@ -109,7 +109,7 @@
                         <div id="containerTable" class="chonicleContainer">
                             <table id="test_table" class="table table-bordered table-striped">
                                 <thead>
-                                <tr>
+                                    <tr id="eldata">
                                     <th>Sr.No.</th>
                                     <th>Date</th>
                                     <th>Element1</th>
