@@ -49,6 +49,18 @@
                         <ul id="attributesListLeft"></ul> 
                     </div>
                </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">                         
+                          <span class="">
+                               <label>Assets :</label>
+                              <select id="elementList" style="width:95%;" multiple class="form-control" onchange="getCharts();" >
+                                <!--<option value="">---Select Elements---</option>-->
+                             </select>                         
+                         </span>                        
+                    </div>                
+                </div>
+              </div>
             </div>
             <div class="col-12 col-lg-6 col-xl-10">
               
@@ -109,35 +121,12 @@
                         <div id="containerTable" class="chonicleContainer">
                             <table id="test_table" class="table table-bordered table-striped">
                                 <thead>
-                                    <tr id="eldata">
-                                    <th>Sr.No.</th>
-                                    <th>Date</th>
-                                    <th>Element1</th>
-                                    <th>Element2</th>
-                                    <th>Element3</th>
-                                </tr>
+                                    <tr id="eldata">                                        
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>14-01-2019</td>
-                                        <td>33</td>
-                                        <td>45</td>
-                                        <td>76</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>14-01-2019</td>
-                                        <td>33</td>
-                                        <td>45</td>
-                                        <td>76</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>14-01-2019</td>
-                                        <td>33</td>
-                                        <td>45</td>
-                                        <td>76</td>
+                                    <tr id="tbldata">
+                                        
                                     </tr>
                                 </tbody>
                                 

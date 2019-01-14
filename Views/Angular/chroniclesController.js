@@ -94,6 +94,7 @@ app.controller('chroniclesController', function($scope) {
                      var sr= 1;
                         $.each(parentListItems,function(key) {
                             $("#parentList").append("<option  data-name="+parentListItems[key].Name+" value="+parentListItems[key].WebId+">"+parentListItems[key].Name+"</option>"); 
+                            $("#elementList").append("<option  data-name="+parentListItems[key].Name+" value="+parentListItems[key].WebId+">"+parentListItems[key].Name+"</option>"); 
                             sr++;
                         }); 
                     });  
@@ -108,7 +109,7 @@ app.controller('chroniclesController', function($scope) {
            //$("#elementList").append("<option value='' selected disabled>---Select Parent---</option>");
         var parentWebId = $("#parentList").val();
         var url = baseServiceUrl + 'elements/' + parentWebId + '/attributes';
-        console.log(url);
+        //console.log(url);
         var attributesList =  processJsonContent(url, 'GET', null);
             $.when(attributesList).fail(function () {
                 warningmsg("Cannot Find the Attributes.");
@@ -117,14 +118,16 @@ app.controller('chroniclesController', function($scope) {
                  var attributesItems = (attributesList.responseJSON.Items);
                  var cat=1;
                  var WebIdVal='';
+                
                  $.each(attributesItems,function(key) {  
-                     var category = attributesItems[key].CategoryNames;                       
+                     var category = attributesItems[key].CategoryNames;                      
                                    
                      $.each(category,function(key1) {
                          if(trendCat===category[key1]){
                          $("#attributesListLeft").append('<li class="elListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getCharts('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
                             <label class="labelListAttr leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+' ('+attributesItems[key].DefaultUnitsNameAbbreviation+')</label></li>');  
-                             $("#eldata").append('<th>'+attributesItems[key].Name+'</th>');
+                          
+                             
                         }
                      });
                     cat++;
@@ -150,7 +153,7 @@ function getCharts(){
 /*****LOAD EVENT FRAME DATA START****/ 
 function loadEventFrame(){
     var chart1;
-    var chart2;
+    //var chart2;
       /**************///
         var data=[];
         var yAxisData=[];
@@ -169,11 +172,6 @@ function loadEventFrame(){
         startTime = startTime.split(':');
         endTime = endTime.split(':');  
         
-        var now = new Date();
-        var WebId = $("#elementList").val();
-        var eventFrameList=[];
-        var edata=[];
-        var sdate ='',stime ='',edate ='',etime ='',y=0;
       $(document).ready(function() {    
     /*****Main Charts****/
     $.each($("input[name='selectorLeft']:checked"), function(){ 
@@ -190,16 +188,18 @@ function loadEventFrame(){
             $.when(attributesData).fail(function () {
                 console.log("Cannot Find the Attributes.");
             });
+            
             $.when(attributesData).done(function () {                 
                  var attributesDataItems = (attributesData.responseJSON.Items);
                  var unit = '';
                  //console.log("count: "+(attributesDataItems.length));
+                 $("#eldata").append('<th id='+name+'>'+name+'</th>');
                 $.each(attributesDataItems,function(key) {
                         var Timestamp = attributesDataItems[key].Timestamp;
                         var val = (Math.round((attributesDataItems[key].Value) * 100) / 100);                         
                         if(isNaN(val)){
                            // console.log(val);////Skipping NaN Values
-                        }else{
+                        }else{                            
                             vdate = (Timestamp).substring(0,10);//start date
                             vtime = (Timestamp).substring(11,19);//start time                                   
                                     vdate = vdate.split('-');//start date split array
@@ -208,8 +208,10 @@ function loadEventFrame(){
                             var dt = Date.UTC(vdate[0],(vdate[1]-1),vdate[2],vtime[0],vtime[1],vtime[2]);
                             data1.push([dt,val]);
                             //xAxis.push(Timestamp); 
-                            unit = attributesDataItems[key].UnitsAbbreviation;
+                            unit = attributesDataItems[key].UnitsAbbreviation;     
+                            $("#tbldata").append('<tr><td>'+val+'</td></tr>');
                         }
+                      
                   });  
                   //console.log(data1);
                    $.each(eventsColorsData,function(key) {
