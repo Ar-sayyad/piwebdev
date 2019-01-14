@@ -1,5 +1,5 @@
-app.controller('chartsController', function($scope) {  
-    $scope.pagename = "Charts";
+app.controller('chroniclesController', function($scope) {  
+    $scope.pagename = "Chronicles";
     $(".tabDiv").hide();
     var now = new Date();
     $(function() {  

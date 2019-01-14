@@ -8,7 +8,7 @@ app.config(function($routeProvider){
     .when("/AssetDesign",{controller:"assetdesignController",templateUrl:"Views/assetDesign.html"})
     .when("/BlockMagistral",{controller:"blockMagistralController",templateUrl:"Views/BlockMagistral.html"})
     .when("/MasterNew",{controller:"newController",templateUrl:"Views/master_newdashboard.html"})
-    .when("/Charts",{controller:"chartsController",templateUrl:"Views/charts.html"})
+    .when("/Chronicles",{controller:"chroniclesController",templateUrl:"Views/chronicles.html"})
     .otherwise({redirectTo:'/Home'})});
 
 var processJsonContent=function(url,type,data){

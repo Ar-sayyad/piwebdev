@@ -28,6 +28,17 @@
     padding: 2px;
     margin: 0px 0px 0px 0px;
 }
+.newchartDiv{
+    width: 100%;
+    min-height: 300px;
+    height: auto;
+    padding: 2px;
+    margin: 0px 0px 0px 0px;
+}
+.chonicleContainer{
+    width: 100%;
+    height: 700px;
+}
 .chartContainer{
     width: 100%;
     height: 400px;
@@ -170,6 +181,12 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
     width: 60%;
     float: left;
 }
+.slect20{
+   z-index: 900;
+   margin-top: 3%;
+   float: left;
+   width: 20%;
+}
 .slect30{
    z-index: 900;
    margin-top: 3%;
@@ -194,6 +211,11 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
 .slect70{
      text-align: center;
      width: 69%;
+     float: left;
+}
+.slect80{
+     text-align: center;
+     width: 80%;
      float: left;
 }
 .slectBox70{
