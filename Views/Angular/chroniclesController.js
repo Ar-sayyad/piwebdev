@@ -117,19 +117,15 @@ app.controller('chroniclesController', function($scope) {
             $.when(attributesList).done(function () {
                  var attributesItems = (attributesList.responseJSON.Items);
                  var cat=1;
-                 var WebIdVal='';
-                
+                 //var WebIdVal='';
                  $.each(attributesItems,function(key) {  
-                     var category = attributesItems[key].CategoryNames;                      
-                                   
+                     var category = attributesItems[key].CategoryNames;     
                      $.each(category,function(key1) {
                          if(trendCat===category[key1]){
                          $("#attributesListLeft").append('<li class="elListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getCharts('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
-                            <label class="labelListAttr leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+' ('+attributesItems[key].DefaultUnitsNameAbbreviation+')</label></li>');  
-                          
-                             
-                        }
-                     });
+                            <label class="labelListAttr leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+' ('+attributesItems[key].DefaultUnitsNameAbbreviation+')</label></li>');                            
+                            }
+                      });
                     cat++;
                  });                                            
             });  
