@@ -80,6 +80,9 @@ app.controller('chroniclesController', function($scope) {
     $("#parentTemplateList").change(function (){
         var parentTemplateID = $("#parentTemplateList option:selected").attr("data-id");//BLOCK ELEMENT NAME FOR IFRAME GRAPH GENERATION
             $("#container").empty();
+            //$("#containerTable").empty();
+             $("#elementList").empty();
+              $("#attributesListLeft").empty();
             $("#parentList").empty();
            $("#parentList").append("<option value='' selected disabled>---Select Parent---</option>");
         var parentTemplateName = $("#parentTemplateList").val();
@@ -94,7 +97,7 @@ app.controller('chroniclesController', function($scope) {
                      var sr= 1;
                         $.each(parentListItems,function(key) {
                             $("#parentList").append("<option  data-name="+parentListItems[key].Name+" value="+parentListItems[key].WebId+">"+parentListItems[key].Name+"</option>"); 
-                            $("#elementList").append("<option  data-name="+parentListItems[key].Name+" value="+parentListItems[key].WebId+">"+parentListItems[key].Name+"</option>"); 
+                            
                             sr++;
                         }); 
                     });  
@@ -104,7 +107,8 @@ app.controller('chroniclesController', function($scope) {
     $("#parentList").change(function (){
            var parentname = $("#parentList option:selected").attr("data-name");//BLOCK ELEMENT NAME FOR IFRAME GRAPH GENERATION
             //$("#container").empty();
-           // $("#elementList").empty();
+            //$("#containerTable").empty();
+              $("#elementList").empty();
               $("#attributesListLeft").empty();
            //$("#elementList").append("<option value='' selected disabled>---Select Parent---</option>");
         var parentWebId = $("#parentList").val();
@@ -118,16 +122,36 @@ app.controller('chroniclesController', function($scope) {
                  var attributesItems = (attributesList.responseJSON.Items);
                  var cat=1;
                  //var WebIdVal='';
+                  $("#elementList").append("<optgroup label="+parentname+" data-name="+parentname+" value="+parentWebId+">");
+                    /***ElementsListByRightOnchange START***/
+                                                    var url = baseServiceUrl + 'elements/' + parentWebId+ '/elements';
+                                                    var rightelementList = processJsonContent(url, 'GET', null);
+                                                    $.when(rightelementList).fail(function() {
+                                                        warningmsg("Cannot Find the Element On Change.");
+                                                        console.log("Cannot Find the Element.")
+                                                    });
+                                                    $.when(rightelementList).done(function() {
+                                                        var elementsChildListItems = (rightelementList.responseJSON.Items);
+                                                       // var srt = lastSrl;
+                                                        $.each(elementsChildListItems, function(key) {                                                           
+                                                            $("#elementList").append("<option  data-name="+elementsChildListItems[key].Name+" value="+elementsChildListItems[key].WebId+">"+elementsChildListItems[key].Name+"</option>");
+                                                            //srt++
+                                                        });
+                                                    });
+                                                /***ElementsListByRightOnchange END***/
+                     $("#elementList").append("</optgroup>");
                  $.each(attributesItems,function(key) {  
                      var category = attributesItems[key].CategoryNames;     
                      $.each(category,function(key1) {
                          if(trendCat===category[key1]){
                          $("#attributesListLeft").append('<li class="elListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getCharts('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
                             <label class="labelListAttr leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+' ('+attributesItems[key].DefaultUnitsNameAbbreviation+')</label></li>');                            
+                         
                             }
                       });
                     cat++;
-                 });                                            
+                 });    
+                 
             });  
 //            /*****GET CHART DATA AND VALUE AND TIMESTAMP ATTRIBUTES END****/
 //             loadEventFrame();//Loading Event Frames
