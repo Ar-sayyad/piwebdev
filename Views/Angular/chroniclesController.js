@@ -1,4 +1,12 @@
 app.controller('chroniclesController', function($scope) {  
+     $("#generate-excel").click(function () {
+          var excel = new ExcelGen({
+        "src_id": "test_table",
+        "show_header": true
+    });
+        excel.generate();
+    });        
+         
     $scope.pagename = "Chronicles";
     $(".tabDiv").hide();
     var now = new Date();
@@ -43,13 +51,7 @@ app.controller('chroniclesController', function($scope) {
         $("#tableViewData").show();
         $("#chartViewData").hide();
     });
-    var excel = new ExcelGen({
-        "src_id": "test_table",
-        "show_header": true
-    });
-    $("#generate-excel").click(function () {
-        excel.generate();
-    });
+ 
     var url = baseServiceUrl+'assetdatabases?path=\\\\' + afServerName + '\\' + afDatabaseName; 
        var ajaxEF =  processJsonContent(url, 'GET', null);
            $.when(ajaxEF).fail(function () {
@@ -97,7 +99,6 @@ app.controller('chroniclesController', function($scope) {
                      var sr= 1;
                         $.each(parentListItems,function(key) {
                             $("#parentList").append("<option  data-name="+parentListItems[key].Name+" value="+parentListItems[key].WebId+">"+parentListItems[key].Name+"</option>"); 
-                            
                             sr++;
                         }); 
                     });  
@@ -173,11 +174,14 @@ function getCharts(){
 /*****LOAD EVENT FRAME DATA START****/ 
 function loadEventFrame(){
     var chart1;
+   
+    $("#test_table").empty();
     //var chart2;
       /**************///
         var data=[];
         var yAxisData=[];
         var chkArray = [];
+         var myBooks = [];
         var sr=0;
         var startDate = $('#startDate').val();
         var startTime = $("#startTime").val();
@@ -191,9 +195,11 @@ function loadEventFrame(){
         endDate = endDate.split('-');
         startTime = startTime.split(':');
         endTime = endTime.split(':');  
-        
+         
       $(document).ready(function() {    
     /*****Main Charts****/
+     //$("#containerTable").append('<tr>');
+      var srt=1;
     $.each($("input[name='selectorLeft']:checked"), function(){ 
         var data1=[];
         var WebId = $(this).val();
@@ -202,6 +208,8 @@ function loadEventFrame(){
         var min = $("#min"+cat).val();
         var max = $("#max"+cat).val();       
         chkArray.push(WebId); 
+       
+                //$("#containerTable").append('');              
         var url = baseServiceUrl+'streams/' + WebId + '/interpolated?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d&searchFullHierarchy=true';
         //console.log(url);
         var attributesData =  processJsonContent(url, 'GET', null);
@@ -213,7 +221,8 @@ function loadEventFrame(){
                  var attributesDataItems = (attributesData.responseJSON.Items);
                  var unit = '';
                  //console.log("count: "+(attributesDataItems.length));
-                 $("#eldata").append('<th id='+name+'>'+name+'</th>');
+                   //$("#containerTable").append('<tr><th id='+name+'>'+name+'</th><tr>');
+                  
                 $.each(attributesDataItems,function(key) {
                         var Timestamp = attributesDataItems[key].Timestamp;
                         var val = (Math.round((attributesDataItems[key].Value) * 100) / 100);                         
@@ -228,11 +237,16 @@ function loadEventFrame(){
                             var dt = Date.UTC(vdate[0],(vdate[1]-1),vdate[2],vtime[0],vtime[1],vtime[2]);
                             data1.push([dt,val]);
                             //xAxis.push(Timestamp); 
-                            unit = attributesDataItems[key].UnitsAbbreviation;     
-                            $("#tbldata").append('<tr><td>'+val+'</td></tr>');
+                            unit = attributesDataItems[key].UnitsAbbreviation;   
+                            myBooks.push({"Sr.No":srt,"Element":name,"date":vdate[2]+'/'+(vdate[1])+'/'+vdate[0],"value":val+'('+unit+')'});
+                            //$("#containerTable").append('<tr><td>'+val+'</td></tr>');
                         }
-                      
+                      srt++;
+                       
                   });  
+                  //console.log(myBooks);
+                   CreateTableFromJSON(myBooks);
+                //$("#containerTable").append('</tr>');
                   //console.log(data1);
                    $.each(eventsColorsData,function(key) {
                        if(name===eventsColorsData[key].name){
@@ -314,143 +328,78 @@ function loadEventFrame(){
                 });
                chart1.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2],startTime[0],startTime[1],startTime[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2],endTime[0],endTime[1],endTime[2]));//EXTREME POINTSET
                 sr++;
-            });            
+                 
+    
+            });    
+           
+            //$("#containerTable").append("</table>");   
     }); 
+   
      if(chkArray.length === 0){
         $("#container").empty(); //Empty chart Div  
     }else{
      //console.log(chkArray);
     }
-    
-    /****Event Frames*****/    
-//         var url = baseServiceUrl + 'elements/' + WebId + '/eventframes?startTime='+startDateTime+'&endTime='+endDateTime+'&searchFullHierarchy=true'; 
-//         var eventFrameData =  processJsonContent(url, 'GET', null);
-//             $.when(eventFrameData).fail(function () {
-//                 console.log("Cannot Find the Event Frames.");
-//             });
-//              $.when(eventFrameData).done(function () {
-//                   var eventFrames = (eventFrameData.responseJSON.Items);
-//                     $.each(eventFrames,function(key) {  
-//                         var eventFrameName = eventFrames[key].TemplateName;
-//                         eventFrameList.push(eventFrameName);                               
-//                         var eventFrameStartTime = eventFrames[key].StartTime;
-//                         var eventFrameEndTime = eventFrames[key].EndTime;
-//                             sdate = eventFrameStartTime.substring(0,10);//start date
-//                             stime = eventFrameStartTime.substring(11,19);//start time
-//                             edate = eventFrameEndTime.substring(0,10);//end date
-//                             etime = eventFrameEndTime.substring(11,19);//end time                                     
-//                             sdate = sdate.split('-');//start date split array
-//                             stime = stime.split(':');//start time split array
-//                             edate = edate.split('-');//end date split array
-//                             etime = etime.split(':');//end time split array
-//                         if(edate[0]==='9999'){ var edyr=now.getFullYear(), edmnth = now.getMonth(), eddt=now.getDate(), h = now.getHours(), m = now.getMinutes(), s = now.getSeconds(); eventFrameEndTime="Running";}
-//                         else{ var edyr=edate[0], edmnth = (edate[1]-1), eddt=edate[2], h = etime[0], m = etime[1], s =etime[2]; } //if Event Frame is Runnig Stage                              
-//                         var color ='';
-//                         $.each(EFData,function(key) {
-//                             if(eventFrameName===EFData[key].efName){
-//                                  color = EFData[key].color;
-//                             }
-//                             if(color!==''){
-//                                 edata.push({
-//                                      nm:eventFrameName,
-//                                      sd:eventFrameStartTime,
-//                                      ed:eventFrameEndTime,
-//                                      color:color,
-//                                      x: Date.UTC(sdate[0], (sdate[1]-1), sdate[2],stime[0],stime[1],stime[2]),
-//                                      x2: Date.UTC(edyr, edmnth, eddt,h,m,s),
-//                                      y: y
-//                                  }); 
-//                              }else{
-//                                   edata.push({
-//                                      nm:eventFrameName,
-//                                      sd:eventFrameStartTime,
-//                                      ed:eventFrameEndTime,
-//                                      color:defaultColor,
-//                                      x: Date.UTC(sdate[0], (sdate[1]-1), sdate[2],stime[0],stime[1],stime[2]),
-//                                      x2: Date.UTC(edyr, edmnth, eddt,h,m,s),
-//                                      y: y
-//                                  }); 
-//                              }                                     
-//                         });                             
-//                       y++; //AXIS INCREAMENT
-//                     }); 
-//
-//  chart2 = Highcharts.chart('eventFrame', {
-//                         chart: {
-//                           //zoomType: 'xy',
-//                           type: 'xrange'
-//                         },
-//                         title: {
-//                           text: ''
-//                         },
-//                         xAxis: {
-//                           type: 'datetime',
-//                            events:{               
-//                                 afterSetExtremes:function(){                                
-//                                         if (!this.chart.options.chart.isZoomed)
-//                                         {                                         
-//                                            var xMin = this.chart.xAxis[0].min;
-//                                            var xMax = this.chart.xAxis[0].max;
-//                                            chart2.xAxis[0].isDirty = true;
-//                                            chart1.xAxis[0].setExtremes(xMin, xMax, true);                                
-//                                            chart1.options.chart.isZoomed = false;
-//                                        }
-//                                    }
-//                                }
-//                         },
-//                        tooltip: {
-//                             shared: true,
-//                             useHTML: true,
-//                             headerFormat:'<table>',
-//                             pointFormat: '<tr><th colspan="2" style="text-align: center;font-size:10px;"><b>{point.nm} </b></th></tr>' +
-//                                 '<tr><td style="font-size:10px;">Start: {point.sd} - End: {point.ed}</td></tr>',
-//                             footerFormat: '</table>',
-//                             valueDecimals: 2
-//                         },
-//                         yAxis: {
-//                             gridLineColor: '#FFFFFF',
-//                             minorGridLineWidth: 0,
-//                             lineColor: '#FFFFFF',
-//                             gridLineWidth: 0,
-//                           title: {
-//                             text: ''
-//                           },
-//                           categories: eventFrameList,
-//                           reversed: true,
-//                           labels: {
-//                                 enabled: false
-//                             }
-//                         },
-//                         series: [{
-//                             showInLegend: false, 
-//                             name: 'Event Frames',
-//                             pointPadding: 0,
-//                             groupPadding: 0,
-//                             borderColor: '#ffffff',
-//                             pointWidth: 10,
-//                             borderRadius:0,
-//                             data: edata,
-//                           dataLabels: {
-//                               format:'{point.nm}',
-//                               enabled: false,
-//                             style: {
-//                                 fontSize: '9',
-//                                 fontWeight:''
-//                             }
-//                           }
-//                         }]
-//                     });                                                 
-//                 chart2.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2]));//EXTREME POINTSET
-//             });                    
-         });    
-         
-         
+       
+  });    
+  
+//      
+//        var table = $('#test_table').DataTable( {
+//        lengthChange: false,
+//        buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
+//      } );  
          /*****Load Bar Chart*****/
          
          /****end bar chart*****/
      }
     /*****LOAD EVENT FRAME DATA END****/
+function CreateTableFromJSON(myBooks) {     
 
+        // EXTRACT VALUE FOR HTML HEADER. 
+        // ('Book ID', 'Book Name', 'Category' and 'Price')
+        var col = [];
+        for (var i = 0; i < myBooks.length; i++) {
+            for (var key in myBooks[i]) {
+                if (col.indexOf(key) === -1) {
+                    col.push(key);
+                }
+            }
+        }
+
+        // CREATE DYNAMIC TABLE.
+//        var table = document.getElementById('test_table');
+        //table.remove();
+        var table = document.createElement("table");
+        table.id = 'test_table';
+        table.className = 'table table-bordered table-striped';
+        // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+
+        var tr = table.insertRow(-1);                   // TABLE ROW.
+
+        for (var i = 0; i < col.length; i++) {
+            var th = document.createElement("th");      // TABLE HEADER.
+            th.innerHTML = col[i];
+            tr.appendChild(th);
+        }
+
+        // ADD JSON DATA TO THE TABLE AS ROWS.
+        for (var i = 0; i < myBooks.length; i++) {
+
+            tr = table.insertRow(-1);
+
+            for (var j = 0; j < col.length; j++) {
+                var tabCell = tr.insertCell(-1);
+                tabCell.innerHTML = myBooks[i][col[j]];
+            }
+        }
+
+        // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+        var divContainer = document.getElementById("containerTable");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(table);
+        
+   
+    }
 
   /*********MAIN CHARTS SECTION END**********/  
   

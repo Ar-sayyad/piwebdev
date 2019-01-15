@@ -128,10 +128,11 @@ input[type=checkbox]:checked ~ label{
   font-weight: bold;
 }
 .scrollbar {
-    float: left;    
+    float: left;
+overflow-y: scroll;    
 }
 
-body::-webkit-scrollbar,.chartDiv::-webkit-scrollbar,.style-1::-webkit-scrollbar,.attrchartDiv::-webkit-scrollbar,#style-1::-webkit-scrollbar,#style-2::-webkit-scrollbar,#style-3::-webkit-scrollbar,.content-wrapper::-webkit-scrollbar {
+body::-webkit-scrollbar,.chartDiv::-webkit-scrollbar,.style-1::-webkit-scrollbar,.chonicleContainer::-webkit-scrollbar,.attrchartDiv::-webkit-scrollbar,#style-1::-webkit-scrollbar,#style-2::-webkit-scrollbar,#style-3::-webkit-scrollbar,.content-wrapper::-webkit-scrollbar {
     width: 6px;
     background-color: #F5F5F5;
 } 
@@ -150,7 +151,9 @@ body::-webkit-scrollbar-thumb{
 .attrchartDiv::-webkit-scrollbar-thumb {
     background-color: #008cffc2;
 }
-
+.chonicleContainer::-webkit-scrollbar-thumb {
+    background-color: #008cffc2;
+}
 .chartDiv::-webkit-scrollbar-thumb {
     background-color: #008cffc2;
 }
@@ -473,3 +476,16 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
  .elListChild{
     padding: 3px 10px 3px 10px;
  }
+th, td, p, input {
+            font:14px Verdana;
+        }
+        table, th, td 
+        {
+            border: solid 1px #DDD;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+        }
+        th {
+            font-weight:bold;
+        }
