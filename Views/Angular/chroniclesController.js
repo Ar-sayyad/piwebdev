@@ -1,13 +1,13 @@
 app.controller('chroniclesController', function($scope) {  
      $("#generate-excel").click(function () {
           var excel = new ExcelGen({
-        "src_id": "test_table",
+        "src_id": "example",
         "show_header": true
     });
         excel.generate();
     });        
      //$('#default-datatable').DataTable();
-       var table = $('#test_table').DataTable( {
+       var table = $('#example').DataTable( {
         lengthChange: false,
         buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
       } );
@@ -152,7 +152,7 @@ app.controller('chroniclesController', function($scope) {
                      var category = attributesItems[key].CategoryNames;     
                      $.each(category,function(key1) {
                          if(trendCat===category[key1]){
-                         $("#attributesListLeft").append('<li class="elListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getCharts('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
+                         $("#attributesListLeft").append('<li class="elListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getChartts('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
                             <label class="labelListAttr leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+' ('+attributesItems[key].DefaultUnitsNameAbbreviation+')</label></li>');                            
                          
                             }
@@ -171,16 +171,16 @@ app.controller('chroniclesController', function($scope) {
 
     
 /***LOAD ALL CHARTS ON DATE OR TIME CHANGE***/
-function getCharts(){   
+function getChartts(){   
    // getMap();
-    loadEventFrame();   
+    loadEventFrames();   
 }
 /***LOAD ALL CHARTS ON DATE OR TIME CHANGE***/
 
  
 /*****LOAD EVENT FRAME DATA START****/ 
-function loadEventFrame(){
-    var chart1;
+function loadEventFrames(){
+    var charts;
    
     $("#test_table").empty();
     //var chart2;
@@ -252,7 +252,7 @@ function loadEventFrame(){
                        
                   });  
                   //console.log(myBooks);
-                   //CreateTableFromJSON(myBooks);
+                   CreateTableFromJSON(myBooks);
                 //$("#containerTable").append('</tr>');
                   //console.log(data1);
                    $.each(eventsColorsData,function(key) {
@@ -282,7 +282,7 @@ function loadEventFrame(){
                    });    
                    //console.log(JSON.stringify(data));
                                  
-               chart1 =   Highcharts.chart('containern', {
+               charts =   Highcharts.chart('containern', {
                         chart: {
                             zoomType: 'xy',
                               type: 'spline'
@@ -333,7 +333,7 @@ function loadEventFrame(){
                         },                       
                     series:data  //PI ATTRIBUTES RECORDED DATA                    
                 });
-               chart1.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2],startTime[0],startTime[1],startTime[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2],endTime[0],endTime[1],endTime[2]));//EXTREME POINTSET
+               charts.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2],startTime[0],startTime[1],startTime[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2],endTime[0],endTime[1],endTime[2]));//EXTREME POINTSET
                 sr++;
                  
     
@@ -377,7 +377,7 @@ function CreateTableFromJSON(myBooks) {
 //        var table = document.getElementById('test_table');
         //table.remove();
         var table = document.createElement("table");
-        table.id = 'test_table';
+        table.id = 'example';
         table.className = 'table table-bordered';
         // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
 
