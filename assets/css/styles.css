@@ -129,7 +129,7 @@ input[type=checkbox]:checked ~ label{
 }
 .scrollbar {
     float: left;
-overflow-y: scroll;    
+    
 }
 
 body::-webkit-scrollbar,.chartDiv::-webkit-scrollbar,.style-1::-webkit-scrollbar,.chonicleContainer::-webkit-scrollbar,.attrchartDiv::-webkit-scrollbar,#style-1::-webkit-scrollbar,#style-2::-webkit-scrollbar,#style-3::-webkit-scrollbar,.content-wrapper::-webkit-scrollbar {

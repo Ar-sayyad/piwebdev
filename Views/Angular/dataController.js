@@ -1,19 +1,13 @@
-app.controller('chroniclesController', function($scope) {  
-     $("#generate-excel").click(function () {
-          var excel = new ExcelGen({
-        "src_id": "test_table",
-        "show_header": true
-    });
-        excel.generate();
-    });        
-     //$('#default-datatable').DataTable();
-       var table = $('#test_table').DataTable( {
+app.controller('dataController', function($scope) {  
+          
+          $('#default-datatable').DataTable();
+       var table = $('#example').DataTable( {
         lengthChange: false,
         buttons: [ 'copy', 'excel', 'pdf', 'print', 'colvis' ]
       } );
     table.buttons().container()
-        .appendTo( '#example_wrapper .col-md-6:eq(0)' );    
-
+        .appendTo( '#example_wrapper .col-md-6:eq(0)' );
+     
     $scope.pagename = "Chronicles";
     $(".tabDiv").hide();
     var now = new Date();
@@ -252,7 +246,7 @@ function loadEventFrame(){
                        
                   });  
                   //console.log(myBooks);
-                   //CreateTableFromJSON(myBooks);
+                   CreateTableFromJSON(myBooks);
                 //$("#containerTable").append('</tr>');
                   //console.log(data1);
                    $.each(eventsColorsData,function(key) {
@@ -282,7 +276,7 @@ function loadEventFrame(){
                    });    
                    //console.log(JSON.stringify(data));
                                  
-               chart1 =   Highcharts.chart('containern', {
+               chart1 =   Highcharts.chart('container', {
                         chart: {
                             zoomType: 'xy',
                               type: 'spline'
@@ -343,7 +337,7 @@ function loadEventFrame(){
     }); 
    
      if(chkArray.length === 0){
-        $("#containern").empty(); //Empty chart Div  
+        $("#container").empty(); //Empty chart Div  
     }else{
      //console.log(chkArray);
     }
@@ -378,7 +372,7 @@ function CreateTableFromJSON(myBooks) {
         //table.remove();
         var table = document.createElement("table");
         table.id = 'test_table';
-        table.className = 'table table-bordered';
+        table.className = 'table table-bordered table-striped';
         // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
 
         var tr = table.insertRow(-1);                   // TABLE ROW.
@@ -401,7 +395,7 @@ function CreateTableFromJSON(myBooks) {
         }
 
         // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
-        var divContainer = document.getElementById("table-responsive");
+        var divContainer = document.getElementById("containerTable");
         divContainer.innerHTML = "";
         divContainer.appendChild(table);
         

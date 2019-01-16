@@ -9,6 +9,7 @@ app.config(function($routeProvider){
     .when("/BlockMagistral",{controller:"blockMagistralController",templateUrl:"Views/BlockMagistral.html"})
     .when("/MasterNew",{controller:"newController",templateUrl:"Views/master_newdashboard.html"})
     .when("/Chronicles",{controller:"chroniclesController",templateUrl:"Views/chronicles.html"})
+    .when("/Data",{controller:"dataController",templateUrl:"Views/data_tables.html"})
     .otherwise({redirectTo:'/Home'})});
 
 var processJsonContent=function(url,type,data){
