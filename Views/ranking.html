@@ -1,0 +1,285 @@
+<header class="topbar-nav">
+    <nav class="navbar navbar-expand bg-white">
+        <h4>{{pagename}}</h4>    
+    </nav>
+</header>
+<div class="content-wrapper">
+    <div class="container-fluid">
+      <!--Start Dashboard Content-->
+        <div class="row">
+            <div class="col-12 col-lg-6 col-xl-3">
+                <div class="card">
+                    <div class="card-body">  
+                        <label>Select Zone :</label>
+                        <select id="parentTemplateList" style="width:95%;" class="form-control">
+                            <option value="" selected="" disabled="">---Select Zone---</option>
+                        </select>                 
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6 col-xl-3">
+                <div class="card">
+                    <div class="card-body">
+                        <label>Select Block :</label>
+                        <select id="parentList" style="width:95%;" class="form-control">
+                          <option value="">--Select Block--</option>
+                        </select>                 
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6 col-xl-3">
+                <div class="card">
+                    <div class="card-body">                           
+                        <label class="slect100">Start Date : </label>             
+                        <div class="slect100">
+                            <input type="text" class="dateTime form-control" autocomplete="off"  data-date-format='yy-mm-dd' style="width:95%;"  id="startDate"  placeholder="Date Time">
+                        </div>
+                   </div>                
+                </div>
+            </div>
+<!--            <div class="col-12 col-lg-6 col-xl-2">
+                <div class="card">
+                    <div class="card-body">                           
+                        <label class="slect100">End Date : </label>             
+                        <div class="slect100">
+                            <input type="text" class="dateTime form-control" autocomplete="off"  data-date-format='yy-mm-dd' style="width:95%;"  id="endDate"  placeholder="Date Time">
+                        </div>
+                   </div>                
+                </div>
+            </div>-->
+
+            <div class="col-12 col-lg-6 col-xl-3">
+                <div class="card">
+                    <div class="card-body"> 
+                        <label>Select Parameter : </label>
+                        <select id="parameterList" style="width:95%;" class="form-control">
+                          <option value="">--Select Parameter--</option>
+                        </select>               
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6 col-xl-6">
+                <div class="card" id="chartViewData" style="margin-top: 0px;">
+                    <div class="card-body newchartDiv">
+                        <div id="containern" class="rankingContainer">
+                            <div class="table-responsive">
+                                <table id="topexample" class="table top-table table-bordered table-striped">
+                                  <thead>
+                                      <tr>
+                                          <th>Rank</th>
+                                          <th>U</th>
+                                          <th>PH</th>
+                                          <th>KU</th>
+                                          <th>PR</th>
+                                          <th>VR</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr style="background-color: #4b8408;">
+                                          <td>TOP1</td>
+                                          <td>1</td>
+                                          <td>1</td>
+                                          <td>1</td>
+                                          <td>1</td>
+                                          <td>1</td>
+                                      </tr>
+                                     <tr style="background-color: #60a50e;">
+                                          <td>TOP2</td>
+                                          <td>2</td>
+                                          <td>2</td>
+                                          <td>2</td>
+                                          <td>2</td>
+                                          <td>2</td>
+                                      </tr>
+                                      <tr style="background-color: #73bc1f;">
+                                          <td>TOP3</td>
+                                          <td>3</td>
+                                          <td>3</td>
+                                          <td>3</td>
+                                          <td>3</td>
+                                          <td>3</td>
+                                      </tr> 
+                                      <tr style="background-color: #7fc828;">
+                                          <td>TOP4</td>
+                                          <td>4</td>
+                                          <td>4</td>
+                                          <td>4</td>
+                                          <td>4</td>
+                                          <td>4</td>
+                                      </tr>
+                                      <tr style="background-color: #8edd35;">
+                                          <td>TOP5</td>
+                                          <td>5</td>
+                                          <td>5</td>
+                                          <td>5</td>
+                                          <td>5</td>
+                                          <td>5</td>
+                                      </tr>
+                                      <tr style="background-color: #b1ed6a;">
+                                          <td>TOP6</td>
+                                          <td>6</td>
+                                          <td>6</td>
+                                          <td>6</td>
+                                          <td>6</td>
+                                          <td>6</td>
+                                      </tr>
+                                      <tr  style="background-color: #c8fc8a;">
+                                          <td>TOP7</td>
+                                          <td>7</td>
+                                          <td>7</td>
+                                          <td>7</td>
+                                          <td>7</td>
+                                          <td>7</td>
+                                      </tr>
+                                      <tr  style="background-color: #d6f8af;">
+                                          <td>TOP8</td>
+                                          <td>8</td>
+                                          <td>8</td>
+                                          <td>8</td>
+                                          <td>8</td>
+                                          <td>8</td>
+                                      </tr>
+                                      <tr  style="background-color: #e5facc;">
+                                          <td>TOP9</td>
+                                          <td>9</td>
+                                          <td>9</td>
+                                          <td>9</td>
+                                          <td>9</td>
+                                          <td>9</td>
+                                      </tr>
+                                      <tr style="background-color: #f7ffef;">
+                                          <td>TOP10</td>
+                                          <td>10</td>
+                                          <td>10</td>
+                                          <td>10</td>
+                                          <td>10</td>
+                                          <td>10</td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table id="bottomexample" class="table bottom-table table-bordered table-striped">
+                                  <thead>
+                                      <tr>
+                                          <th>Rank</th>
+                                          <th>U</th>
+                                          <th>PH</th>
+                                          <th>KU</th>
+                                          <th>PR</th>
+                                          <th>VR</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr style="background-color: #fff4f1;">
+                                          <td>BOTTOM10</td>
+                                          <td>10</td>
+                                          <td>10</td>
+                                          <td>10</td>
+                                          <td>10</td>
+                                          <td>10</td>
+                                      </tr>
+                                     <tr style="background-color: #fde3da;">
+                                          <td>BOTTOM9</td>
+                                          <td>9</td>
+                                          <td>9</td>
+                                          <td>9</td>
+                                          <td>9</td>
+                                          <td>9</td>
+                                      </tr>
+                                       <tr style="background-color: #f5d3c7;">
+                                          <td>BOTTOM8</td>
+                                          <td>8</td>
+                                          <td>8</td>
+                                          <td>8</td>
+                                          <td>8</td>
+                                          <td>8</td>
+                                      </tr> 
+                                      <tr style="background-color: #f1c2b3;">
+                                          <td>BOTTOM7</td>
+                                          <td>7</td>
+                                          <td>7</td>
+                                          <td>7</td>
+                                          <td>7</td>
+                                          <td>7</td>
+                                      </tr>
+                                      <tr style="background-color: #efae9b;">
+                                          <td>BOTTOM6</td>
+                                          <td>6</td>
+                                          <td>6</td>
+                                          <td>6</td>
+                                          <td>6</td>
+                                          <td>6</td>
+                                      </tr>
+                                      <tr style="background-color: #e39278;">
+                                          <td>BOTTOM5</td>
+                                          <td>5</td>
+                                          <td>5</td>
+                                          <td>5</td>
+                                          <td>5</td>
+                                          <td>5</td>
+                                      </tr>
+                                      <tr style="background-color: #e97e5b;">
+                                          <td>BOTTOM4</td>
+                                          <td>4</td>
+                                          <td>4</td>
+                                          <td>4</td>
+                                          <td>4</td>
+                                          <td>4</td>
+                                      </tr>
+                                      <tr style="background-color: #ef6a41;">
+                                          <td>BOTTOM3</td>
+                                          <td>3</td>
+                                          <td>3</td>
+                                          <td>3</td>
+                                          <td>3</td>
+                                          <td>3</td>
+                                      </tr>
+                                      <tr style="background-color: #df4a1b;">
+                                          <td>BOTTOM2</td>
+                                          <td>2</td>
+                                          <td>2</td>
+                                          <td>2</td>
+                                          <td>2</td>
+                                          <td>2</td>
+                                      </tr>
+                                      <tr style="background-color: #c8380a;">
+                                          <td>BOTTOM1</td>
+                                          <td>1</td>
+                                          <td>1</td>
+                                          <td>1</td>
+                                          <td>1</td>
+                                          <td>1</td>
+                                      </tr>
+                                  </tbody>
+                              </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-12 col-lg-6 col-xl-6">
+                <div class="card" id="tableViewData" style="margin-top: 0px;">
+                    <div class="card-body newchartDiv">
+                        <div id="containerTable" class="rankingContainer">  
+                            <h3 style="color: black;">Filter Section Here</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>                    
+        </div>
+      
+    <!--End Row-->
+    <!--End Dashboard Content-->
+    </div>
+    <!-- End container-fluid-->
+    <div class="container-fluid">
+        <div class="row" id="cellGraphList">
+        </div>     
+    </div>
+</div>
