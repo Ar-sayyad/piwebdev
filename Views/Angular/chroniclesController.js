@@ -61,8 +61,8 @@ app.controller('chroniclesController', function($scope) {
                var WebId = (ajaxEF.responseJSON.WebId); 
                
                 /****TEMPLATE ELEMENT SEARCH BY TEMPLATE NAME START****/
-                var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elementtemplates?field=Categories&query='+filterCategoryName+'&searchFullHierarchy=true';
-                //var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elements?templateName=' + templateName+'&searchFullHierarchy=true';
+                var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elementtemplates?field=Categories&query='+filterCategoryName+'&sortField=Name&selectedFields=items.name;items.webid;&searchFullHierarchy=true';
+                    //var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elements?templateName=' + templateName+'&searchFullHierarchy=true';
                     var parentTemplateList =  processJsonContent(url, 'GET', null);                    
                     $.when(parentTemplateList).fail(function () {
                         warningmsg("Cannot Find the Element Templates.");
@@ -81,16 +81,17 @@ app.controller('chroniclesController', function($scope) {
     /*****BLOCK ELEMENT ONCHNAGE START****/
     $("#parentTemplateList").change(function (){
         var parentTemplateID = $("#parentTemplateList option:selected").attr("data-id");//BLOCK ELEMENT NAME FOR IFRAME GRAPH GENERATION
-            $("#container").empty();
-            //$("#containerTable").empty();
+            $("#containern").empty();
+           // $("#containerTable").empty();
              $("#elementList").empty();
               $("#attributesListLeft").empty();
             $("#parentList").empty();
            $("#parentList").append("<option value='' selected disabled>---Select Parent---</option>");
         var parentTemplateName = $("#parentTemplateList").val();
          
-          var url = baseServiceUrl + 'assetdatabases/' + parentTemplateID + '/elements?templateName=' + parentTemplateName+'&searchFullHierarchy=true';
-                    var parentList =  processJsonContent(url, 'GET', null);                    
+          var url = baseServiceUrl + 'assetdatabases/' + parentTemplateID + '/elements?templateName=' + parentTemplateName+'&sortField=Name&selectedFields=items.name;items.webid;&searchFullHierarchy=true';
+                     //console.log(url);
+                     var parentList =  processJsonContent(url, 'GET', null);                    
                     $.when(parentList).fail(function () {
                         warningmsg("Cannot Find the Element Templates.");
                     });
@@ -107,8 +108,8 @@ app.controller('chroniclesController', function($scope) {
     /*****GET CHART DATA AND VALUE AND TIMESTAMP ATTRIBUTES START****/
     $("#parentList").change(function (){
            var parentname = $("#parentList option:selected").attr("data-name");//BLOCK ELEMENT NAME FOR IFRAME GRAPH GENERATION
-            //$("#container").empty();
-            //$("#containerTable").empty();
+             $("#containern").empty();
+             //$("#containerTable").empty();
               $("#elementList").empty();
               $("#attributesListLeft").empty();
            //$("#elementList").append("<option value='' selected disabled>---Select Parent---</option>");
@@ -124,19 +125,40 @@ app.controller('chroniclesController', function($scope) {
                  var cat=1;
                  //var WebIdVal='';
                   $("#elementList").append("<optgroup label="+parentname+" data-name="+parentname+" value="+parentWebId+">");
-                    /***ElementsListByRightOnchange START***/
-                                                    var url = baseServiceUrl + 'elements/' + parentWebId+ '/elements';
-                                                    var rightelementList = processJsonContent(url, 'GET', null);
-                                                    $.when(rightelementList).fail(function() {
+                                        /***ElementsListByRightOnchange START***/
+                                                    var url = baseServiceUrl + 'elements/' + parentWebId+ '/elements?sortField=Name&selectedFields=items.name;items.webid;';
+                                                   
+                                                    var secondElementList = processJsonContent(url, 'GET', null);
+                                                    $.when(secondElementList).fail(function() {
                                                         warningmsg("Cannot Find the Element On Change.");
                                                         console.log("Cannot Find the Element.")
                                                     });
-                                                    $.when(rightelementList).done(function() {
-                                                        var elementsChildListItems = (rightelementList.responseJSON.Items);
+                                                    $.when(secondElementList).done(function() {
+                                                        var elementsChildListItems = (secondElementList.responseJSON.Items);
                                                        // var srt = lastSrl;
-                                                        $.each(elementsChildListItems, function(key) {                                                           
-                                                            $("#elementList").append("<option  data-name="+elementsChildListItems[key].Name+" value="+elementsChildListItems[key].WebId+">"+elementsChildListItems[key].Name+"</option>");
+                                                        $.each(elementsChildListItems, function(key) {  
+                                                            //$("#elementList").append("<optgroup label="+elementsChildListItems[key].Name+" data-name="+elementsChildListItems[key].Name+" value="+elementsChildListItems[key].WebId+">");
+                                                            //$("#elementList").append("<option  data-name="+elementsChildListItems[key].Name+" value="+elementsChildListItems[key].WebId+">"+elementsChildListItems[key].Name+"</option>");
+                                                                    /***ElementsListByRightOnchange START***/
+                                                                        var url = baseServiceUrl + 'elements/' + elementsChildListItems[key].WebId+ '/elements?sortField=Name&selectedFields=items.name;items.webid;';
+                                                                        var thirdElementList = processJsonContent(url, 'GET', null);
+                                                                        $.when(thirdElementList).fail(function() {
+                                                                            warningmsg("Cannot Find the Element On Change.");
+                                                                            console.log("Cannot Find the Element.")
+                                                                        });
+                                                                        $.when(thirdElementList).done(function() {
+                                                                            var thirdElementsChildListItems = (thirdElementList.responseJSON.Items);
+                                                                           // var srt = lastSrl;
+                                                                           $("#elementList").append("<optgroup style='margin-left:7px;' label="+elementsChildListItems[key].Name+" data-name="+elementsChildListItems[key].Name+" value="+elementsChildListItems[key].WebId+">");
+                                                                            $.each(thirdElementsChildListItems, function(key) {                                                           
+                                                                                $("#elementList").append("<option style='margin-left:15px;'   data-name="+thirdElementsChildListItems[key].Name+" value="+thirdElementsChildListItems[key].WebId+">"+thirdElementsChildListItems[key].Name+"</option>");
+                                                                                //srt++
+                                                                            });
+                                                                             $("#elementList").append("</optgroup>");
+                                                                        });
+                                                                    /***ElementsListByRightOnchange END***/
                                                             //srt++
+                                                              //$("#elementList").append("</optgroup>");
                                                         });
                                                     });
                                                 /***ElementsListByRightOnchange END***/
@@ -145,8 +167,17 @@ app.controller('chroniclesController', function($scope) {
                      var category = attributesItems[key].CategoryNames;     
                      $.each(category,function(key1) {
                          if(trendCat===category[key1]){
-                         $("#attributesListLeft").append('<li class="elListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getChartts('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
-                            <label class="labelListAttr leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+' ('+attributesItems[key].DefaultUnitsNameAbbreviation+')</label></li>');                            
+                              $.each(eventsColorsData,function(key1) {
+                                if(attributesItems[key].Name===eventsColorsData[key1].name){
+                                    $("#attributesListLeft").append('<li class="elListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getChartts('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
+                            <label class="labelListChild leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+' ('+attributesItems[key].DefaultUnitsNameAbbreviation+')</label>\n\
+                            <div class="ScaleDiv">\n\
+                                <input type="text" class="scales min" placeholder="Min" value="'+eventsColorsData[key1].min+'" name="min" onchange="getCharts('+cat+');" id="min'+cat+'">\n\
+                                <input type="text" class="scales max" placeholder="Max" value="'+eventsColorsData[key1].max+'" name="max" onchange="getCharts('+cat+');" id="max'+cat+'">\n\
+                            </div>\n\
+                           </li>');    
+                                       }
+                            });
                          
                             }
                       });
@@ -208,7 +239,7 @@ function loadEventFrames(){
         chkArray.push(WebId); 
        
                 //$("#containerTable").append('');              
-        var url = baseServiceUrl+'streams/' + WebId + '/interpolated?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d&searchFullHierarchy=true';
+        var url = baseServiceUrl+'streams/' + WebId + '/interpolated?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d&selectedFields=items.Timestamp;items.Value;items.UnitsAbbreviation;&searchFullHierarchy=true';
         //console.log(url);
         var attributesData =  processJsonContent(url, 'GET', null);
             $.when(attributesData).fail(function () {

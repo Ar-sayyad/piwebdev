@@ -241,7 +241,7 @@ hr {
     padding-left: 15px;
     padding-right: 15px;
     padding-bottom: 70px;
-    overflow-x: hidden;
+    overflow-x: unset;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;

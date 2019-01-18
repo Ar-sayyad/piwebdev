@@ -43,7 +43,8 @@ app.controller('rankingController', function($scope) {
                var WebId = (ajaxEF.responseJSON.WebId); 
                
                 /****TEMPLATE ELEMENT SEARCH BY TEMPLATE NAME START****/
-                var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elementtemplates?field=Categories&query='+filterCategoryName+'&searchFullHierarchy=true';
+                var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elementtemplates?field=Categories&query='+filterCategoryName+'&sortField=Name&selectedFields=items.name;items.webid;&searchFullHierarchy=true';
+                //console.log(url);
                 var parentTemplateList =  processJsonContent(url, 'GET', null);                    
                     $.when(parentTemplateList).fail(function () {
                         warningmsg("Cannot Find the Element Templates.");
@@ -66,8 +67,8 @@ app.controller('rankingController', function($scope) {
                     $("#parentList").append("<option value='' selected disabled>---Select Block---</option>");
                  var parentTemplateName = $("#parentTemplateList").val();
          
-                 var url = baseServiceUrl + 'assetdatabases/' + parentTemplateID + '/elements?templateName=' + parentTemplateName+'&searchFullHierarchy=true';
-                      var parentList =  processJsonContent(url, 'GET', null);                    
+                 var url = baseServiceUrl + 'assetdatabases/' + parentTemplateID + '/elements?templateName=' + parentTemplateName+'&sortField=Name&selectedFields=items.name;items.webid;&searchFullHierarchy=true';
+                          var parentList =  processJsonContent(url, 'GET', null);                    
                         $.when(parentList).fail(function () {
                             warningmsg("Cannot Find the Element Templates.");
                       });
@@ -89,27 +90,28 @@ app.controller('rankingController', function($scope) {
                 $("#parameterList").empty();
                 $("#parameterList").append("<option value='' selected disabled>---Select Parameter---</option>");
             var parentWebId = $("#parentList").val();
-            var url = baseServiceUrl + 'elements/' + parentWebId + '/attributes';
-            //console.log(url);
+            var url = baseServiceUrl + 'elements/' + parentWebId + '/attributes?sortField=Name&selectedFields=items.name;items.webid;items.CategoryNames;';
+           // console.log(url);
             var attributesList =  processJsonContent(url, 'GET', null);
                 $.when(attributesList).fail(function () {
                     warningmsg("Cannot Find the Attributes.");
                 });            
                 $.when(attributesList).done(function () {
                      var attributesItems = (attributesList.responseJSON.Items);
-                     var WebIdVal='';
+                    // var WebIdVal='';
                         
                      $.each(attributesItems,function(key) {  
                          var category = attributesItems[key].CategoryNames; 
                          $.each(category,function(key1) {
-                              if(WebIdVal==='' || WebIdVal!==attributesItems[key].WebId){
-                             if(trendCat===category[key1] || valueCat===category[key1] || timestampCat===category[key1]){
+                             // if(WebIdVal==='' || WebIdVal!==attributesItems[key].WebId){
+                             //if(trendCat===category[key1] || valueCat===category[key1] || timestampCat===category[key1]){
+                           if(trendCat===category[key1]){
                                    $("#parameterList").append("<option  data-name="+attributesItems[key].Name+" value="+attributesItems[key].WebId+">"+attributesItems[key].Name+"</option>"); 
                                    //$("#topexample>thead>tr").append("<th>"+attributesItems[key].Name+"</th>");
                                    myTab.push({"Element":attributesItems[key].Name});
                                 }
-                                WebIdVal=attributesItems[key].WebId;
-                            }
+                                //WebIdVal=attributesItems[key].WebId;
+                           // }
                           });
                      });  
                 // CreateTableFromJSON(myTab);
@@ -171,8 +173,8 @@ app.controller('rankingController', function($scope) {
               var myTab=[];
               var name = $("#parameterList option:selected").attr("data-name");
             var parameterWebId = $("#parameterList").val();
-              var url = baseServiceUrl+'streams/' + parameterWebId + '/interpolated?startTime='+startDate+'&endTime='+endDate+'&interval=1h&searchFullHierarchy=true';
-            console.log(url);
+              var url = baseServiceUrl+'streams/' + parameterWebId + '/interpolated?startTime='+startDate+'&endTime='+endDate+'&interval=1h&selectedFields=items.Timestamp;items.Value;items.UnitsAbbreviation;&searchFullHierarchy=true';
+           // console.log(url);
             var parameterList =  processJsonContent(url, 'GET', null);
                 $.when(parameterList).fail(function () {
                     warningmsg("Cannot Find the Parameter.");
