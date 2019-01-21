@@ -257,10 +257,10 @@ function loadEventFrames(){
                  var attributesDataItems = (attributesData.responseJSON.Items);
                  var unit = '';
                 var cnt=attributesDataItems.length;
-                  if(srt>cnt){
-                       $('#example tr').find('td:last-child').remove();
-                      //$('#example tr').append('<th id='+name+'>'+name+'</th>');
-                  }
+//                  if(srt>cnt){
+//                       $('#example tr').find('td:last-child').remove();
+//                      //$('#example tr').append('<th id='+name+'>'+name+'</th>');
+//                  }
                   
                 $.each(attributesDataItems,function(key) {
                         var Timestamp = attributesDataItems[key].Timestamp;                        
@@ -278,10 +278,14 @@ function loadEventFrames(){
                             //xAxis.push(Timestamp);                   
                             unit = attributesDataItems[key].UnitsAbbreviation;  
                             if(srt<=cnt){
-                             myTab.push([srt,val]);
-                             nwwarr.push(myTab);
+                                var val = (Math.round((attributesDataItems[key].Value) * 100) / 100);     
+                               myTab.push([srt,val,val1]);
+                             //nwwarr.push(myTab);
                          }else{
-                             $('#example tr').find('td:last-child').append('<td>'+val+'</td>');
+                             var val1 = (Math.round((attributesDataItems[key].Value) * 100) / 100);
+                              myTab.push([srt,val,val1]);
+                                //myTab.push({"sr":srt,"one":val,"two":val1});
+                             //$('#example tr').find('td:last-child').append('<td>'+val+'</td>');
                                //$('#example th:last-child').append('<td>'+val+'</td>');
                                    // console.log(th); 
                          }
@@ -291,8 +295,8 @@ function loadEventFrames(){
                       srt++;
                        
                   });  
-                   //myTab.push([srarr,valarray]);
-               // console.log(myTab);
+//                   myTab.push(myTab);
+//              console.log(myTab);
                   // var dataSet = myTab;
                    CreateTableFromJSON(myTab,column);
                    $.each(eventsColorsData,function(key) {
