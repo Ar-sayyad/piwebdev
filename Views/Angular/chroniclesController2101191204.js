@@ -7,7 +7,56 @@ app.controller('chroniclesController', function($scope) {
         excel.generate();
     });       
  
- 
+ var dataSet = [
+    [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
+    [ "Garrett Winters", "Accountant", "Tokyo", "8422", "2011/07/25", "$170,750" ],
+    [ "Ashton Cox", "Junior Technical Author", "San Francisco", "1562", "2009/01/12", "$86,000" ],
+    [ "Cedric Kelly", "Senior Javascript Developer", "Edinburgh", "6224", "2012/03/29", "$433,060" ],
+    [ "Airi Satou", "Accountant", "Tokyo", "5407", "2008/11/28", "$162,700" ],
+    [ "Brielle Williamson", "Integration Specialist", "New York", "4804", "2012/12/02", "$372,000" ],
+    [ "Herrod Chandler", "Sales Assistant", "San Francisco", "9608", "2012/08/06", "$137,500" ],
+    [ "Rhona Davidson", "Integration Specialist", "Tokyo", "6200", "2010/10/14", "$327,900" ],
+    [ "Colleen Hurst", "Javascript Developer", "San Francisco", "2360", "2009/09/15", "$205,500" ],
+    [ "Sonya Frost", "Software Engineer", "Edinburgh", "1667", "2008/12/13", "$103,600" ],
+    [ "Jena Gaines", "Office Manager", "London", "3814", "2008/12/19", "$90,560" ],
+    [ "Quinn Flynn", "Support Lead", "Edinburgh", "9497", "2013/03/03", "$342,000" ],
+    [ "Charde Marshall", "Regional Director", "San Francisco", "6741", "2008/10/16", "$470,600" ],
+    [ "Haley Kennedy", "Senior Marketing Designer", "London", "3597", "2012/12/18", "$313,500" ],
+    [ "Tatyana Fitzpatrick", "Regional Director", "London", "1965", "2010/03/17", "$385,750" ],
+    [ "Michael Silva", "Marketing Designer", "London", "1581", "2012/11/27", "$198,500" ],
+    [ "Paul Byrd", "Chief Financial Officer (CFO)", "New York", "3059", "2010/06/09", "$725,000" ],
+    [ "Gloria Little", "Systems Administrator", "New York", "1721", "2009/04/10", "$237,500" ],
+    [ "Bradley Greer", "Software Engineer", "London", "2558", "2012/10/13", "$132,000" ],
+    [ "Dai Rios", "Personnel Lead", "Edinburgh", "2290", "2012/09/26", "$217,500" ],
+    [ "Jenette Caldwell", "Development Lead", "New York", "1937", "2011/09/03", "$345,000" ],
+    [ "Yuri Berry", "Chief Marketing Officer (CMO)", "New York", "6154", "2009/06/25", "$675,000" ],
+    [ "Caesar Vance", "Pre-Sales Support", "New York", "8330", "2011/12/12", "$106,450" ],
+    [ "Doris Wilder", "Sales Assistant", "Sidney", "3023", "2010/09/20", "$85,600" ],
+    [ "Angelica Ramos", "Chief Executive Officer (CEO)", "London", "5797", "2009/10/09", "$1,200,000" ],
+    [ "Gavin Joyce", "Developer", "Edinburgh", "8822", "2010/12/22", "$92,575" ],
+    [ "Jennifer Chang", "Regional Director", "Singapore", "9239", "2010/11/14", "$357,650" ],
+    [ "Brenden Wagner", "Software Engineer", "San Francisco", "1314", "2011/06/07", "$206,850" ],
+    [ "Fiona Green", "Chief Operating Officer (COO)", "San Francisco", "2947", "2010/03/11", "$850,000" ],
+    [ "Shou Itou", "Regional Marketing", "Tokyo", "8899", "2011/08/14", "$163,000" ],
+    [ "Michelle House", "Integration Specialist", "Sidney", "2769", "2011/06/02", "$95,400" ],
+    [ "Suki Burks", "Developer", "London", "6832", "2009/10/22", "$114,500" ],
+    [ "Prescott Bartlett", "Technical Author", "London", "3606", "2011/05/07", "$145,000" ],
+    [ "Gavin Cortez", "Team Leader", "San Francisco", "2860", "2008/10/26", "$235,500" ],
+    [ "Martena Mccray", "Post-Sales support", "Edinburgh", "8240", "2011/03/09", "$324,050" ],
+    [ "Unity Butler", "Marketing Designer", "San Francisco", "5384", "2009/12/09", "$85,675" ]
+];
+      $('#example').DataTable( {
+         data: dataSet,
+        columns: [
+            { title: "Name" },
+            { title: "Position" },
+            { title: "Office" },
+            { title: "Extn." },
+            { title: "Start date" },
+            { title: "Salary" }
+        ]
+    } );
+    
     $scope.pagename = "Chronicles";
     $(".tabDiv").hide();
     var now = new Date();
@@ -206,14 +255,12 @@ function getChartts(){
 /*****LOAD EVENT FRAME DATA START****/ 
 function loadEventFrames(){
     var charts;
-    $("#table-responsive").empty();
-    $("#table-responsive").append('<table id="example" class="table" width="100%"></table>');
+    $("#example").empty();
       /**************///
         var data=[];
         var yAxisData=[];
         var chkArray = [];
         var myTab = [];
-        var column=[];
         var sr=0;
         var startDate = $('#startDate').val();
         var startTime = $("#startTime").val();
@@ -227,22 +274,18 @@ function loadEventFrames(){
         endDate = endDate.split('-');
         startTime = startTime.split(':');
         endTime = endTime.split(':');  
-          var values=[];
+         
       $(document).ready(function() {    
     /*****Main Charts****/
      //$("#containerTable").append('<tr>');
       var srt=1;
-      column.push( { title: "Sr.No" });  
-      var nwwarr=[];
-    $.each($("input[name='selectorLeft']:checked"), function(){    
+    $.each($("input[name='selectorLeft']:checked"), function(){ 
         var data1=[];
         var WebId = $(this).val();
         var name = $(this).attr("data-name");
         var cat = $(this).attr("data-id");
         var min = $("#min"+cat).val();
-        var max = $("#max"+cat).val(); 
-       
-        column.push( { title: name });
+        var max = $("#max"+cat).val();       
         chkArray.push(WebId); 
        
                 //$("#containerTable").append('');              
@@ -256,45 +299,31 @@ function loadEventFrames(){
             $.when(attributesData).done(function () {                 
                  var attributesDataItems = (attributesData.responseJSON.Items);
                  var unit = '';
-                var cnt=attributesDataItems.length;
-                  if(srt>cnt){
-                       $('#example tr').find('td:last-child').remove();
-                      //$('#example tr').append('<th id='+name+'>'+name+'</th>');
-                  }
+                 //console.log("count: "+(attributesDataItems.length));
+                   //$("#containerTable").append('<tr><th id='+name+'>'+name+'</th><tr>');
                   
                 $.each(attributesDataItems,function(key) {
-                        var Timestamp = attributesDataItems[key].Timestamp;                        
-                       var val = (Math.round((attributesDataItems[key].Value) * 100) / 100);                         
+                        var Timestamp = attributesDataItems[key].Timestamp;
+                        var val = (Math.round((attributesDataItems[key].Value) * 100) / 100);                         
                         if(isNaN(val)){
                            // console.log(val);////Skipping NaN Values
-                        }else{  
+                        }else{                            
                             vdate = (Timestamp).substring(0,10);//start date
                             vtime = (Timestamp).substring(11,19);//start time                                   
                                     vdate = vdate.split('-');//start date split array
                                     vtime = vtime.split(':');//start time split array
-                           // var val = Math.round((attributesDataItems[key].Value) * 100) / 100;
+                            var val = Math.round((attributesDataItems[key].Value) * 100) / 100;
                             var dt = Date.UTC(vdate[0],(vdate[1]-1),vdate[2],vtime[0],vtime[1],vtime[2]);
                             data1.push([dt,val]);
-                            //xAxis.push(Timestamp);                   
-                            unit = attributesDataItems[key].UnitsAbbreviation;  
-                            if(srt<=cnt){
-                             myTab.push([srt,val]);
-                             nwwarr.push(myTab);
-                         }else{
-                             $('#example tr').find('td:last-child').append('<td>'+val+'</td>');
-                               //$('#example th:last-child').append('<td>'+val+'</td>');
-                                   // console.log(th); 
-                         }
+                            //xAxis.push(Timestamp); 
+                            unit = attributesDataItems[key].UnitsAbbreviation;   
                             //myTab.push({"Sr.No":srt,"Element":name,"Date":vdate[2]+'/'+(vdate[1])+'/'+vdate[0],"Value":val+'('+unit+')'});
-                            //$("#containerTable").append('<tr><td>'+val+'</td></tr>');                            
+                            //$("#containerTable").append('<tr><td>'+val+'</td></tr>');
                         }
                       srt++;
                        
                   });  
-                   //myTab.push([srarr,valarray]);
-               // console.log(myTab);
-                  // var dataSet = myTab;
-                   CreateTableFromJSON(myTab,column);
+                  // CreateTableFromJSON(myTab);
                    $.each(eventsColorsData,function(key) {
                        if(name===eventsColorsData[key].name){
                              data.push({
@@ -376,7 +405,7 @@ function loadEventFrames(){
                charts.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2],startTime[0],startTime[1],startTime[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2],endTime[0],endTime[1],endTime[2]));//EXTREME POINTSET
                 sr++;
             });  
-   }); 
+    }); 
    
      if(chkArray.length === 0){
         $("#containern").empty(); //Empty chart Div  
@@ -389,12 +418,44 @@ function loadEventFrames(){
      }
      
     /*****LOAD EVENT FRAME DATA END****/
-function CreateTableFromJSON(myTab,column) {      
-      $('#example').DataTable( {
-         data: myTab,
-        columns: column
-    } );
-    
+function CreateTableFromJSON(myTab) {
+        var col = [];
+        for (var i = 0; i < myTab.length; i++) {
+            for (var key in myTab[i]) {
+                if (col.indexOf(key) === -1) {
+                    col.push(key);
+                }
+            }
+        }
+
+        var table = document.createElement("table");
+        table.id = 'test_table';
+        table.className = 'table table-bordered dataTable';
+        // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+
+        var tr = table.insertRow(-1);                   // TABLE ROW.
+
+        for (var i = 0; i < col.length; i++) {
+            var th = document.createElement("th");      // TABLE HEADER.
+            th.innerHTML = col[i];
+            tr.appendChild(th);
+        }
+
+        // ADD JSON DATA TO THE TABLE AS ROWS.
+        for (var i = 0; i < myTab.length; i++) {
+
+            tr = table.insertRow(-1);
+
+            for (var j = 0; j < col.length; j++) {
+                var tabCell = tr.insertCell(-1);
+                tabCell.innerHTML = myTab[i][col[j]];
+            }
+        }
+
+        // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+        var divContainer = document.getElementById("tables");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(table);   
     }
 
   /*********MAIN CHARTS SECTION END**********/  
