@@ -164,8 +164,8 @@ app.controller('chroniclesController', function($scope) {
                                     $("#attributesListLeft").append('<li class="elListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getChartts('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
                             <label class="labelListChild leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+' ('+attributesItems[key].DefaultUnitsNameAbbreviation+')</label>\n\
                             <div class="ScaleDiv">\n\
-                                <input type="text" class="scales min" placeholder="Min" value="'+eventsColorsData[key1].min+'" name="min" onchange="getCharts('+cat+');" id="min'+cat+'">\n\
-                                <input type="text" class="scales max" placeholder="Max" value="'+eventsColorsData[key1].max+'" name="max" onchange="getCharts('+cat+');" id="max'+cat+'">\n\
+                                <input type="text" class="scales min" placeholder="Min" value="'+eventsColorsData[key1].min+'" name="min" onchange="getChartts('+cat+');" id="min'+cat+'">\n\
+                                <input type="text" class="scales max" placeholder="Max" value="'+eventsColorsData[key1].max+'" name="max" onchange="getChartts('+cat+');" id="max'+cat+'">\n\
                             </div>\n\
                            </li>');    
                                        }
