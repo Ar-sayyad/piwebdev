@@ -1370,6 +1370,7 @@ hr {
 
 .btn-group, .btn-group-vertical{
 	box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, .075);
+	float: left;
 }
 
 .btn-group .btn{
@@ -5086,7 +5087,9 @@ input[type="color"] {
 
 
 }
-
+div.dataTables_wrapper div.dataTables_filter{
+    margin-bottom: 15px;
+}
 
 
 

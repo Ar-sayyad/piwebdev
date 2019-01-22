@@ -213,6 +213,8 @@ function loadEventFrames(){
         var data=[];
         var yAxisData=[];
         var chkArray = [];
+        var myTab = [];
+        var column=[];
         var sr=0;
         var startDate = $('#startDate').val();
         var startTime = $("#startTime").val();
@@ -226,18 +228,26 @@ function loadEventFrames(){
         endDate = endDate.split('-');
         startTime = startTime.split(':');
         endTime = endTime.split(':');  
-        var t = $('#example').DataTable();
-      $(document).ready(function() {           
+          var values=[];
+      $(document).ready(function() {  
+         
     /*****Main Charts****/
+     //$("#containerTable").append('<tr>');
       var srt=1;
+   //   column.push( { title: "Sr.No" });  
     $.each($("input[name='selectorLeft']:checked"), function(){    
         var data1=[];
+        var table=[];
         var WebId = $(this).val();
         var name = $(this).attr("data-name");
         var cat = $(this).attr("data-id");
         var min = $("#min"+cat).val();
         var max = $("#max"+cat).val(); 
-        chkArray.push(WebId);            
+       
+       // column.push( { title: name });
+        chkArray.push(WebId); 
+       
+                //$("#containerTable").append('');              
         var url = baseServiceUrl+'streams/' + WebId + '/interpolated?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d&selectedFields=items.Timestamp;items.Value;items.UnitsAbbreviation;&searchFullHierarchy=true';
         //console.log(url);
         var attributesData =  processJsonContent(url, 'GET', null);
@@ -245,9 +255,15 @@ function loadEventFrames(){
                 console.log("Cannot Find the Attributes.");
             });
             
-            $.when(attributesData).done(function () { 
+            $.when(attributesData).done(function () {                 
                  var attributesDataItems = (attributesData.responseJSON.Items);
-                 var unit = '';                  
+                 var unit = '';
+                var cnt=attributesDataItems.length;
+//                  if(srt>cnt){
+//                       $('#example tr').find('td:last-child').remove();
+//                      //$('#example tr').append('<th id='+name+'>'+name+'</th>');
+//                  }
+                  
                 $.each(attributesDataItems,function(key) {
                         var Timestamp = attributesDataItems[key].Timestamp;                        
                        var val = (Math.round((attributesDataItems[key].Value) * 100) / 100);                         
@@ -262,12 +278,36 @@ function loadEventFrames(){
                             var dt = Date.UTC(vdate[0],(vdate[1]-1),vdate[2],vtime[0],vtime[1],vtime[2]);
                             data1.push([dt,val]);
                             //xAxis.push(Timestamp);                   
-                            unit = attributesDataItems[key].UnitsAbbreviation;
-                            t.row.add( [ srt,name, val+'('+unit+')', (vdate[2]+'/'+(vdate[1])+'/'+vdate[0])] ).draw( false );                      
-                           // t.row.add( [ srt,name, val+'('+unit+')', (vdate[2]+'/'+(vdate[1])+'/'+vdate[0]+' '+vtime[0]+':'+vtime[1]+':'+vtime[2])] ).draw( false );                      
-                      }                      
+                            unit = attributesDataItems[key].UnitsAbbreviation;  
+//                             if(srt<=cnt){
+//                                myTab.push([srt,name,val+'('+unit+')',(vdate[2]+'/'+(vdate[1])+'/'+vdate[0])]);
+//                            }else{
+                                 var t = $('#example').DataTable();
+                                t.row.add( [ srt,name, val+'('+unit+')', (vdate[2]+'/'+(vdate[1])+'/'+vdate[0])] ).draw( false );
+                               // $('#example').append('<tr><td>'+srt+'</td><td>'+name+'</td><td>'+val+'('+unit+')'+'</td><td>'+(vdate[2]+'/'+(vdate[1])+'/'+vdate[0])+'</td></tr>');
+//                            }
+                           
+                               // myTab.push([srt,name,val+'('+unit+')',(vdate[2]+'/'+(vdate[1])+'/'+vdate[0])]);
+                                //myTab.push({"sr":srt,"one":val,"two":val1});
+                             //$('#example tr').find('td:last-child').append('<td>'+val+'</td>');
+                               //$('#example th:last-child').append('<td>'+val+'</td>');
+                                   // console.log(th); 
+                         //myTab.push(table);
+                            //myTab.push({"Sr.No":srt,"Element":name,"Date":vdate[2]+'/'+(vdate[1])+'/'+vdate[0],"Value":val+'('+unit+')'});
+                            //$("#containerTable").append('<tr><td>'+val+'</td></tr>');   
+                            //myTab.push(table);
+                        }
+                      
+                       // console.log(myTab);
+                       // console.log(srt);
                       srt++;
-                  });                    
+                        
+                  }); 
+                  
+                   //myTab=table;
+            //  console.log(myTab);
+                  // var dataSet = myTab;
+                   
                    $.each(eventsColorsData,function(key) {
                        if(name===eventsColorsData[key].name){
                              data.push({
@@ -349,6 +389,7 @@ function loadEventFrames(){
                charts.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2],startTime[0],startTime[1],startTime[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2],endTime[0],endTime[1],endTime[2]));//EXTREME POINTSET
                 sr++;
             });  
+             
    }); 
   
      if(chkArray.length === 0){
@@ -362,7 +403,7 @@ function loadEventFrames(){
      }
      
     /*****LOAD EVENT FRAME DATA END****/
-function CreateTableFromJSON() {      
+function CreateTableFromJSON(myTab) {      
       $('#example').DataTable( {          
         // "lengthMenu": [ 10, 25, 50, 75, 100 ],
           dom: 'Bfrtip',
