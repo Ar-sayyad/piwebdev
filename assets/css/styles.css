@@ -492,11 +492,11 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
     padding: 3px 10px 3px 10px;
  }
 th, td, p, input {
-    font:14px Verdana;
+    /* font:14px Verdana; */
 }
 table, th, td 
 {
-    border: solid 1px #DDD;
+    /* border: solid 1px #DDD; */
     border-collapse: collapse;
     padding: 2px 3px;
     text-align: center;

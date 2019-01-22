@@ -207,7 +207,7 @@ function getChartts(){
 function loadEventFrames(){
     var charts;
     $("#table-responsive").empty();
-    $("#table-responsive").append('<table id="example" class="table" width="100%"></table>');
+    $("#table-responsive").append('<table id="example" class="table table-bordered" width="100%"></table>');
      CreateTableFromJSON();
       /**************///
         var data=[];
@@ -363,7 +363,8 @@ function loadEventFrames(){
      
     /*****LOAD EVENT FRAME DATA END****/
 function CreateTableFromJSON() {      
-      $('#example').DataTable( {          
+      $('#example').DataTable( {  
+           "pageLength": 25,
         // "lengthMenu": [ 10, 25, 50, 75, 100 ],
           dom: 'Bfrtip',
         buttons: [
