@@ -1,13 +1,4 @@
 app.controller('chroniclesController', function($scope) {  
-     $("#generate-excel").click(function () {
-          var excel = new ExcelGen({
-        "src_id": "test_table",
-        "show_header": true
-    });
-        excel.generate();
-    });       
- 
- 
     $scope.pagename = "Chronicles";
     $(".tabDiv").hide();
     var now = new Date();
@@ -364,10 +355,10 @@ function loadEventFrames(){
     /*****LOAD EVENT FRAME DATA END****/
 function CreateTableFromJSON() {      
       $('#example').DataTable( {  
-           "pageLength": 25,
-        // "lengthMenu": [ 10, 25, 50, 75, 100 ],
+           "pageLength": 20,
+           "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
           dom: 'Bfrtip',
-        buttons: [
+         buttons: [
             'pageLength','copy', 'csv', 'excel', 'print'
         ],
          //data: myTab,
