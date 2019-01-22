@@ -167,13 +167,12 @@ function loadEventFrames() {
     var dataarr=[];
 function makearray(sr,val) {
   dataarr.push([sr,val]); 
-   console.log(dataarr);
+  CreateTableFromJSON(dataarr,columns);
 }
 function addarray(art,val){
     //var i= (art-1);
-    dataarr[art].push(val);
-
-    console.log(dataarr);
+    dataarr[art].push(val);   
+    CreateTableFromJSON(dataarr,columns);
 }
     var charts;
     $("#table-responsive").empty();
@@ -182,11 +181,7 @@ function addarray(art,val){
     var data = [];
     var yAxisData = [];
     var chkArray = [];
-    var myTab = [];
-    var myTab1 = [];
     var columns = [];
-     var array3 =[];
-      var array4 = [];
     var sr = 0;
     var startDate = $('#startDate').val();
     var startTime = $("#startTime").val();
@@ -204,7 +199,7 @@ function addarray(art,val){
     $(document).ready(function() {
         var srt = 1;
        
-        columns.push( { title: "Sr.No" },{ title: "Date" });  
+        columns.push( { title: "Sr.No" });  
         $.each($("input[name='selectorLeft']:checked"), function() {
             var data1 = [];
             var newarr=[];
@@ -333,7 +328,9 @@ function addarray(art,val){
                 });
                 charts.xAxis[0].setExtremes(Date.UTC(startDate[0], (startDate[1] - 1), startDate[2], startTime[0], startTime[1], startTime[2]), Date.UTC(endDate[0], (endDate[1] - 1), endDate[2], endTime[0], endTime[1], endTime[2]));
                 sr++;
+                
             });
+            
         });
          //myTab = merge(array3,myTab1);
 //                    console.log(array3);
