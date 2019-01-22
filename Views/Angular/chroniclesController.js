@@ -1,6 +1,5 @@
 app.controller('chroniclesController', function($scope) {
     $scope.pagename = "Chronicles";
-    $(".tabDiv").hide();
     var now = new Date();
     $(function() {
         var emonth = '';
@@ -8,10 +7,10 @@ app.controller('chroniclesController', function($scope) {
         var month = (now.getMonth() + 1);
         if (month === 1) {
             emonth = 12;
-            yr = (now.getFullYear() - 1)
+            yr = (now.getFullYear() - 1);
         } else {
             emonth = now.getMonth();
-            yr = now.getFullYear()
+            yr = now.getFullYear();
         }
         var day = now.getDate();
         if (month < 10)
@@ -29,7 +28,7 @@ app.controller('chroniclesController', function($scope) {
         $("#endDate").datepicker({
             dateFormat: 'yy-mm-dd',
             maxDate: '0'
-        })
+        });
     });
     $(function() {
         var h = now.getHours(),
@@ -43,36 +42,36 @@ app.controller('chroniclesController', function($scope) {
         });
         $('input[type="time"][name="endtime"]').attr({
             'value': h + ':' + m + ':' + s
-        })
+        });
     });
     $("#chartView").click(function() {
         $("#tableViewData").hide();
-        $("#chartViewData").show()
+        $("#chartViewData").show();
     });
     $("#tableView").click(function() {
         $("#tableViewData").show();
-        $("#chartViewData").hide()
+        $("#chartViewData").hide();
     });
     var url = baseServiceUrl + 'assetdatabases?path=\\\\' + afServerName + '\\' + afDatabaseName;
     var ajaxEF = processJsonContent(url, 'GET', null);
     $.when(ajaxEF).fail(function() {
-        warningmsg("Cannot Find the WebId.")
+        warningmsg("Cannot Find the WebId.");
     });
     $.when(ajaxEF).done(function() {
         var WebId = (ajaxEF.responseJSON.WebId);
         var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elementtemplates?field=Categories&query=' + filterCategoryName + '&sortField=Name&selectedFields=items.name;items.webid;&searchFullHierarchy=true';
         var parentTemplateList = processJsonContent(url, 'GET', null);
         $.when(parentTemplateList).fail(function() {
-            warningmsg("Cannot Find the Element Templates.")
+            warningmsg("Cannot Find the Element Templates.");
         });
         $.when(parentTemplateList).done(function() {
             var parentTemplateListItems = (parentTemplateList.responseJSON.Items);
             var sr = 1;
             $.each(parentTemplateListItems, function(key) {
                 $("#parentTemplateList").append("<option  data-id=" + WebId + " value=" + parentTemplateListItems[key].Name + ">" + parentTemplateListItems[key].Name + "</option>");
-                sr++
-            })
-        })
+                sr++;
+            });
+        });
     });
     $("#parentTemplateList").change(function() {
         var parentTemplateID = $("#parentTemplateList option:selected").attr("data-id");
@@ -85,7 +84,7 @@ app.controller('chroniclesController', function($scope) {
         var url = baseServiceUrl + 'assetdatabases/' + parentTemplateID + '/elements?templateName=' + parentTemplateName + '&sortField=Name&selectedFields=items.name;items.webid;&searchFullHierarchy=true';
         var parentList = processJsonContent(url, 'GET', null);
         $.when(parentList).fail(function() {
-            warningmsg("Cannot Find the Element Templates.")
+            warningmsg("Cannot Find the Element Templates.");
         });
         $.when(parentList).done(function() {
             var parentListItems = (parentList.responseJSON.Items);
@@ -93,8 +92,8 @@ app.controller('chroniclesController', function($scope) {
             $.each(parentListItems, function(key) {
                 $("#parentList").append("<option  data-name=" + parentListItems[key].Name + " value=" + parentListItems[key].WebId + ">" + parentListItems[key].Name + "</option>");
                 sr++
-            })
-        })
+            });
+        });
     });
     $("#parentList").change(function() {
         var parentname = $("#parentList option:selected").attr("data-name");
@@ -105,7 +104,7 @@ app.controller('chroniclesController', function($scope) {
         var url = baseServiceUrl + 'elements/' + parentWebId + '/attributes';
         var attributesList = processJsonContent(url, 'GET', null);
         $.when(attributesList).fail(function() {
-            warningmsg("Cannot Find the Attributes.")
+            warningmsg("Cannot Find the Attributes.");
         });
         $.when(attributesList).done(function() {
             var attributesItems = (attributesList.responseJSON.Items);
@@ -115,7 +114,7 @@ app.controller('chroniclesController', function($scope) {
             var secondElementList = processJsonContent(url, 'GET', null);
             $.when(secondElementList).fail(function() {
                 warningmsg("Cannot Find the Element On Change.");
-                console.log("Cannot Find the Element.")
+                console.log("Cannot Find the Element.");
             });
             $.when(secondElementList).done(function() {
                 var elementsChildListItems = (secondElementList.responseJSON.Items);
@@ -124,7 +123,7 @@ app.controller('chroniclesController', function($scope) {
                     var thirdElementList = processJsonContent(url, 'GET', null);
                     $.when(thirdElementList).fail(function() {
                         warningmsg("Cannot Find the Element On Change.");
-                        console.log("Cannot Find the Element.")
+                        console.log("Cannot Find the Element.");
                     });
                     $.when(thirdElementList).done(function() {
                         var thirdElementsChildListItems = (thirdElementList.responseJSON.Items);
@@ -133,8 +132,8 @@ app.controller('chroniclesController', function($scope) {
                             $("#elementList").append("<option style='margin-left:15px;'   data-name=" + thirdElementsChildListItems[key].Name + " value=" + thirdElementsChildListItems[key].WebId + ">" + thirdElementsChildListItems[key].Name + "</option>")
                         });
                         $("#elementList").append("</optgroup>")
-                    })
-                })
+                    });
+                });
             });
             $("#elementList").append("</optgroup>");
             $.each(attributesItems, function(key) {
@@ -149,29 +148,45 @@ app.controller('chroniclesController', function($scope) {
                                 <input type="text" class="scales min" placeholder="Min" value="' + eventsColorsData[key1].min + '" name="min" onchange="getChartts(' + cat + ');" id="min' + cat + '">\n\
                                 <input type="text" class="scales max" placeholder="Max" value="' + eventsColorsData[key1].max + '" name="max" onchange="getChartts(' + cat + ');" id="max' + cat + '">\n\
                             </div>\n\
-                           </li>')
+                           </li>');
                             }
-                        })
+                        });
                     }
                 });
-                cat++
-            })
-        })
-    })
+                cat++;
+            });
+        });
+    });
 });
 
 function getChartts() {
-    loadEventFrames()
+    loadEventFrames();
 }
 
 function loadEventFrames() {
+    var dataarr=[];
+function makearray(sr,val) {
+  dataarr.push([sr,val]); 
+   console.log(dataarr);
+}
+function addarray(art,val){
+    //var i= (art-1);
+    dataarr[art].push(val);
+
+    console.log(dataarr);
+}
     var charts;
     $("#table-responsive").empty();
     $("#table-responsive").append('<table id="example" class="table table-bordered" width="100%"></table>');
-    CreateTableFromJSON();
+   // CreateTableFromJSON();
     var data = [];
     var yAxisData = [];
     var chkArray = [];
+    var myTab = [];
+    var myTab1 = [];
+    var columns = [];
+     var array3 =[];
+      var array4 = [];
     var sr = 0;
     var startDate = $('#startDate').val();
     var startTime = $("#startTime").val();
@@ -185,25 +200,33 @@ function loadEventFrames() {
     endDate = endDate.split('-');
     startTime = startTime.split(':');
     endTime = endTime.split(':');
-    var t = $('#example').DataTable();
+    //var t = $('#example').DataTable();
     $(document).ready(function() {
         var srt = 1;
+       
+        columns.push( { title: "Sr.No" },{ title: "Date" });  
         $.each($("input[name='selectorLeft']:checked"), function() {
             var data1 = [];
+            var newarr=[];
             var WebId = $(this).val();
             var name = $(this).attr("data-name");
             var cat = $(this).attr("data-id");
             var min = $("#min" + cat).val();
             var max = $("#max" + cat).val();
             chkArray.push(WebId);
+            columns.push( { title: name });
             var url = baseServiceUrl + 'streams/' + WebId + '/interpolated?startTime=' + startDateTime + '&endTime=' + endDateTime + '&interval=1d&selectedFields=items.Timestamp;items.Value;items.UnitsAbbreviation;&searchFullHierarchy=true';
             var attributesData = processJsonContent(url, 'GET', null);
             $.when(attributesData).fail(function() {
-                console.log("Cannot Find the Attributes.")
+                console.log("Cannot Find the Attributes.");
             });
+   
+
             $.when(attributesData).done(function() {
                 var attributesDataItems = (attributesData.responseJSON.Items);
-                var unit = '';
+                var unit = '';      
+                var cnt = (attributesDataItems.length);
+                 var art = 0;
                 $.each(attributesDataItems, function(key) {
                     var Timestamp = attributesDataItems[key].Timestamp;
                     var val = (Math.round((attributesDataItems[key].Value) * 100) / 100);
@@ -215,10 +238,26 @@ function loadEventFrames() {
                         var dt = Date.UTC(vdate[0], (vdate[1] - 1), vdate[2], vtime[0], vtime[1], vtime[2]);
                         data1.push([dt, val]);
                         unit = attributesDataItems[key].UnitsAbbreviation;
-                        t.row.add([srt, name, val + '(' + unit + ')', (vdate[2] + '/' + (vdate[1]) + '/' + vdate[0])]).draw(!1)
+                        if(srt<=cnt){
+                        makearray(srt,val);
+                    }else{
+                        addarray(art,val);
                     }
-                    srt++
+                           //makearray(srt,name,(vdate[2]+'/'+(vdate[1])+'/'+vdate[0]),val+'('+unit+')');
+                        //t.row.add([srt, name, val + '(' + unit + ')', (vdate[2] + '/' + (vdate[1]) + '/' + vdate[0])]).draw(!1);
+                    }
+                    srt++;
+                   art++;
+                   
                 });
+                   
+                    //console.log(array3);
+//                  array3 = array3.concat(newarr).unique(); 
+//                  // myTab.push(array3);
+//                   array4=array4.concat(array3).unique(); 
+//                 console.log(array4);
+               // console.log(newarr);
+                 //CreateTableFromJSON(myTab,columns);
                 $.each(eventsColorsData, function(key) {
                     if (name === eventsColorsData[key].name) {
                         data.push({
@@ -265,7 +304,7 @@ function loadEventFrames() {
                         text: ''
                     },
                     xAxis: {
-                        type: 'datetime',
+                        type: 'datetime'
                     },
                     yAxis: yAxisData,
                     tooltip: {
@@ -278,7 +317,7 @@ function loadEventFrames() {
                                 hover: {
                                     lineWidth: 2
                                 }
-                            },
+                            }
                         }
                     },
                     legend: {
@@ -293,16 +332,29 @@ function loadEventFrames() {
                     series: data
                 });
                 charts.xAxis[0].setExtremes(Date.UTC(startDate[0], (startDate[1] - 1), startDate[2], startTime[0], startTime[1], startTime[2]), Date.UTC(endDate[0], (endDate[1] - 1), endDate[2], endTime[0], endTime[1], endTime[2]));
-                sr++
-            })
+                sr++;
+            });
         });
+         //myTab = merge(array3,myTab1);
+//                    console.log(array3);
         if (chkArray.length === 0) {
-            $("#containern").empty()
+            $("#containern").empty();
         } else {}
-    })
+    });
 }
 
-function CreateTableFromJSON() {
+
+//function unique(myTab,newarr) {
+//    var a = this.concat();
+//    for(var i=0; i<a.length; ++i) {
+//        for(var j=i+1; j<a.length; ++j) {
+//            if(a[i] === a[j])
+//                a.splice(j--, 1);
+//        }
+//    }
+//    return a;
+//};
+function CreateTableFromJSON(myTab,columns) {
     $('#example').DataTable({
         "pageLength": 20,
         "lengthMenu": [
@@ -311,14 +363,16 @@ function CreateTableFromJSON() {
         ],
         dom: 'Bfrtip',
         buttons: ['pageLength', 'copy', 'csv', 'excel', 'print'],
-        columns: [{
-            title: "Sr.No."
-        }, {
-            title: "Name"
-        }, {
-            title: "Value(Unit)"
-        }, {
-            title: "Date"
-        }]
-    })
+        data:myTab,
+        columns: columns
+//        [{
+//            title: "Sr.No."
+//        }, {
+//            title: "Name"
+//        }, {
+//            title: "Value(Unit)"
+//        }, {
+//            title: "Date"
+//        }]
+    });
 }
