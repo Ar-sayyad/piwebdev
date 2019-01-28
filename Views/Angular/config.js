@@ -15,6 +15,14 @@ var timestampCat = "masterdashboard_timestamp";/***CATEGORY FOR TIMESTAMP***/
 var filterCategoryName = "asset_design";/****CATEGORY NAME FOR FILTER ELEMENT TEMPLATE****/
 var allocationAttributeName = "PLANT";/****The Plant Attributes Name for save the allocation page data***/
 var iframeConfigUrl = "http://www.google.com"; //IFRAME URL 
+var defaultRankingTemplate = "ZONE";/****Default Zone for Ranking Page****/
+var rankingParameters = [
+    { name:"U", value:20 },
+    { name:"PH", value:5 },
+    { name:"KU", value:25 },
+    { name:"PR", value:15 },
+    { name:"VR", value:10 }
+];
 var eventsColorsData = [
     {
         "name":"BALANCE","color":"#058DC7","min":0,"max":300 

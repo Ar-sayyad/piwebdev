@@ -162,18 +162,29 @@ app.controller('chroniclesController', function($scope) {
 function getChartts() {
     loadEventFrames();
 }
-
-function loadEventFrames() {
-    var dataarr=[];
-function makearray(sr,val) {
-  dataarr.push([sr,val]); 
-  CreateTableFromJSON(dataarr,columns);
+ var dataarr=[];
+function makearray(val) {
+    console.log(val);
+    dataarr.push([val]); 
+  //CreateTableFromJSON(dataarr,columns);
+  //console.log(dataarr);
 }
-function addarray(art,val){
-    //var i= (art-1);
-    dataarr[art].push(val);   
-    CreateTableFromJSON(dataarr,columns);
+var datanm=[];
+function addarray(art,val,name,cnt){
+    datanm.push(name);
+    //var i= (art-1);'
+    console.log(datanm);   
+    var c=(cnt-1);
+    if(art<=c){
+        dataarr[art].pop();   
+        dataarr[art].push(val);   
+    }else{}
+    if(art===c){      
+    console.log(dataarr);
 }
+   // CreateTableFromJSON(dataarr,columns);
+}
+function loadEventFrames() {   
     var charts;
     $("#table-responsive").empty();
     $("#table-responsive").append('<table id="example" class="table table-bordered" width="100%"></table>');
@@ -198,7 +209,7 @@ function addarray(art,val){
     //var t = $('#example').DataTable();
     $(document).ready(function() {
         var srt = 1;
-       
+        var maincnt = 1;
         columns.push( { title: "Sr.No" });  
         $.each($("input[name='selectorLeft']:checked"), function() {
             var data1 = [];
@@ -216,7 +227,6 @@ function addarray(art,val){
                 console.log("Cannot Find the Attributes.");
             });
    
-
             $.when(attributesData).done(function() {
                 var attributesDataItems = (attributesData.responseJSON.Items);
                 var unit = '';      
@@ -233,10 +243,10 @@ function addarray(art,val){
                         var dt = Date.UTC(vdate[0], (vdate[1] - 1), vdate[2], vtime[0], vtime[1], vtime[2]);
                         data1.push([dt, val]);
                         unit = attributesDataItems[key].UnitsAbbreviation;
-                        if(srt<=cnt){
-                        makearray(srt,val);
+                        if(maincnt===2){
+                        makearray(val);
                     }else{
-                        addarray(art,val);
+                        addarray(art,val,name,cnt);
                     }
                            //makearray(srt,name,(vdate[2]+'/'+(vdate[1])+'/'+vdate[0]),val+'('+unit+')');
                         //t.row.add([srt, name, val + '(' + unit + ')', (vdate[2] + '/' + (vdate[1]) + '/' + vdate[0])]).draw(!1);
@@ -330,7 +340,7 @@ function addarray(art,val){
                 sr++;
                 
             });
-            
+            maincnt++;
         });
          //myTab = merge(array3,myTab1);
 //                    console.log(array3);
