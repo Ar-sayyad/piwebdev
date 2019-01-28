@@ -265,7 +265,7 @@ body::-webkit-scrollbar-track,.chartDiv::-webkit-scrollbar-track,.style-1::-webk
     text-align: center;
     text-transform: capitalize;
 }
-.topheader h4{
+.topheader h4,.topheader h3{
     color:#343a40;
 }
 .wd100{

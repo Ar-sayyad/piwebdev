@@ -4,7 +4,7 @@ var baseServiceUrl = "https://192.168.1.28:1706/piwebapi/"; /***PI WEBAPI URL***
 var user = "Asif";/***USERNAME***/
 var pass = "ECG@123";/***PASSWORD***/
 var afServerName = "ECG-DEV-SERVER";/***AF SERVER NAME***/
-var afDatabaseName = "APOIO_CLIENT";//APOIO_CLIENT//"Mayhar";/***DATABASE NAME***/
+var afDatabaseName = "APOIO_CLIENT";//Aasif_Development//"Mayhar";/***DATABASE NAME***/
 var EnumerationSets = "CONNECTED_TO_PLANT";/***ENUMERATION SET NAME***/
 var templateName = "BLOCK";/***DEFAULT TEMPLATE NAME***/
 var newtemplateName = "MAGISTRAL";/***DEFAULT TEMPLATE NAME***/
@@ -20,7 +20,7 @@ var eventsColorsData = [
         "name":"BALANCE","color":"#058DC7","min":0,"max":300 
     },
     {
-        "name":"U","color":"#50B432","min":0,"max":235
+        "name":"U","color":"#50B432","min":0,"max":35
     },
     { 
         "name":"KU","color":"#ED561B","min":0,"max":170 
@@ -32,7 +32,7 @@ var eventsColorsData = [
         "name":"PR","color":"#24CBE5",  "min":0, "max":210
     },
     {
-        "name":"VR","color":"#64E572","min":0,"max":250 
+        "name":"VR","color":"#64E572","min":0,"max":220 
     },
     { 
         "name":"ACIDIFICATION","color":"#FF9655","min":0,"max":200
