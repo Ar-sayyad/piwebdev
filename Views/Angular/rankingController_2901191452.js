@@ -72,7 +72,6 @@ app.controller('rankingController', function($scope) {
             })
         })
     });
-    
     $("#parentList").change(function() {
           var startDate = $('#startDate').val() + 'T00:00:00Z';
         var endDate = $('#startDate').val() + 'T23:59:59Z';
@@ -84,7 +83,7 @@ app.controller('rankingController', function($scope) {
         var url = baseServiceUrl + 'elements/' + parentWebId + '/attributes?selectedFields=Items.Name;Items.Webid;';
         var attributesList = processJsonContent(url, 'GET', null);
         $.when(attributesList).fail(function() {
-            warningmsg("Cannot Find the Attributes.");
+            warningmsg("Cannot Find the Attributes.")
         });
         $.when(attributesList).done(function() {
             var attributesItems = (attributesList.responseJSON.Items);
@@ -104,7 +103,7 @@ app.controller('rankingController', function($scope) {
                                        $.when(parameterList).done(function() {
                                            var parameterItems = (parameterList.responseJSON.Items);
                                            var srt = 1;
-                                            tableData.push({name:Name});
+                                            //tableData.push({title:Name});
                                                 $.each(parameterItems, function(key) {
                                                    // var Timestamp = parameterItems[key].Timestamp;
                                                     var val = (Math.round((parameterItems[key].Value) * 100) / 100);
@@ -113,69 +112,65 @@ app.controller('rankingController', function($scope) {
 //                                                        vtime = (Timestamp).substring(11, 19);
 //                                                        vdate = vdate.split('-');
 //                                                        vtime = vtime.split(':');
-                                                          tableData.push({ value:val });
+                                                          tableData.push(
+                                                                    {  
+                                                                        title:Name,
+                                                                        Value: val
+                                                                    }
+                                                                  );
                                                         //var val = Math.round((parameterItems[key].Value) * 100) / 100;
                                                         //unit = parameterItems[key].UnitsAbbreviation;
                                                        //$("#showData").append("<tr><td>" + val + "</td></tr>");
                                                     }
                                                     srt++;
                                                 });
-                                                makeTable(tableData);
-                                               // console.log(tableData); 
+                                                CreateTableFromJSON(tableData);
                                        });
                     }
                 });
-                   
             });
-          
             burl += 'selectedFields=Items.Name;Items.Webid;Items.Value.Value;Items.Value.UnitsAbbreviation;&searchFullHierarchy=true';
            // console.log(burl);
-          
-//            var atList = processJsonContent(burl, 'GET', null);
-//            $.when(atList).fail(function() {
-//                warningmsg("Cannot Find the Attributes.");
-//            });
-//            $.when(atList).done(function() {
-//                var attItems = (atList.responseJSON.Items);
-//               // console.log(attItems)
-//            });
+            var atList = processJsonContent(burl, 'GET', null);
+            $.when(atList).fail(function() {
+                warningmsg("Cannot Find the Attributes.");
+            });
+            $.when(atList).done(function() {
+                var attItems = (atList.responseJSON.Items);
+               // console.log(attItems)
+            });
         });
-        //makeTable(tableData);
-        //console.log(tableData);
+       // console.log(tableData);
       //  CreateTableFromJSON(tableData);
     });
 
-function makeTable(tableData){
-     $("#showData").empty();
-    var table='<table class="table table-bordered"><tr>';
-    $.each(tableData, function(key) {
-        //console.log(tableData[key].name);
-        if(tableData[key].name !==undefined){
-        table+="<th>"+tableData[key].name+"</th>";
+    function CreateTableFromJSO(myTab) {
+        var col = [];
+        for (var i = 0; i < myTab.length; i++) {
+            for (var key in myTab[i]) {
+                if (col.indexOf(key) === -1) {
+                    col.push(key)
+                }
+            }
+        }
+        var table = document.createElement("table");
+        table.id = 'test_table';
+        table.className = 'table table-bordered dataTable';
+        var tr = table.insertRow(-1);
+        var th = document.createElement("th");
+        th.innerHTML = "Rank";
+        tr.appendChild(th);
+        for (var i = 0; i < myTab.length; i++) {
+            for (var j = 0; j < col.length; j++) {
+                var tabCell = tr.insertCell(-1);
+                tabCell.innerHTML = myTab[i][col[j]]
+            }
+        }
+        var divContainer = document.getElementById("topexample");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(table)
     }
-    });
-     table+="</tr>";
-     
-    var count=(tableData.length/11);    
-   
-    var sr=1;
-      $.each(tableData, function(key) {  
-      if(key===sr){
-           table+="<tr>";
-       }
-           if(tableData[key].value !==undefined){
-         table+="<td>"+tableData[key].value+"</td>";         
-     }
-     if(key===sr){
-     table+="</tr>";
- }
- sr+count;
-    });
-    
-      table+="</tr></table>";
-      $("#showData").append(table);
-    console.log(table);
-}
+
     function CreateTableFromJSON(myTab) {
         var col = [];
         for (var i = 0; i < myTab.length; i++) {
