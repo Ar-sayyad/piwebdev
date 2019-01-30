@@ -1,385 +1,425 @@
-app.controller('chroniclesController', function($scope) {
+app.controller('chroniclesController', function($scope) {  
+     $("#generate-excel").click(function () {
+          var excel = new ExcelGen({
+        "src_id": "test_table",
+        "show_header": true
+    });
+        excel.generate();
+    });       
+ 
+ 
     $scope.pagename = "Chronicles";
+    $(".tabDiv").hide();
     var now = new Date();
-    $(function() {
-        var emonth = '';
-        var yr = '';
-        var month = (now.getMonth() + 1);
-        if (month === 1) {
-            emonth = 12;
-            yr = (now.getFullYear() - 1);
-        } else {
-            emonth = now.getMonth();
-            yr = now.getFullYear();
-        }
-        var day = now.getDate();
-        if (month < 10)
-            month = "0" + month;
-        if (day < 10)
-            day = "0" + day;
-        var start = yr + '-' + emonth + '-' + day;
-        var end = now.getFullYear() + '-' + month + '-' + day;
+    $(function() {  
+       var emonth = '';
+       var yr='';
+       var month = (now.getMonth()+1); 
+            if(month===1){
+                 emonth = 12;
+                 yr = (now.getFullYear()-1);
+             }else{
+                emonth = now.getMonth();
+                yr = now.getFullYear();
+             }
+       var day = now.getDate();
+       if (month < 10) 
+           month = "0" + month;
+       if (day < 10) 
+           day = "0" + day;
+       var start = yr +'-'+emonth + '-' + day;       
+       var end = now.getFullYear()+'-'+month + '-' + day;
         $("#startDate").val(start);
-        $("#startDate").datepicker({
-            dateFormat: 'yy-mm-dd',
-            maxDate: '0'
-        });
+        $("#startDate").datepicker({dateFormat: 'yy-mm-dd',maxDate : '0'});
         $("#endDate").val(end);
-        $("#endDate").datepicker({
-            dateFormat: 'yy-mm-dd',
-            maxDate: '0'
-        });
+        $("#endDate").datepicker({dateFormat: 'yy-mm-dd',maxDate : '0'});
     });
-    $(function() {
-        var h = now.getHours(),
-            m = now.getMinutes(),
-            s = now.getSeconds();
-        if (h < 10) h = '0' + h;
-        if (m < 10) m = '0' + m;
-        if (s < 10) s = '0' + s;
-        $('input[type="time"][name="starttime"]').attr({
-            'value': '00:00:00'
-        });
-        $('input[type="time"][name="endtime"]').attr({
-            'value': h + ':' + m + ':' + s
-        });
+    $(function(){     
+      var h = now.getHours(),
+          m = now.getMinutes(),
+          s = now.getSeconds();
+      if(h < 10) h = '0' + h; 
+      if(m < 10) m = '0' + m; 
+      if(s < 10) s = '0' + s;
+      $('input[type="time"][name="starttime"]').attr({'value':'00:00:00' });
+      $('input[type="time"][name="endtime"]').attr({'value': h + ':' + m + ':' + s });
     });
-    $("#chartView").click(function() {
+    $("#chartView").click(function(){
         $("#tableViewData").hide();
         $("#chartViewData").show();
     });
-    $("#tableView").click(function() {
+    $("#tableView").click(function(){
         $("#tableViewData").show();
         $("#chartViewData").hide();
     });
-    var url = baseServiceUrl + 'assetdatabases?path=\\\\' + afServerName + '\\' + afDatabaseName;
-    var ajaxEF = processJsonContent(url, 'GET', null);
-    $.when(ajaxEF).fail(function() {
-        warningmsg("Cannot Find the WebId.");
-    });
-    $.when(ajaxEF).done(function() {
-        var WebId = (ajaxEF.responseJSON.WebId);
-        var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elementtemplates?field=Categories&query=' + filterCategoryName + '&sortField=Name&selectedFields=items.name;items.webid;&searchFullHierarchy=true';
-        var parentTemplateList = processJsonContent(url, 'GET', null);
-        $.when(parentTemplateList).fail(function() {
-            warningmsg("Cannot Find the Element Templates.");
-        });
-        $.when(parentTemplateList).done(function() {
-            var parentTemplateListItems = (parentTemplateList.responseJSON.Items);
-            var sr = 1;
-            $.each(parentTemplateListItems, function(key) {
-                $("#parentTemplateList").append("<option  data-id=" + WebId + " value=" + parentTemplateListItems[key].Name + ">" + parentTemplateListItems[key].Name + "</option>");
-                sr++;
-            });
-        });
-    });
-    $("#parentTemplateList").change(function() {
-        var parentTemplateID = $("#parentTemplateList option:selected").attr("data-id");
-        $("#containern").empty();
-        $("#elementList").empty();
-        $("#attributesListLeft").empty();
-        $("#parentList").empty();
-        $("#parentList").append("<option value='' selected disabled>---Select Parent---</option>");
+ 
+    var url = baseServiceUrl+'assetdatabases?path=\\\\' + afServerName + '\\' + afDatabaseName; 
+       var ajaxEF =  processJsonContent(url, 'GET', null);
+           $.when(ajaxEF).fail(function () {
+               warningmsg("Cannot Find the WebId.");
+           });
+            $.when(ajaxEF).done(function () {
+               var WebId = (ajaxEF.responseJSON.WebId); 
+               
+                /****TEMPLATE ELEMENT SEARCH BY TEMPLATE NAME START****/
+                var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elementtemplates?field=Categories&query='+filterCategoryName+'&sortField=Name&selectedFields=items.name;items.webid;&searchFullHierarchy=true';
+                    //var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elements?templateName=' + templateName+'&searchFullHierarchy=true';
+                    var parentTemplateList =  processJsonContent(url, 'GET', null);                    
+                    $.when(parentTemplateList).fail(function () {
+                        warningmsg("Cannot Find the Element Templates.");
+                    });
+                    $.when(parentTemplateList).done(function () {
+                     var parentTemplateListItems = (parentTemplateList.responseJSON.Items);
+                     var sr= 1;
+                        $.each(parentTemplateListItems,function(key) {
+                            $("#parentTemplateList").append("<option  data-id="+WebId+" value="+parentTemplateListItems[key].Name+">"+parentTemplateListItems[key].Name+"</option>"); 
+                            sr++;
+                        }); 
+                    });  
+                    /****TEMPLATE ELEMENT SEARCH BY TEMPLATE NAME END****/ 
+               });
+    
+    /*****BLOCK ELEMENT ONCHNAGE START****/
+    $("#parentTemplateList").change(function (){
+        var parentTemplateID = $("#parentTemplateList option:selected").attr("data-id");//BLOCK ELEMENT NAME FOR IFRAME GRAPH GENERATION
+            $("#containern").empty();
+           // $("#containerTable").empty();
+             $("#elementList").empty();
+              $("#attributesListLeft").empty();
+            $("#parentList").empty();
+           $("#parentList").append("<option value='' selected disabled>---Select Parent---</option>");
         var parentTemplateName = $("#parentTemplateList").val();
-        var url = baseServiceUrl + 'assetdatabases/' + parentTemplateID + '/elements?templateName=' + parentTemplateName + '&sortField=Name&selectedFields=items.name;items.webid;&searchFullHierarchy=true';
-        var parentList = processJsonContent(url, 'GET', null);
-        $.when(parentList).fail(function() {
-            warningmsg("Cannot Find the Element Templates.");
-        });
-        $.when(parentList).done(function() {
-            var parentListItems = (parentList.responseJSON.Items);
-            var sr = 1;
-            $.each(parentListItems, function(key) {
-                $("#parentList").append("<option  data-name=" + parentListItems[key].Name + " value=" + parentListItems[key].WebId + ">" + parentListItems[key].Name + "</option>");
-                sr++
-            });
-        });
-    });
-    $("#parentList").change(function() {
-        var parentname = $("#parentList option:selected").attr("data-name");
-        $("#containern").empty();
-        $("#elementList").empty();
-        $("#attributesListLeft").empty();
+         
+          var url = baseServiceUrl + 'assetdatabases/' + parentTemplateID + '/elements?templateName=' + parentTemplateName+'&sortField=Name&selectedFields=items.name;items.webid;&searchFullHierarchy=true';
+                     //console.log(url);
+                     var parentList =  processJsonContent(url, 'GET', null);                    
+                    $.when(parentList).fail(function () {
+                        warningmsg("Cannot Find the Element Templates.");
+                    });
+                    $.when(parentList).done(function () {
+                     var parentListItems = (parentList.responseJSON.Items);
+                     var sr= 1;
+                        $.each(parentListItems,function(key) {
+                            $("#parentList").append("<option  data-name="+parentListItems[key].Name+" value="+parentListItems[key].WebId+">"+parentListItems[key].Name+"</option>"); 
+                            sr++;
+                        }); 
+                    });  
+           });          
+                    
+    /*****GET CHART DATA AND VALUE AND TIMESTAMP ATTRIBUTES START****/
+    $("#parentList").change(function (){
+           var parentname = $("#parentList option:selected").attr("data-name");//BLOCK ELEMENT NAME FOR IFRAME GRAPH GENERATION
+             $("#containern").empty();
+             //$("#containerTable").empty();
+              $("#elementList").empty();
+              $("#attributesListLeft").empty();
+           //$("#elementList").append("<option value='' selected disabled>---Select Parent---</option>");
         var parentWebId = $("#parentList").val();
         var url = baseServiceUrl + 'elements/' + parentWebId + '/attributes';
-        var attributesList = processJsonContent(url, 'GET', null);
-        $.when(attributesList).fail(function() {
-            warningmsg("Cannot Find the Attributes.");
-        });
-        $.when(attributesList).done(function() {
-            var attributesItems = (attributesList.responseJSON.Items);
-            var cat = 1;
-            $("#elementList").append("<optgroup label=" + parentname + " data-name=" + parentname + " value=" + parentWebId + ">");
-            var url = baseServiceUrl + 'elements/' + parentWebId + '/elements?sortField=Name&selectedFields=items.name;items.webid;';
-            var secondElementList = processJsonContent(url, 'GET', null);
-            $.when(secondElementList).fail(function() {
-                warningmsg("Cannot Find the Element On Change.");
-                console.log("Cannot Find the Element.");
-            });
-            $.when(secondElementList).done(function() {
-                var elementsChildListItems = (secondElementList.responseJSON.Items);
-                $.each(elementsChildListItems, function(key) {
-                    var url = baseServiceUrl + 'elements/' + elementsChildListItems[key].WebId + '/elements?sortField=Name&selectedFields=items.name;items.webid;';
-                    var thirdElementList = processJsonContent(url, 'GET', null);
-                    $.when(thirdElementList).fail(function() {
-                        warningmsg("Cannot Find the Element On Change.");
-                        console.log("Cannot Find the Element.");
-                    });
-                    $.when(thirdElementList).done(function() {
-                        var thirdElementsChildListItems = (thirdElementList.responseJSON.Items);
-                        $("#elementList").append("<optgroup style='margin-left:7px;' label=" + elementsChildListItems[key].Name + " data-name=" + elementsChildListItems[key].Name + " value=" + elementsChildListItems[key].WebId + ">");
-                        $.each(thirdElementsChildListItems, function(key) {
-                            $("#elementList").append("<option style='margin-left:15px;'   data-name=" + thirdElementsChildListItems[key].Name + " value=" + thirdElementsChildListItems[key].WebId + ">" + thirdElementsChildListItems[key].Name + "</option>")
-                        });
-                        $("#elementList").append("</optgroup>")
-                    });
-                });
-            });
-            $("#elementList").append("</optgroup>");
-            $.each(attributesItems, function(key) {
-                var category = attributesItems[key].CategoryNames;
-                $.each(category, function(key1) {
-                    if (trendCat === category[key1]) {
-                        $.each(eventsColorsData, function(key1) {
-                            if (attributesItems[key].Name === eventsColorsData[key1].name) {
-                                $("#attributesListLeft").append('<li class="elListChild paramterList' + cat + '">\n\<input type="checkbox" id="elemList' + cat + '" data-id="' + cat + '"  data-name="' + attributesItems[key].Name + '" onchange="getChartts(' + cat + ');" class="paraList" value="' + attributesItems[key].WebId + '" name="selectorLeft">\n\
-                            <label class="labelListChild leftLabel" for="elemList' + cat + '">' + attributesItems[key].Name + ' (' + attributesItems[key].DefaultUnitsNameAbbreviation + ')</label>\n\
+        //console.log(url);
+        var attributesList =  processJsonContent(url, 'GET', null);
+            $.when(attributesList).fail(function () {
+                warningmsg("Cannot Find the Attributes.");
+            });            
+            $.when(attributesList).done(function () {
+                 var attributesItems = (attributesList.responseJSON.Items);
+                 var cat=1;
+                 //var WebIdVal='';
+                  $("#elementList").append("<optgroup label="+parentname+" data-name="+parentname+" value="+parentWebId+">");
+                                        /***ElementsListByRightOnchange START***/
+                                                    var url = baseServiceUrl + 'elements/' + parentWebId+ '/elements?sortField=Name&selectedFields=items.name;items.webid;';
+                                                   
+                                                    var secondElementList = processJsonContent(url, 'GET', null);
+                                                    $.when(secondElementList).fail(function() {
+                                                        warningmsg("Cannot Find the Element On Change.");
+                                                        console.log("Cannot Find the Element.")
+                                                    });
+                                                    $.when(secondElementList).done(function() {
+                                                        var elementsChildListItems = (secondElementList.responseJSON.Items);
+                                                       // var srt = lastSrl;
+                                                        $.each(elementsChildListItems, function(key) {  
+                                                            //$("#elementList").append("<optgroup label="+elementsChildListItems[key].Name+" data-name="+elementsChildListItems[key].Name+" value="+elementsChildListItems[key].WebId+">");
+                                                            //$("#elementList").append("<option  data-name="+elementsChildListItems[key].Name+" value="+elementsChildListItems[key].WebId+">"+elementsChildListItems[key].Name+"</option>");
+                                                                    /***ElementsListByRightOnchange START***/
+                                                                        var url = baseServiceUrl + 'elements/' + elementsChildListItems[key].WebId+ '/elements?sortField=Name&selectedFields=items.name;items.webid;';
+                                                                        var thirdElementList = processJsonContent(url, 'GET', null);
+                                                                        $.when(thirdElementList).fail(function() {
+                                                                            warningmsg("Cannot Find the Element On Change.");
+                                                                            console.log("Cannot Find the Element.")
+                                                                        });
+                                                                        $.when(thirdElementList).done(function() {
+                                                                            var thirdElementsChildListItems = (thirdElementList.responseJSON.Items);
+                                                                           // var srt = lastSrl;
+                                                                           $("#elementList").append("<optgroup style='margin-left:7px;' label="+elementsChildListItems[key].Name+" data-name="+elementsChildListItems[key].Name+" value="+elementsChildListItems[key].WebId+">");
+                                                                            $.each(thirdElementsChildListItems, function(key) {                                                           
+                                                                                $("#elementList").append("<option style='margin-left:15px;'   data-name="+thirdElementsChildListItems[key].Name+" value="+thirdElementsChildListItems[key].WebId+">"+thirdElementsChildListItems[key].Name+"</option>");
+                                                                                //srt++
+                                                                            });
+                                                                             $("#elementList").append("</optgroup>");
+                                                                        });
+                                                                    /***ElementsListByRightOnchange END***/
+                                                            //srt++
+                                                              //$("#elementList").append("</optgroup>");
+                                                        });
+                                                    });
+                                                /***ElementsListByRightOnchange END***/
+                     $("#elementList").append("</optgroup>");
+                 $.each(attributesItems,function(key) {  
+                     var category = attributesItems[key].CategoryNames;     
+                     $.each(category,function(key1) {
+                         if(trendCat===category[key1]){
+                              $.each(eventsColorsData,function(key1) {
+                                if(attributesItems[key].Name===eventsColorsData[key1].name){
+                                    $("#attributesListLeft").append('<li class="elListChild paramterList'+cat+'">\n\<input type="checkbox" id="elemList'+cat+'" data-id="'+cat+'"  data-name="'+attributesItems[key].Name+'" onchange="getChartts('+cat+');" class="paraList" value="'+attributesItems[key].WebId+'" name="selectorLeft">\n\
+                            <label class="labelListChild leftLabel" for="elemList'+cat+'">'+attributesItems[key].Name+' ('+attributesItems[key].DefaultUnitsNameAbbreviation+')</label>\n\
                             <div class="ScaleDiv">\n\
-                                <input type="text" class="scales min" placeholder="Min" value="' + eventsColorsData[key1].min + '" name="min" onchange="getChartts(' + cat + ');" id="min' + cat + '">\n\
-                                <input type="text" class="scales max" placeholder="Max" value="' + eventsColorsData[key1].max + '" name="max" onchange="getChartts(' + cat + ');" id="max' + cat + '">\n\
+                                <input type="text" class="scales min" placeholder="Min" value="'+eventsColorsData[key1].min+'" name="min" onchange="getCharts('+cat+');" id="min'+cat+'">\n\
+                                <input type="text" class="scales max" placeholder="Max" value="'+eventsColorsData[key1].max+'" name="max" onchange="getCharts('+cat+');" id="max'+cat+'">\n\
                             </div>\n\
-                           </li>');
+                           </li>');    
+                                       }
+                            });
+                         
                             }
-                        });
-                    }
-                });
-                cat++;
-            });
+                      });
+                    cat++;
+                 });    
+                 
+            });  
+//            /*****GET CHART DATA AND VALUE AND TIMESTAMP ATTRIBUTES END****/
+//             loadEventFrame();//Loading Event Frames
         });
-    });
+/*****BLOCK ELEMENT ONCHNAGE END****/   
 });
 
-function getChartts() {
-    loadEventFrames();
+
+
+    
+/***LOAD ALL CHARTS ON DATE OR TIME CHANGE***/
+function getChartts(){   
+   // getMap();
+    loadEventFrames();   
 }
- var dataarr=[];
-function makearray(val) {
-    console.log(val);
-    dataarr.push([val]); 
-  //CreateTableFromJSON(dataarr,columns);
-  //console.log(dataarr);
-}
-var datanm=[];
-function addarray(art,val,name,cnt){
-    datanm.push(name);
-    //var i= (art-1);'
-    console.log(datanm);   
-    var c=(cnt-1);
-    if(art<=c){
-        dataarr[art].pop();   
-        dataarr[art].push(val);   
-    }else{}
-    if(art===c){      
-    console.log(dataarr);
-}
-   // CreateTableFromJSON(dataarr,columns);
-}
-function loadEventFrames() {   
+/***LOAD ALL CHARTS ON DATE OR TIME CHANGE***/
+
+ 
+/*****LOAD EVENT FRAME DATA START****/ 
+function loadEventFrames(){
     var charts;
     $("#table-responsive").empty();
-    $("#table-responsive").append('<table id="example" class="table table-bordered" width="100%"></table>');
-   // CreateTableFromJSON();
-    var data = [];
-    var yAxisData = [];
-    var chkArray = [];
-    var columns = [];
-    var sr = 0;
-    var startDate = $('#startDate').val();
-    var startTime = $("#startTime").val();
-    var startDateTime = (startDate + 'T' + startTime + 'Z');
-    var endDate = $('#endDate').val();
-    var endTime = $("#endTime").val();
-    var endDateTime = (endDate + 'T' + endTime + 'Z');
-    var vdate = '';
-    var vtime = '';
-    startDate = startDate.split('-');
-    endDate = endDate.split('-');
-    startTime = startTime.split(':');
-    endTime = endTime.split(':');
-    //var t = $('#example').DataTable();
-    $(document).ready(function() {
-        var srt = 1;
-        var maincnt = 1;
-        columns.push( { title: "Sr.No" });  
-        $.each($("input[name='selectorLeft']:checked"), function() {
-            var data1 = [];
-            var newarr=[];
-            var WebId = $(this).val();
-            var name = $(this).attr("data-name");
-            var cat = $(this).attr("data-id");
-            var min = $("#min" + cat).val();
-            var max = $("#max" + cat).val();
-            chkArray.push(WebId);
-            columns.push( { title: name });
-            var url = baseServiceUrl + 'streams/' + WebId + '/interpolated?startTime=' + startDateTime + '&endTime=' + endDateTime + '&interval=1d&selectedFields=items.Timestamp;items.Value;items.UnitsAbbreviation;&searchFullHierarchy=true';
-            var attributesData = processJsonContent(url, 'GET', null);
-            $.when(attributesData).fail(function() {
+    $("#table-responsive").append('<table id="example" class="table" width="100%"></table>');
+     CreateTableFromJSON();
+      /**************///
+        var data=[];
+        var yAxisData=[];
+        var chkArray = [];
+        var myTab = [];
+        var column=[];
+        var sr=0;
+        var startDate = $('#startDate').val();
+        var startTime = $("#startTime").val();
+        var startDateTime = (startDate + 'T' + startTime+'Z');
+        var endDate = $('#endDate').val();
+        var endTime = $("#endTime").val();
+        var endDateTime = (endDate + 'T' + endTime+'Z');   
+        var vdate='';
+        var vtime='';    
+        startDate = startDate.split('-');
+        endDate = endDate.split('-');
+        startTime = startTime.split(':');
+        endTime = endTime.split(':');  
+          var values=[];
+      $(document).ready(function() {  
+         
+    /*****Main Charts****/
+     //$("#containerTable").append('<tr>');
+      var srt=1;
+   //   column.push( { title: "Sr.No" });  
+    $.each($("input[name='selectorLeft']:checked"), function(){    
+        var data1=[];
+        var table=[];
+        var WebId = $(this).val();
+        var name = $(this).attr("data-name");
+        var cat = $(this).attr("data-id");
+        var min = $("#min"+cat).val();
+        var max = $("#max"+cat).val(); 
+       
+       // column.push( { title: name });
+        chkArray.push(WebId); 
+       
+                //$("#containerTable").append('');              
+        var url = baseServiceUrl+'streams/' + WebId + '/interpolated?startTime='+startDateTime+'&endTime='+endDateTime+'&interval=1d&selectedFields=items.Timestamp;items.Value;items.UnitsAbbreviation;&searchFullHierarchy=true';
+        //console.log(url);
+        var attributesData =  processJsonContent(url, 'GET', null);
+            $.when(attributesData).fail(function () {
                 console.log("Cannot Find the Attributes.");
             });
-   
-            $.when(attributesData).done(function() {
-                var attributesDataItems = (attributesData.responseJSON.Items);
-                var unit = '';      
-                var cnt = (attributesDataItems.length);
-                 var art = 0;
-                $.each(attributesDataItems, function(key) {
-                    var Timestamp = attributesDataItems[key].Timestamp;
-                    var val = (Math.round((attributesDataItems[key].Value) * 100) / 100);
-                    if (isNaN(val)) {} else {
-                        vdate = (Timestamp).substring(0, 10);
-                        vtime = (Timestamp).substring(11, 19);
-                        vdate = vdate.split('-');
-                        vtime = vtime.split(':');
-                        var dt = Date.UTC(vdate[0], (vdate[1] - 1), vdate[2], vtime[0], vtime[1], vtime[2]);
-                        data1.push([dt, val]);
-                        unit = attributesDataItems[key].UnitsAbbreviation;
-                        if(maincnt===2){
-                        makearray(val);
-                    }else{
-                        addarray(art,val,name,cnt);
-                    }
-                           //makearray(srt,name,(vdate[2]+'/'+(vdate[1])+'/'+vdate[0]),val+'('+unit+')');
-                        //t.row.add([srt, name, val + '(' + unit + ')', (vdate[2] + '/' + (vdate[1]) + '/' + vdate[0])]).draw(!1);
-                    }
-                    srt++;
-                   art++;
-                   
-                });
-                   
-                    //console.log(array3);
-//                  array3 = array3.concat(newarr).unique(); 
-//                  // myTab.push(array3);
-//                   array4=array4.concat(array3).unique(); 
-//                 console.log(array4);
-               // console.log(newarr);
-                 //CreateTableFromJSON(myTab,columns);
-                $.each(eventsColorsData, function(key) {
-                    if (name === eventsColorsData[key].name) {
-                        data.push({
-                            name: name,
-                            type: 'spline',
-                            yAxis: sr,
-                            color: eventsColorsData[key].color,
-                            data: data1,
-                            tooltip: {
-                                valueSuffix: unit
-                            }
-                        });
-                        if (min === '') {
-                            min = eventsColorsData[key].min
+            
+            $.when(attributesData).done(function () {                 
+                 var attributesDataItems = (attributesData.responseJSON.Items);
+                 var unit = '';
+                var cnt=attributesDataItems.length;
+//                  if(srt>cnt){
+//                       $('#example tr').find('td:last-child').remove();
+//                      //$('#example tr').append('<th id='+name+'>'+name+'</th>');
+//                  }
+                  
+                $.each(attributesDataItems,function(key) {
+                        var Timestamp = attributesDataItems[key].Timestamp;                        
+                       var val = (Math.round((attributesDataItems[key].Value) * 100) / 100);                         
+                        if(isNaN(val)){
+                           // console.log(val);////Skipping NaN Values
+                        }else{  
+                            vdate = (Timestamp).substring(0,10);//start date
+                            vtime = (Timestamp).substring(11,19);//start time                                   
+                                    vdate = vdate.split('-');//start date split array
+                                    vtime = vtime.split(':');//start time split array
+                           // var val = Math.round((attributesDataItems[key].Value) * 100) / 100;
+                            var dt = Date.UTC(vdate[0],(vdate[1]-1),vdate[2],vtime[0],vtime[1],vtime[2]);
+                            data1.push([dt,val]);
+                            //xAxis.push(Timestamp);                   
+                            unit = attributesDataItems[key].UnitsAbbreviation;  
+//                             if(srt<=cnt){
+//                                myTab.push([srt,name,val+'('+unit+')',(vdate[2]+'/'+(vdate[1])+'/'+vdate[0])]);
+//                            }else{
+                                 var t = $('#example').DataTable();
+                                t.row.add( [ srt,name, val+'('+unit+')', (vdate[2]+'/'+(vdate[1])+'/'+vdate[0])] ).draw( false );
+                               // $('#example').append('<tr><td>'+srt+'</td><td>'+name+'</td><td>'+val+'('+unit+')'+'</td><td>'+(vdate[2]+'/'+(vdate[1])+'/'+vdate[0])+'</td></tr>');
+//                            }
+                           
+                               // myTab.push([srt,name,val+'('+unit+')',(vdate[2]+'/'+(vdate[1])+'/'+vdate[0])]);
+                                //myTab.push({"sr":srt,"one":val,"two":val1});
+                             //$('#example tr').find('td:last-child').append('<td>'+val+'</td>');
+                               //$('#example th:last-child').append('<td>'+val+'</td>');
+                                   // console.log(th); 
+                         //myTab.push(table);
+                            //myTab.push({"Sr.No":srt,"Element":name,"Date":vdate[2]+'/'+(vdate[1])+'/'+vdate[0],"Value":val+'('+unit+')'});
+                            //$("#containerTable").append('<tr><td>'+val+'</td></tr>');   
+                            //myTab.push(table);
                         }
-                        if (max === '' || max === 0) {
-                            max = eventsColorsData[key].max
-                        }
-                        yAxisData.push({
-                            min: min,
-                            max: max,
-                            title: {
-                                text: ''
-                            },
-                            labels: {
-                                format: '{value}' + unit,
-                                style: {
-                                    color: eventsColorsData[key].color
-                                },
-                                enabled: !0
-                            }
-                        })
-                    }
-                });
-                charts = Highcharts.chart('containern', {
-                    chart: {
-                        zoomType: 'xy',
-                        type: 'spline'
-                    },
-                    title: {
-                        text: ''
-                    },
-                    subtitle: {
-                        text: ''
-                    },
-                    xAxis: {
-                        type: 'datetime'
-                    },
-                    yAxis: yAxisData,
-                    tooltip: {
-                        shared: !0
-                    },
-                    plotOptions: {
-                        spline: {
-                            lineWidth: 1,
-                            states: {
-                                hover: {
-                                    lineWidth: 2
+                      
+                       // console.log(myTab);
+                       // console.log(srt);
+                      srt++;
+                        
+                  }); 
+                  
+                   //myTab=table;
+            //  console.log(myTab);
+                  // var dataSet = myTab;
+                   
+                   $.each(eventsColorsData,function(key) {
+                       if(name===eventsColorsData[key].name){
+                             data.push({
+                                name: name,
+                                type: 'spline',
+                                yAxis: sr,
+                                color:eventsColorsData[key].color,
+                                data: data1,
+                                tooltip: { valueSuffix: unit}
+                            });
+                            //data = data1;
+                            if(min===''){ min = eventsColorsData[key].min;}
+                            if(max===''||max===0){ max = eventsColorsData[key].max;}
+                            // console.log(cat+" min: "+min+" | "+" max: "+max);
+                            yAxisData.push({
+                                min:min,//eventsColorsData[key].min,
+                                max:max,//eventsColorsData[key].max,
+                                title: {text: ''},
+                                labels: {format: '{value}'+unit,
+                                    style: {color: eventsColorsData[key].color},
+                                     enabled: true
                                 }
+                            }); 
+                       }
+                   });    
+                   //console.log(JSON.stringify(data));
+                                 
+               charts =   Highcharts.chart('containern', {
+                        chart: {
+                            zoomType: 'xy',
+                              type: 'spline'
+                              },
+                        title: {
+                            text: ''
+                        },
+                        subtitle: {
+                            text: ''
+                        },
+                         xAxis:{
+                            type: 'datetime',
+//                            events:{               
+//                                 afterSetExtremes:function(){                                
+//                                      if (!this.chart.options.chart.isZoomed)
+//                                       {                                         
+//                                       var xMin = this.chart.xAxis[0].min;
+//                                       var xMax = this.chart.xAxis[0].max;
+//                                       chart1.xAxis[0].isDirty = true;
+//                                       chart2.xAxis[0].setExtremes(xMin, xMax, true);                                
+//                                       chart2.options.chart.isZoomed = false;
+//                                       }
+//                                   } 
+//                                 }
+                            },
+                        yAxis: yAxisData, //Y AXIS RANGE DATA
+                        tooltip: {
+                                shared: true
+                        },
+                        plotOptions: {
+                            spline: {
+                                lineWidth: 1,
+                                states: {
+                                    hover: {
+                                        lineWidth: 2
+                                    }
+                                },
                             }
-                        }
-                    },
-                    legend: {
-                        layout: 'horizontal',
-                        align: 'center',
-                        x: 0,
-                        verticalAlign: 'top',
-                        y: 0,
-                        floating: !0,
-                        enabled: !0
-                    },
-                    series: data
+                        },
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            x: 0,
+                            verticalAlign: 'top',
+                            y: 0,
+                            floating: true,
+                            enabled: true
+                        },                       
+                    series:data  //PI ATTRIBUTES RECORDED DATA                    
                 });
-                charts.xAxis[0].setExtremes(Date.UTC(startDate[0], (startDate[1] - 1), startDate[2], startTime[0], startTime[1], startTime[2]), Date.UTC(endDate[0], (endDate[1] - 1), endDate[2], endTime[0], endTime[1], endTime[2]));
+               charts.xAxis[0].setExtremes(Date.UTC(startDate[0],(startDate[1]-1),startDate[2],startTime[0],startTime[1],startTime[2]), Date.UTC(endDate[0],(endDate[1]-1),endDate[2],endTime[0],endTime[1],endTime[2]));//EXTREME POINTSET
                 sr++;
-                
-            });
-            maincnt++;
-        });
-         //myTab = merge(array3,myTab1);
-//                    console.log(array3);
-        if (chkArray.length === 0) {
-            $("#containern").empty();
-        } else {}
-    });
-}
+            });  
+             
+   }); 
+  
+     if(chkArray.length === 0){
+        $("#containern").empty(); //Empty chart Div  
+    }else{
+     //console.log(chkArray);
+    }
+       
+  });    
 
-
-//function unique(myTab,newarr) {
-//    var a = this.concat();
-//    for(var i=0; i<a.length; ++i) {
-//        for(var j=i+1; j<a.length; ++j) {
-//            if(a[i] === a[j])
-//                a.splice(j--, 1);
-//        }
-//    }
-//    return a;
-//};
-function CreateTableFromJSON(myTab,columns) {
-    $('#example').DataTable({
-        "pageLength": 20,
-        "lengthMenu": [
-            [10, 20, 50, 100, -1],
-            [10, 20, 50, 100, "All"]
+     }
+     
+    /*****LOAD EVENT FRAME DATA END****/
+function CreateTableFromJSON(myTab) {      
+      $('#example').DataTable( {          
+        // "lengthMenu": [ 10, 25, 50, 75, 100 ],
+          dom: 'Bfrtip',
+        buttons: [
+            'pageLength','copy', 'csv', 'excel', 'print'
         ],
-        dom: 'Bfrtip',
-        buttons: ['pageLength', 'copy', 'csv', 'excel', 'print'],
-        data:myTab,
-        columns: columns
-//        [{
-//            title: "Sr.No."
-//        }, {
-//            title: "Name"
-//        }, {
-//            title: "Value(Unit)"
-//        }, {
-//            title: "Date"
-//        }]
-    });
-}
+         //data: myTab,
+        columns: [
+            {title:"Sr.No."},
+            {title:"Name"},
+            {title:"Value(Unit)"},
+            {title:"Date"}
+            ]
+    } );
+    
+    }
+
+  /*********MAIN CHARTS SECTION END**********/  
+  

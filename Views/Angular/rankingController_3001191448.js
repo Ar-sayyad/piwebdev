@@ -10,7 +10,7 @@ app.controller('rankingController', function($scope) {
             yr = (now.getFullYear() - 1)
         } else {
             emonth = now.getMonth();
-            yr = now.getFullYear();
+            yr = now.getFullYear()
         }
         var day = now.getDate();
         if (month < 10)
@@ -31,63 +31,57 @@ app.controller('rankingController', function($scope) {
     });
     $("#chartView").click(function() {
         $("#tableViewData").hide();
-        $("#chartViewData").show();
+        $("#chartViewData").show()
     });
     $("#tableView").click(function() {
         $("#tableViewData").show();
-        $("#chartViewData").hide();
+        $("#chartViewData").hide()
     });
     var url = baseServiceUrl + 'assetdatabases?path=\\\\' + afServerName + '\\' + afDatabaseName;
     var ajaxEF = processJsonContent(url, 'GET', null);
     $.when(ajaxEF).fail(function() {
-        warningmsg("Cannot Find the WebId.");
+        warningmsg("Cannot Find the WebId.")
     });
     $.when(ajaxEF).done(function() {
         var WebId = (ajaxEF.responseJSON.WebId);
         var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elements?templateName=' + defaultRankingTemplate + '&selectedFields=Items.Name;Items.Webid;Items.TemplateName;&searchFullHierarchy=true&searchFullHierarchy=true';
         var parentTemplateList = processJsonContent(url, 'GET', null);
         $.when(parentTemplateList).fail(function() {
-            warningmsg("Cannot Find the Element Templates.");
+            warningmsg("Cannot Find the Element Templates.")
         });
         $.when(parentTemplateList).done(function() {
             var parentTemplateListItems = (parentTemplateList.responseJSON.Items);
             $.each(parentTemplateListItems, function(key) {
                 $("#parentTemplateList").append("<option  data-name=" + parentTemplateListItems[key].Name + " value=" + parentTemplateListItems[key].WebId + ">" + parentTemplateListItems[key].Name + "</option>")
-            });
-        });
+            })
+        })
     });
-    /****Load parameters from Confif file****/
-        $.each(rankingParameters, function(key) {
-            $("#parameterList").append("<option  data-name=" + rankingParameters[key].name + " value=" + rankingParameters[key].name + ">" + rankingParameters[key].name + "</option>")
-         });
-//    $("#parentTemplateList").change(function() {
-//        $("#parentList").empty();
-//        $("#parentList").append("<option value='' selected disabled>---Select Block---</option>");
-//        var parentTemplateID = $("#parentTemplateList").val();
-//        var url = baseServiceUrl + 'elements/' + parentTemplateID + '/elements?selectedFields=Items.Name;Items.Webid;Items.TemplateName;';
-//        var parentList = processJsonContent(url, 'GET', null);
-//        $.when(parentList).fail(function() {
-//            warningmsg("Cannot Find the Element Templates.")
-//        });
-//        $.when(parentList).done(function() {
-//            var parentListItems = (parentList.responseJSON.Items);
-//            $.each(parentListItems, function(key) {
-//                $("#parentList").append("<option  data-name=" + parentListItems[key].Name + " value=" + parentListItems[key].WebId + ">" + parentListItems[key].Name + "</option>")
-//            })
-//        })
-//    });
-    
-    $("#blockList").change(function() {
+    $("#parentTemplateList").change(function() {
+        $("#parentList").empty();
+        $("#parentList").append("<option value='' selected disabled>---Select Block---</option>");
         var parentTemplateID = $("#parentTemplateList").val();
-        var blockList = $("#blockList").val();
-        var name = $("#parentTemplateList option:selected").attr("data-name");        
-        var startDate = $('#startDate').val() + 'T00:00:00Z';
+        var url = baseServiceUrl + 'elements/' + parentTemplateID + '/elements?selectedFields=Items.Name;Items.Webid;Items.TemplateName;';
+        var parentList = processJsonContent(url, 'GET', null);
+        $.when(parentList).fail(function() {
+            warningmsg("Cannot Find the Element Templates.")
+        });
+        $.when(parentList).done(function() {
+            var parentListItems = (parentList.responseJSON.Items);
+            $.each(parentListItems, function(key) {
+                $("#parentList").append("<option  data-name=" + parentListItems[key].Name + " value=" + parentListItems[key].WebId + ">" + parentListItems[key].Name + "</option>")
+            })
+        })
+    });
+    
+    $("#parentList").change(function() {
+          var startDate = $('#startDate').val() + 'T00:00:00Z';
         var endDate = $('#startDate').val() + 'T23:59:59Z';
-        if(blockList==='CELL'){
-            var url = baseServiceUrl + 'elements/' + parentTemplateID + '/elements?templateName=blockList&nameFilter='+name+'*&selectedFields=Items.Name;Items.Webid;&searchFullHierarchy=true';
-        }else{
-            var url = baseServiceUrl + 'elements/' + parentTemplateID + '/elements?templateName=blockList&nameFilter='+name+'*&selectedFields=Items.Name;Items.Webid;&searchFullHierarchy=true';
-        }        
+        var unit = '';
+        var tableData=[];
+        $("#parameterList").empty();
+        $("#parameterList").append("<option value='' selected disabled>---Select Parameter---</option>");
+        var parentWebId = $("#parentList").val();
+        var url = baseServiceUrl + 'elements/' + parentWebId + '/attributes?selectedFields=Items.Name;Items.Webid;';
         var attributesList = processJsonContent(url, 'GET', null);
         $.when(attributesList).fail(function() {
             warningmsg("Cannot Find the Attributes.");

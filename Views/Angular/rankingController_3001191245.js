@@ -10,7 +10,7 @@ app.controller('rankingController', function($scope) {
             yr = (now.getFullYear() - 1)
         } else {
             emonth = now.getMonth();
-            yr = now.getFullYear();
+            yr = now.getFullYear()
         }
         var day = now.getDate();
         if (month < 10)
@@ -31,63 +31,57 @@ app.controller('rankingController', function($scope) {
     });
     $("#chartView").click(function() {
         $("#tableViewData").hide();
-        $("#chartViewData").show();
+        $("#chartViewData").show()
     });
     $("#tableView").click(function() {
         $("#tableViewData").show();
-        $("#chartViewData").hide();
+        $("#chartViewData").hide()
     });
     var url = baseServiceUrl + 'assetdatabases?path=\\\\' + afServerName + '\\' + afDatabaseName;
     var ajaxEF = processJsonContent(url, 'GET', null);
     $.when(ajaxEF).fail(function() {
-        warningmsg("Cannot Find the WebId.");
+        warningmsg("Cannot Find the WebId.")
     });
     $.when(ajaxEF).done(function() {
         var WebId = (ajaxEF.responseJSON.WebId);
         var url = baseServiceUrl + 'assetdatabases/' + WebId + '/elements?templateName=' + defaultRankingTemplate + '&selectedFields=Items.Name;Items.Webid;Items.TemplateName;&searchFullHierarchy=true&searchFullHierarchy=true';
         var parentTemplateList = processJsonContent(url, 'GET', null);
         $.when(parentTemplateList).fail(function() {
-            warningmsg("Cannot Find the Element Templates.");
+            warningmsg("Cannot Find the Element Templates.")
         });
         $.when(parentTemplateList).done(function() {
             var parentTemplateListItems = (parentTemplateList.responseJSON.Items);
             $.each(parentTemplateListItems, function(key) {
                 $("#parentTemplateList").append("<option  data-name=" + parentTemplateListItems[key].Name + " value=" + parentTemplateListItems[key].WebId + ">" + parentTemplateListItems[key].Name + "</option>")
-            });
-        });
+            })
+        })
     });
-    /****Load parameters from Confif file****/
-        $.each(rankingParameters, function(key) {
-            $("#parameterList").append("<option  data-name=" + rankingParameters[key].name + " value=" + rankingParameters[key].name + ">" + rankingParameters[key].name + "</option>")
-         });
-//    $("#parentTemplateList").change(function() {
-//        $("#parentList").empty();
-//        $("#parentList").append("<option value='' selected disabled>---Select Block---</option>");
-//        var parentTemplateID = $("#parentTemplateList").val();
-//        var url = baseServiceUrl + 'elements/' + parentTemplateID + '/elements?selectedFields=Items.Name;Items.Webid;Items.TemplateName;';
-//        var parentList = processJsonContent(url, 'GET', null);
-//        $.when(parentList).fail(function() {
-//            warningmsg("Cannot Find the Element Templates.")
-//        });
-//        $.when(parentList).done(function() {
-//            var parentListItems = (parentList.responseJSON.Items);
-//            $.each(parentListItems, function(key) {
-//                $("#parentList").append("<option  data-name=" + parentListItems[key].Name + " value=" + parentListItems[key].WebId + ">" + parentListItems[key].Name + "</option>")
-//            })
-//        })
-//    });
-    
-    $("#blockList").change(function() {
+    $("#parentTemplateList").change(function() {
+        $("#parentList").empty();
+        $("#parentList").append("<option value='' selected disabled>---Select Block---</option>");
         var parentTemplateID = $("#parentTemplateList").val();
-        var blockList = $("#blockList").val();
-        var name = $("#parentTemplateList option:selected").attr("data-name");        
-        var startDate = $('#startDate').val() + 'T00:00:00Z';
+        var url = baseServiceUrl + 'elements/' + parentTemplateID + '/elements?selectedFields=Items.Name;Items.Webid;Items.TemplateName;';
+        var parentList = processJsonContent(url, 'GET', null);
+        $.when(parentList).fail(function() {
+            warningmsg("Cannot Find the Element Templates.")
+        });
+        $.when(parentList).done(function() {
+            var parentListItems = (parentList.responseJSON.Items);
+            $.each(parentListItems, function(key) {
+                $("#parentList").append("<option  data-name=" + parentListItems[key].Name + " value=" + parentListItems[key].WebId + ">" + parentListItems[key].Name + "</option>")
+            })
+        })
+    });
+    
+    $("#parentList").change(function() {
+          var startDate = $('#startDate').val() + 'T00:00:00Z';
         var endDate = $('#startDate').val() + 'T23:59:59Z';
-        if(blockList==='CELL'){
-            var url = baseServiceUrl + 'elements/' + parentTemplateID + '/elements?templateName=blockList&nameFilter='+name+'*&selectedFields=Items.Name;Items.Webid;&searchFullHierarchy=true';
-        }else{
-            var url = baseServiceUrl + 'elements/' + parentTemplateID + '/elements?templateName=blockList&nameFilter='+name+'*&selectedFields=Items.Name;Items.Webid;&searchFullHierarchy=true';
-        }        
+        var unit = '';
+        var tableData=[];
+        $("#parameterList").empty();
+        $("#parameterList").append("<option value='' selected disabled>---Select Parameter---</option>");
+        var parentWebId = $("#parentList").val();
+        var url = baseServiceUrl + 'elements/' + parentWebId + '/attributes?selectedFields=Items.Name;Items.Webid;';
         var attributesList = processJsonContent(url, 'GET', null);
         $.when(attributesList).fail(function() {
             warningmsg("Cannot Find the Attributes.");
@@ -96,6 +90,7 @@ app.controller('rankingController', function($scope) {
             var attributesItems = (attributesList.responseJSON.Items);
             var burl = baseServiceUrl + 'streamsets/value?';
             $.each(attributesItems, function(key) {
+                 var tData=[];
                 var Name = attributesItems[key].Name;
                 $.each(rankingParameters, function(key1) {
                     if (Name === rankingParameters[key1].name) {
@@ -110,9 +105,10 @@ app.controller('rankingController', function($scope) {
                                        $.when(parameterList).done(function() {
                                            var parameterItems = (parameterList.responseJSON.Items);
                                            var srt = 1;
-                                            tableData.push({name:Name});
+                                            tData.push({name:Name});
                                             var nm='';
                                                 $.each(parameterItems, function(key) {
+                                                   
                                                    // var Timestamp = parameterItems[key].Timestamp;
                                                     var val = (Math.round((parameterItems[key].Value) * 100) / 100);
                                                     if (isNaN(val)) {} else if (srt <= 10) {
@@ -120,36 +116,12 @@ app.controller('rankingController', function($scope) {
 //                                                        vtime = (Timestamp).substring(11, 19);
 //                                                        vdate = vdate.split('-');
 //                                                        vtime = vtime.split(':');
-                                                          tableData.push({ value:val });
+                                                          tData.push({ value:val });
                                                         //var val = Math.round((parameterItems[key].Value) * 100) / 100;
                                                         //unit = parameterItems[key].UnitsAbbreviation;
                                                        //$("#showData").append("<tr><td>" + val + "</td></tr>");
-                                                    
-                                                    }
-                                                    srt++;
-                                                });
-                                                CreateTableFromJSON(tableData);
-                                                 console.log(tableData); 
-                                       });
-                    }
-                });
-                   
-            });
-          
-            burl += 'selectedFields=Items.Name;Items.Webid;Items.Value.Value;Items.Value.UnitsAbbreviation;&searchFullHierarchy=true';
-           // console.log(burl);
-          
-            var atList = processJsonContent(burl, 'GET', null);
-            $.when(atList).fail(function() {
-                warningmsg("Cannot Find the Attributes.");
-            });
-            $.when(atList).done(function() {
-                var attItems = (atList.responseJSON.Items);
-              //console.log(attItems)
-               $.each(attItems, function(key) {
-                   var Name = attItems[key].Name;
-                   var val = (Math.round((attItems[key].Value.Value) * 100) / 100);
-                   $("#containerTable").append('<div class="filerDiv">\n\
+                                                       if(nm==='' || nm!==Name){
+                                                       $("#containerTable").append('<div class="filerDiv">\n\
                                         <input type="text" value="'+Name+'"  class="floatLeft form-control value" readonly id="value" placeholder="Parameter">\n\
                                         <select  class="floatLeft form-control operator" id="operator">\n\
                                             <option value="" selected="" disabled="">---Select Operator---</option>\n\
@@ -162,8 +134,32 @@ app.controller('rankingController', function($scope) {
                                         <input type="text" value="'+val+'"  class="floatLeft form-control number" id="number" placeholder="Number">\n\
                                         <button type="button" class="floatRight btn btn-danger remove"><i class="ti-close"></i></button> \n\
                                     </div>');
-               });
+                                                       }
+                                                       nm=Name;
+                            
+                                                    }
+                                                    srt++;
+                                                });
+                                                tableData.push(tData);
+                                                CreateTableFromJSON(tableData);
+                                                console.log(tableData); 
+                                       });
+                    }
+                });
+                   
             });
+          
+            burl += 'selectedFields=Items.Name;Items.Webid;Items.Value.Value;Items.Value.UnitsAbbreviation;&searchFullHierarchy=true';
+           // console.log(burl);
+          
+//            var atList = processJsonContent(burl, 'GET', null);
+//            $.when(atList).fail(function() {
+//                warningmsg("Cannot Find the Attributes.");
+//            });
+//            $.when(atList).done(function() {
+//                var attItems = (atList.responseJSON.Items);
+//               // console.log(attItems)
+//            });
         });
         //makeTable(tableData);
         //console.log(tableData);
@@ -219,7 +215,7 @@ function makeTable(tableData){
 //                }
 //            }
         }
-        //console.log(row);
+        console.log(row);
         var table = document.createElement("table");
         table.id = 'test_table';
         table.className = 'table table-bordered dataTable';
@@ -234,12 +230,12 @@ function makeTable(tableData){
             tr = table.insertRow(-1);
              
         
-        for (var j = 0; j < col.length; j++) {
+       // for (var j = 0; j < col.length; j++) {
              if (myTab[i].value) {
                  var td = document.createElement("td");
                 td.innerHTML = myTab[i].value;
                 tr.appendChild(td);
-             }
+           //  }
             
         
         }

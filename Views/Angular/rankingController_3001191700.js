@@ -83,11 +83,8 @@ app.controller('rankingController', function($scope) {
         var name = $("#parentTemplateList option:selected").attr("data-name");        
         var startDate = $('#startDate').val() + 'T00:00:00Z';
         var endDate = $('#startDate').val() + 'T23:59:59Z';
-        if(blockList==='CELL'){
-            var url = baseServiceUrl + 'elements/' + parentTemplateID + '/elements?templateName=blockList&nameFilter='+name+'*&selectedFields=Items.Name;Items.Webid;&searchFullHierarchy=true';
-        }else{
-            var url = baseServiceUrl + 'elements/' + parentTemplateID + '/elements?templateName=blockList&nameFilter='+name+'*&selectedFields=Items.Name;Items.Webid;&searchFullHierarchy=true';
-        }        
+        
+        var url = baseServiceUrl + 'elements/' + parentTemplateID + '/elements?templateName=blockList&nameFilter='+name+'*&selectedFields=Items.Name;Items.Webid;&searchFullHierarchy=true';
         var attributesList = processJsonContent(url, 'GET', null);
         $.when(attributesList).fail(function() {
             warningmsg("Cannot Find the Attributes.");
