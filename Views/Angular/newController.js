@@ -65,7 +65,7 @@ app.controller('newController', function($scope) {
     $("#elementList").change(function (){
         var elementName = $("#elementList option:selected").attr("data-name");//BLOCK ELEMENT NAME FOR IFRAME GRAPH GENERATION
         var iframeUrl= iframeConfigUrl+'?name='+elementName; //IFRAME URL 
-        $('.iframeMapp').attr('src', iframeUrl);  
+        $('.iframeMap').attr('src', iframeUrl);  
         //console.log(iframeUrl);
         $("#container").empty();
         $("#attributesListLeft").empty();

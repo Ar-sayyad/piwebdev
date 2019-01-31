@@ -1,7 +1,4 @@
 app.controller('chroniclesController', function($scope) {
-    
-    console.log(processJsonContent1());
-    
     $scope.pagename = "Chronicles";
     var now = new Date();
     $(function() {
