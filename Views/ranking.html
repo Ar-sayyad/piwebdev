@@ -68,14 +68,14 @@
                     <div class="card-body newchartDiv">
                         <div id="containern" class="rankingContainer">
                             <p id="showData"></p>
-<!--                            <div class="table-responsive">
+                            <div class="table-responsive">
                                 <table id="example" class="table top-table table-bordered table-striped">
-                                  <thead>
+<!--                                  <thead>
                                       <tr>
-                                          <th></th>                                    
+                                          <th>Name</th><th>Value</th>
                                       </tr>
-                                  </thead>
-                                  <tbody>
+                                  </thead>-->
+<!--                                  <tbody>
                                       <tr style="background-color: #4b8408;">
                                           <td>TOP1</td>
                                           <td>1</td>
@@ -156,9 +156,9 @@
                                           <td>10</td>
                                           <td>10</td>
                                       </tr>
-                                  </tbody>
+                                  </tbody>-->
                               </table>
-                            </div>-->
+                            </div>
                             
                             <div class="table-responsive">
                                 <table id="bottomexample" class="table bottom-table table-bordered table-striped">
@@ -264,9 +264,12 @@
             <div class="col-12 col-lg-6 col-xl-6">
                 <div class="card" id="tableViewData" style="margin-top: 0px;">
                     <div class="card-body newchartDiv">
+                        <button class="btn btn-primary" id="addExpress"><i class="ti-plus"></i> Add Expression</button>
                         <div id="containerTable" class="rankingContainer">  
-<!--                            <div class="filerDiv">
-                                <input type="text" value=""  class="floatLeft form-control value" id="value" placeholder="Parameter">
+                            <div class="filerDiv">
+                                 <select  class="floatLeft form-control params" id="params">
+                                    <option value="" selected="" disabled="">---Select Parameter---</option>                                   
+                                </select>
                                 <select  class="floatLeft form-control operator" id="operator">
                                     <option value="" selected="" disabled="">---Select Operator---</option>
                                     <option value="=">=</option>
@@ -276,8 +279,8 @@
                                     <option value="<="><=</option>
                                 </select>
                                 <input type="text" value=""  class="floatLeft form-control number" id="number" placeholder="Number">
-                                <button type="button" class="floatRight btn btn-danger remove"><i class="ti-close"></i></button> 
-                            </div>-->
+                                <button type="button" onclick="deleteParentElement(this);"  class="floatRight btn btn-danger remove"><i class="ti-close"></i></button> 
+                            </div>
                         </div>
                     </div>
                 </div>

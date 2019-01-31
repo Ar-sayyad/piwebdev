@@ -17,11 +17,11 @@ var allocationAttributeName = "PLANT";/****The Plant Attributes Name for save th
 var iframeConfigUrl = "http://www.google.com"; //IFRAME URL 
 var defaultRankingTemplate = "ZONE";/****Default Zone for Ranking Page****/
 var rankingParameters = [
-    { name:"U", value:20 },
-    { name:"PH", value:5 },
-    { name:"KU", value:25 },
-    { name:"PR", value:15 },
-    { name:"VR", value:10 }
+    { name:"U" },
+    { name:"PH"},
+    { name:"KU" },
+    { name:"PR" },
+    { name:"VR" }
 ];
 var eventsColorsData = [
     {

@@ -92,19 +92,17 @@ app.controller('rankingController', function($scope) {
                         var sr=1;
                         $.each(rankingParameters, function(key1) {
                             if (rankingParameters[key1].name === Name) {
-                                getVal( Name, attributesItems[key].WebId);                               
+                                getVal(sr,blockname, Name, attributesItems[key].WebId);                               
                             } else {}
                              sr++;
                         })
                     })
                 })
             })
-           // createTable();
         })
-        
     });
-    var array=[];
-    function getVal(name, WebId) {
+
+    function getVal(sr,blockname, name, WebId) {
         var startDate = $('#startDate').val() + 'T00:00:00Z';
         var endDate = $('#startDate').val() + 'T23:59:59Z';
         var t = $('#example').DataTable();
@@ -114,69 +112,17 @@ app.controller('rankingController', function($scope) {
             warningmsg("Cannot Find the Parameter.")
         });
         $.when(parameterList).done(function() {
-            //t.row.add([ name, parameterList.responseJSON.Value,0,0,0,0]).draw(!1);
-            array.push({name:name, value:parameterList.responseJSON.Value });
-            createTable(array);
-        });
-        
+            t.row.add([sr,blockname, name, parameterList.responseJSON.Value]).draw(!1)
+        })
     }
          
-         function createTable(myTab){
-            var array=[];
-            for (var i = 0; i <  rankingParameters.length; i++) {
-                var rows = myTab.filter(function (pilot) {
-                return pilot.name === rankingParameters[i].name;
-            });
-            array.push(rows);
-        }
-        console.log(array);
-        var col = [];
-        for (var i = 0; i < rows.length; i++) {
-            col.push(rows[i].name);
-        }
-
-        // CREATE DYNAMIC TABLE.
-        var table = document.createElement("table");
-        table.id = 'test_table';
-        table.className = 'table table-bordered dataTable';
-        // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
-
-        var tr = table.insertRow(-1);                   // TABLE ROW.
-
-        for (var i = 0; i <  rankingParameters.length; i++) {
-            var th = document.createElement("th");      // TABLE HEADER.
-            th.innerHTML = rankingParameters[i].name;
-            tr.appendChild(th);
-        }
-
-        // ADD JSON DATA TO THE TABLE AS ROWS.
-        for (var i = 0; i < rankingParameters.length; i++) {
-            tr = table.insertRow(-1);
-            for (var j = 0; j < rows.length; j++) {
-                var tabCell = tr.insertCell(-1);
-                tabCell.innerHTML = array[i][j].value;
-            }
-        }
-
-//    for (var i=0;i<3;i++){
-//            for(var j=0;j<5;j++){
-//                console.log(array[i][j].value);
-//            }
-//        }
-        
-        // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
-        var divContainer = document.getElementById("showData");
-        divContainer.innerHTML = "";
-        divContainer.appendChild(table);
-         }
-         
     var cols = [];
-//    cols.push({
-//            title: "Sr"
-//        },            
-//         {
-//            title: "Block"
-//        })
+    cols.push({
+            title: "Sr"
+        },            
+         {
+            title: "Block"
+        })
     $.each(rankingParameters, function(key1) {
         cols.push({
             title: rankingParameters[key1].name
